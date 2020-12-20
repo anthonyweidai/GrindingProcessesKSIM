@@ -27,7 +27,7 @@ rho=2;% grit edge radius, um
 theta_a=theta_a/180*pi;
 beta_a=beta_a/180*pi;
 d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
-d_crit_cut=0.4;
+d_crit_cut=0.6;
 %% force cal
 mode=1;
 if mode==1
