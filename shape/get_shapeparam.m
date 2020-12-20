@@ -6,9 +6,9 @@ if geoparam.shape == 1
     Rarea = geoparam.Rarea;
     fillet_mode = geoparam.fillet_mode;
     
-     h2w_ratio = 1;
-%     mutemp = 2*R_culet*geoparam.h2w_ratio;
-    mutemp = 2*R_culet*h2w_ratio;
+    % h2w_ratio = 1;
+    mutemp = 2*R_culet*geoparam.h2w_ratio;
+    % mutemp = 2*R_culet*h2w_ratio;
     hmax = normrnd(mutemp,mutemp*geoparam.sigmah);
     hmax = max(hmax,(mutemp-3*mutemp*geoparam.sigmah));
     hmax = min(hmax,(mutemp+3*mutemp*geoparam.sigmah));
@@ -73,7 +73,7 @@ if geoparam.shape == 1
                     k2 = j+1;
                 end
                 d=[A(k1,:); C(j,:); A(k2,:)];
-                [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d,10);
+                [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d,10);
                 % top face point
                 
                 B(j,:) = (C(k1,:)+C(k2,:))/2;
@@ -103,9 +103,9 @@ if geoparam.shape == 1
                     k2 = j+1;
                 end
                 d=[C(k1,:); B(j,:); C(k2,:)];
-                [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d);
+                [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d);
                 d=[nsph; D(j,:); B(j,:)];
-                [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d);
+                [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d);
             end
         else
             nodes_x = [nodes_x xc];
@@ -231,7 +231,7 @@ if geoparam.shape == 1
                     for j = 1:numofp
                         PA = [arct(j+numofp*(k1-1),:);arct(j+numofp*(k2-1),:)];
                         %% rebuild the lineIntersec3D
-                        arc3d(j+numofp*(i-1),:) = lineIntersect3D(PA(1,:),PA(2,:),...
+                        arc3d(j+numofp*(i-1),:) = lineintersection3D(PA(1,:),PA(2,:),...
                             DRv(k1,:),DRv(k2,:));
                     end
                 end
@@ -250,11 +250,11 @@ if geoparam.shape == 1
                         k2 = i+1;
                     end
                     d = [A(k1,:);A(k2,:)];
-                    [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d,10);
+                    [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d,10);
                     d = [C1(k1,:);C1(k2,:)];
-                    [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d,10);
+                    [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d,10);
                     d = [C2(k1,:);C2(k2,:)];
-                    [nodes_x,nodes_y,nodes_z] = interpoints(nodes_x,nodes_y,nodes_z,d,10);
+                    [nodes_x,nodes_y,nodes_z] = interpolation3D(nodes_x,nodes_y,nodes_z,d,10);
                 end
             end
         else
@@ -265,40 +265,103 @@ if geoparam.shape == 1
         end
     end
 elseif geoparam.shape == 2
-    if geoparam.Rarea == 1
-        %% shpere
-        theta=2*pi*rand(1,700);
-        phi=24*pi/50*rand(1,700)+pi/50;
-        rho=R_culet;
-        nodes_x=rho*sin(phi).*cos(theta);
-        nodes_y=rho*sin(phi).*sin(theta);
-        nodes_z=rho*cos(phi);
+    %% ellipsoid
+    if geoparam.Rarea<=1e-7
+        Rarea = 0.01;
     else
-        %% ellipsoid
-        a = geoparam.Rarea * R_culet;
-        b = a;
-        c = R_culet;
-        theta=2*pi*rand(1,700);
-        phi=24*pi/50*rand(1,700)+pi/50;
-        nodes_x=a*sin(phi).*cos(theta);
-        nodes_y=b*sin(phi).*sin(theta);
-        nodes_z=c*cos(phi);
+        Rarea = geoparam.Rarea;
     end
+    if Rarea <=1
+        a = Rarea * R_culet;
+        c = R_culet;
+    else
+        a = R_culet;
+        c = R_culet/Rarea;
+    end
+    b = a;
+    
+    theta=2*pi*rand(1,700);
+    phi=24*pi/50*rand(1,700)+pi/50;
+    nodes_x=a*sin(phi).*cos(theta);
+    nodes_y=b*sin(phi).*sin(theta);
+    nodes_z=c*cos(phi);
 elseif geoparam.shape == 3
-    %% Cuboctahedron
-    hw=normrnd(0.2886,0.0962);%default value for intact octahedron
-    hw=max(hw,0.02);
-    hw=min(0.2886,hw);
+    %% tetradecahedron = cube by cuting its 6 vertecies
+    % eight vertecies coordinates + half of it
+    xi = geoparam.xi;
+    a = 2;
+    rectangle = [1, -1, 0; %
+        1, 1, 0;
+        -1, 1, 0;
+        -1, -1, 0;
+        1, -1, 1;
+        1, 1, 1;
+        -1, 1, 1;
+        -1, -1, 1];
     
-    a=1.68;
-    b=(3^0.5/2*a-hw)*4/(10^0.5);
-    c=b*(hw)/((10^0.5)/4*b);
-    h=a/2;
-    l=a/2-c;
+    b = 0.707*a + 1.414*a*xi;
+    octahedron = [0, -0.707*b, 0; % b = sqrt(2)*(a/2+a*xi)
+        0.707*b, 0, 0;
+        0, 0.707*b, 0;
+        -0.707*b, 0, 0;
+        0, 0, a/2+a*xi];
     
-    nodes_x=[h h l, -h -h -l, h h l, -h -h -l,    h h l, -h -h -l,    h h l, -h -h -l,];
-    nodes_y=[h l h, h l h,    -h -l -h, -h -l -h, h l h, h l h,       -h -l -h, -h -l -h,];
-    nodes_z=[l h h, l h h,    l h h, l h h,       -l -h -h, -l -h -h, -l -h -h, -l -h -h,];
+    num_face = 6;
+    num_vertex = size(rectangle,1);
+    num_edges = num_face + num_vertex - 2;
+    %% for rectangle edges
+    edges_coordinate = zeros(num_edges-4,3);
+    edges_coordinate(1:4,:) = repmat([0 0 1],4,1);
+    num_temp = 4;
+    for i = 1:num_edges/3
+        k1 = i;
+        if i == num_edges/3
+            k2 = 1;
+        else
+            k2 = k1 + 1;
+        end
+        num_temp = num_temp + 1;
+        edges_coordinate(num_temp,:) = rectangle(k1+num_edges/3,:) - rectangle(k2+num_edges/3,:);
+    end
+    %% for octahedron faces
+    realnum_vertex = num_vertex/2;
+    normal_vector = zeros(realnum_vertex,3);
+    for j = 1:realnum_vertex
+        k1 = j;
+        if j == realnum_vertex
+            k2 = 1;
+        else
+            k2 = k1 + 1;
+        end
+        normal_vector(j,:) = cross((octahedron(end,:)-octahedron(k1,:)),...
+            (octahedron(end,:)-octahedron(k2,:))); % normalize will change the relationship
+    end
+    %% for tetradecahedron vertecies
+    tetra_num_vertex = realnum_vertex*3;
+    tetradecahedron = zeros(tetra_num_vertex,3); % half of vertecies
+    num_temp = 0;
+    for k = 1:realnum_vertex
+        rayPoint = rectangle(k + realnum_vertex,:);
+        planeNormal = normal_vector(k,:);
+        planePoint = octahedron(end,:);
+        I1 = intersectPoint(edges_coordinate(k,:),rayPoint,planeNormal,planePoint);
+        I2 = intersectPoint(edges_coordinate(k+realnum_vertex,:),rayPoint,planeNormal,planePoint);
+        if k == 1
+            k2 = realnum_vertex;
+        else
+            k2 = k - 1;
+        end
+        I3 = intersectPoint(edges_coordinate(k2+realnum_vertex,:),rayPoint,planeNormal,planePoint); % k label edge 3
+        num_temp = num_temp + 1;
+        tetradecahedron(num_temp:num_temp+2,:) = [I1; I2; I3];
+        num_temp = num_temp + 2;
+    end
+    %%
+    tetradecahedron = [tetradecahedron; rectangle(1:realnum_vertex,:)];
+    tetradecahedron = R_culet/norm(tetradecahedron(end,:)-[0 0 0])*tetradecahedron;
+    nodes_x = tetradecahedron(:,1)';
+    nodes_y = tetradecahedron(:,2)';
+    nodes_z = tetradecahedron(:,3)';
 end
 %%
 P = [nodes_x;nodes_y;nodes_z]';

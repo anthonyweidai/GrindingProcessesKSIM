@@ -9,7 +9,7 @@ function [vq] = get_gritshape(R,geoparam)
 % sigmah is the deviation of height of grain
 % sigmasw is the deviation of skew of the vertex
 % fillet_mode: 1-with fillet, 0 without fillet
-% RA_mode: 1 - Rake angle is constant, 0 - Rake angle is not constant
+% RA_mode: 1 - Rake angle is const, 0 - Rake angle is not const
 % Example1 [vq] = get_gritshape(2,1,1,5,0.5,0,.1,.1);
 % Example2 [vq] = get_gritshape(2,1,0,7,0.6,0.2,.1,.1);
 % Example3 [vq] = get_gritshape(2,2);
@@ -21,12 +21,6 @@ P = get_shapeparam(R,geoparam);
 res=.2;
 %% rotate grit
 if geoparam.shape == 3
-    % SCALING the size of the grit
-    rr = max(sum(P.^2,2).^0.5);
-    scale_m = [2*R/rr 0 0;0 2*R/rr 0;0 0 2*R/rr];
-    for i = 1:size(P,1)
-        P(i,:) = scale_m*P(i,:)';
-    end
     rotate_z1 = [cos(pi/4) -sin(pi/4) 0; sin(pi/4) cos(pi/4) 0; 0 0 1];
     rotate_y1 = [cos(pi/2-asin((3^0.5)/3)) 0 sin(pi/2-asin((3^0.5)/3)); 0 1 0; -sin(pi/2-asin((3^0.5)/3)) 0 cos(pi/2-asin((3^0.5)/3))];
     
@@ -66,7 +60,7 @@ end
 %   - get_shapeparam
 %   -- inpoint
 %   -- interpoints
-%   -- lineIntersect3D
-%   -- interpoints
+%   -- lineIntersection3D
+%   -- interpolation3D
 %   -- getvertex
 %   === finintersection

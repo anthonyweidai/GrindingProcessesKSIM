@@ -40,6 +40,7 @@ geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 0;
 geoparam.sigmah(~isfield(geoparam,'sigmah')) = 0;
 geoparam.sigmasw(~isfield(geoparam,'sigmasw')) = 0;
 geoparam.fillet_mode(~isfield(geoparam,'fillet_mode')) = 0;
+geoparam.xi(geoparam.shape == 3 && ~isfield(geoparam,'xi')) = 0;
 premise = cell2mat(struct2cell(geoparam))';
 %%
 if sepparam.wheel_type==1
