@@ -5,11 +5,11 @@ geoparam.shape = 1;
 for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
-        geoparam.omega = omega;
         for fillet_mode = 0:1%
             geoparam.fillet_mode = fillet_mode;
             %% for rake angle
-            for omega = [3, 5, 7, 9, 25]
+            for omega = [3, 5, 7, 9, 25]        
+                geoparam.omega = omega;
                 for RA_mode = 0:1 %
                     geoparam.RA_mode = RA_mode;
                     for Rarea = [0.1, 0.3, 0.5, 0.7, 0.9]

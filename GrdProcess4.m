@@ -40,23 +40,23 @@ geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 0;
 geoparam.sigmah(~isfield(geoparam,'sigmah')) = 0;
 geoparam.sigmasw(~isfield(geoparam,'sigmasw')) = 0;
 geoparam.fillet_mode(~isfield(geoparam,'fillet_mode')) = 0;
-geoparam.xi(geoparam.shape == 3 && ~isfield(geoparam,'xi')) = 0;
+% geoparam.xi(geoparam.shape == 3 && ~isfield(geoparam,'xi')) = 0;
 premise = cell2mat(struct2cell(geoparam))';
 %%
 if sepparam.wheel_type==1
     num_grits=1200;
     premise = [num_grits, premise];
     filename = get_filename(num_grits, batnum, sepparam, geoparam, FOI);
-    [grit_profile_all]=bubbleSimulator(filename, workpiece_length,...
+    [grits,grit_profile_all]=bubbleSimulator(filename, workpiece_length,...
     workpiece_width, num_grits,geoparam);
 else
     num_grits=2400; %only recommend 2k and 2.4k
     temp = rmfield(sepparam,'wheel_type');
     premise = [num_grits,cell2mat(struct2cell(temp))',premise];
     filename = get_filename(num_grits, batnum, sepparam, geoparam, FOI);
-    [grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
+    [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
-[Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
+[Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
 writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra C_grit F_n_steadystage F_t_steadystage num_mode percent_mode],['UT_data\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_premise.csv'],'WriteMode','append');
 toc;
 end

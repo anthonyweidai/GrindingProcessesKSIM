@@ -1,10 +1,10 @@
 
-function [grit_profile_all]=whl_generation(mode,filename,geoparam)
+function [grit_profile_all]=whl_generation(mode,grits,filename,geoparam)
 %% geometrical parameters
 % R = 10;
 %%
-grit_list=readtable([filename '.csv']);
-grits=table2struct(grit_list,'ToScalar',true);
+% grit_list=readtable([filename '.csv']);
+% grits=table2struct(grit_list,'ToScalar',true);
 % grits=bubbleSimulator()
 numgrits=size(grits.Tradius,1);
 

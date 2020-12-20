@@ -1,5 +1,5 @@
 %% simulation function
-function [Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grit_profile_all,cof_cal_mode,...
+function [Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,Rarea)
 % cycle=1;
 % filename=['N2000_tgw80kd1-' num2str(cycle)];%tgw80kd1 bubbles_list_tgw60kd1-2
@@ -14,8 +14,8 @@ sigma_s=0.253e-3; %shear strength 0.253GPa
 sigma_y=3.5e-3; %yield strength 3.5GPa
 %%
 %reading and get grit data
-grit_list=readtable([filename '.csv'],'Range', 'A:F');
-grits=table2struct(grit_list,'ToScalar',true);
+%grit_list=readtable([filename '.csv'],'Range', 'A:F');
+%grits=table2struct(grit_list,'ToScalar',true);
 numgrits=size(grits.Tradius,1);
 
 k_t=1;
@@ -139,19 +139,21 @@ for v_i=1:num_vgrits
     temp_uct=max((h_origin-h_grit>0).*(h_origin-h_grit));
     temp_chparea=res*sum((h_origin-h_grit>0).*(h_origin-h_grit));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    indents = find(rs_surf(round(g_y/res),:)>0); % find all stress field on the same roll
-    for i = indents
-        stats_indented = 0;
-        b = rs_surf(round( g_y / res ), i);
-        if abs( i - round( g_y / res )) < b 
-            rs_surf(round( g_y / res ), i) = ( b ^ 2 + b_temp ^ 2 ) ^ 0.5;
-            stats_indented = 1;
-            continue
-        end
-    end
-    if stats_indented = 0
-        rs_surf(round( g_y / res ), round(g_x /res) ) = b_temp;
-    end
+    
+%     indents = find(rs_surf(round(g_y/res),:)>0); % find all stress field on the same roll
+%     for i = indents
+%         stats_indented = 0;
+%         b = rs_surf(round( g_y / res ), i);
+%         if abs( i - round( g_y / res )) < b 
+%             rs_surf(round( g_y / res ), i) = ( b ^ 2 + b_temp ^ 2 ) ^ 0.5;
+%             stats_indented = 1;
+%             continue
+%         end
+%     end
+%     if stats_indented == 0
+%         rs_surf(round( g_y / res ), round(g_x /res) ) = b_temp;
+%     end
+    
     %recording hmax, logging cut mode data
 %     h_m(t_tick,v_i)=temp_uct;
 %     area_chp(t_tick,v_i)=temp_chparea;

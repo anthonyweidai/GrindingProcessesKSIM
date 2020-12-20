@@ -1,5 +1,5 @@
 
-function [grit_profille_all]=bubbleSimulator(filename, workpiece_length,...
+function [grits,grit_profille_all]=bubbleSimulator(filename, workpiece_length,...
     workpiece_width, num_grits,geoparam)
 % [mu,sigma]=mesh2diameter(2500);
 % filename='N2000_r1';
@@ -39,7 +39,7 @@ rr=repmat(bubbles.radius,1,numBubbles);
 sumRadius=(rr+rr');
 
 t=0;
-figure('visible','off');
+figure;
 circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
 axis equal;drawnow;
 % simulation starts
@@ -61,6 +61,7 @@ while t<5
     end
     
 end
+close gcf;
 % print([filename '-cr.jpg'], '-djpeg' );
 bubbles.pos=roundn(bubbles.pos,-1);
 grits.posx=bubbles.pos(:,1);
@@ -79,7 +80,7 @@ cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 disp(cr);
 % writetable(sortedT,[filename '-' num2str(cycle) '.csv']);
 writetable(sortedT,[filename '.csv']);
-grit_profille_all=whl_generation(1,[filename],geoparam);
+grit_profille_all=whl_generation(1,grits,[filename],geoparam);
 
 end
 

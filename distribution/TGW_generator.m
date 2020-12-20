@@ -1,4 +1,4 @@
-function [grit_profile_all]=TGW_generator(filename, sepparam, workpiece_length,...
+function [grits,grit_profile_all]=TGW_generator(filename, sepparam, workpiece_length,...
     workpiece_width, geoparam)
 %%
 mu=10;sigma=geoparam.Rsigma;         %smaller grit configuration
@@ -61,5 +61,5 @@ T= struct2table(grits); % convert the struct array to a table
 sortedT = sortrows(T, 'posy'); % sort the table by 'DOB'
 sort(bubbles.pos,2);
 writetable(sortedT,[filename '.csv']);
-[grit_profile_all]=whl_generation(1,[filename],geoparam);
+[grit_profile_all]=whl_generation(1,grits,[filename],geoparam);
 end
