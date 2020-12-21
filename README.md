@@ -1,6 +1,8 @@
+I have created a new branch "Dave_update". You can merge it with the main branch.
+
 # GrdProcess
+
 The repo is grinding process kinematic simulation in MATLAB.
-I have create a new branch "Dave_update". You can merge it to the main branch.
 
 # About Git
 ## Frok 之后的初始化
