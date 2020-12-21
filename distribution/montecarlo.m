@@ -1,15 +1,18 @@
-function [grit_profille_all, numBubbles]=montecarlo(filename,GrdToollength,GrdToolwidth,radius,geoparam)
+function [numBubbles, grit_profile_all]=montecarlo(filename,workpiece_length,workpiece_width,geoparam)
 %% use Monte Carlo algorithm to generate the distribution of abrasive grains
 %% parameters
 %%%%%%%%%%
-sigma=0.1;
+mu = 10; sigma=0.1;
 %%%%%%%%%%
-MuRadius=radius;       % minimum radius
-SigRadius=sigma;      % maximum radius
-MaxSep=radius*0.8;         % maximum Separation distance
-MinSep=radius*0.1;           % minimum Separation distance
+MuRadius=mu;       % minimum MuRadius
+SigMuRadius=sigma;      % maximum MuRadius
+MaxSep=MuRadius*0.8;         % maximum Separation distance
+MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
-num_grits = GrdToollength*GrdToolwidth / (4*radius^2);
+GrdToollength=2*workpiece_length;
+GrdToolwidth=workpiece_width;
+
+num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
 blocknum = floor(sqrt(num_grits));
 divisors = factor(blocknum);
 while 1
@@ -31,7 +34,7 @@ y_blocknum = max(divisors);
 temp1 = floor(GrdToolwidth/x_blocknum*10)*0.1;
 temp2 = floor(GrdToollength/y_blocknum*10)*0.1;
 %% Self adaptive bubbles number
-numBubbles = round(num_grits*0.7);
+numBubbles = round(num_grits*0.6);
 %% generate bubbles and initialise
 blockbound = zeros(blocknum,4);
 blockbound(:,1) = reshape(repmat(sort(0:temp1:GrdToolwidth-temp1)',1,y_blocknum),1,blocknum);
@@ -39,7 +42,7 @@ blockbound(:,2) = reshape(repmat(sort(temp1:temp1:GrdToolwidth)',1,y_blocknum),1
 blockbound(:,3) = reshape(repmat(sort(0:temp2:GrdToollength-temp2),x_blocknum,1),1,blocknum);
 blockbound(:,4) = reshape(repmat(sort(temp2:temp2:GrdToollength),x_blocknum,1),1,blocknum);
 bubbles.pos = zeros(numBubbles,2);
-bubbles.Tradius = normrnd(MuRadius,SigRadius,[numBubbles,1]);
+bubbles.Tradius = normrnd(MuRadius,SigMuRadius,[numBubbles,1]);
 bubbles.radius = bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
 bubbles.blockflag1 = zeros(numBubbles,1);
 bubbles.blockflag2 = zeros(numBubbles,1);
@@ -69,5 +72,5 @@ sortedT =sortrows(T, 'posy'); % sort the table by 'DOB'
 % cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 % disp(cr);
 writetable(sortedT,[filename '.csv']);
-grit_profille_all=whl_generation(1,[filename],geoparam);
+grit_profile_all=whl_generation(1,[filename],geoparam);
 end
