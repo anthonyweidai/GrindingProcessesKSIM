@@ -40,20 +40,20 @@ geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 0;
 geoparam.sigmah(~isfield(geoparam,'sigmah')) = 0;
 geoparam.sigmasw(~isfield(geoparam,'sigmasw')) = 0;
 geoparam.fillet_mode(~isfield(geoparam,'fillet_mode')) = 0;
-% geoparam.xi(geoparam.shape == 3 && ~isfield(geoparam,'xi')) = 0;
+if geoparam.shape == 3
+    geoparam.xi(~isfield(geoparam,'xi')) = 0;
+end
 premise = cell2mat(struct2cell(geoparam))';
 %%
 if sepparam.wheel_type==1
-    num_grits=1200;
-    premise = [num_grits, premise];
-    filename = get_filename(num_grits, batnum, sepparam, geoparam, FOI);
+    num_grits = 1200;
+    filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=bubbleSimulator(filename, workpiece_length,...
-    workpiece_width, num_grits,geoparam);
+    workpiece_width, num_grits, geoparam);
 else
-    num_grits=2400; %only recommend 2k and 2.4k
     temp = rmfield(sepparam,'wheel_type');
-    premise = [num_grits,cell2mat(struct2cell(temp))',premise];
-    filename = get_filename(num_grits, batnum, sepparam, geoparam, FOI);
+    premise = [cell2mat(struct2cell(temp))',premise];
+    filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
 [Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
@@ -61,38 +61,34 @@ writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra C_grit F_n_s
 toc;
 end
 
-function filename = get_filename(num_grits, batnum, sepparam, geoparam, FOI)
+function filename = get_filename(batnum, sepparam, geoparam, FOI)
 wheel_type = sepparam.wheel_type;
 if wheel_type == 1
-    if geoparam.shape == 2
-        if geoparam.Rarea ~= 1
-            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N'  num2str(num_grits) 'RA' num2str(geoparam.Rarea)] ;
-        else
-            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N'  num2str(num_grits)] ;
-        end
-    else
-        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N'  num2str(num_grits) ...
+    if geoparam.shape == 1
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
             'SH' num2str(geoparam.shape) 'w' num2str(geoparam.omega) 'hsg' num2str(geoparam.sigmah) ...
             'swsg' num2str(geoparam.sigmasw) 'FT' num2str(geoparam.fillet_mode) 'RA' num2str(geoparam.Rarea) ...
             'RAM' num2str(geoparam.RA_mode)] ;
+    elseif geoparam.shape == 2
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'RA' num2str(geoparam.Rarea)];
+    else
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'xi' num2str(geoparam.xi)] ;
     end
 elseif wheel_type == 2
-    if geoparam.shape == 2
-        if geoparam.Rarea ~= 1
-            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N' num2str(num_grits) ...
-                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
-                'Rgap' num2str(sepparam.RowGap) 'RA' num2str(geoparam.Rarea)] ;
-        else
-            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N' num2str(num_grits) ...
-                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
-                'Rgap' num2str(sepparam.RowGap)] ;
-        end
-    else
-        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) 'N' num2str(num_grits) ...
+    if geoparam.shape == 1
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
             'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
             'Rgap' num2str(sepparam.RowGap) 'SH' num2str(geoparam.shape) 'w' num2str(geoparam.omega)  ...
             'hsg' num2str(geoparam.sigmah) 'swsg' num2str(geoparam.sigmasw) 'FT' num2str(geoparam.fillet_mode) ...
             'RA' num2str(geoparam.Rarea) 'RAM' num2str(geoparam.RA_mode)] ;
+    elseif geoparam.shape == 2
+            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
+                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
+                'Rgap' num2str(sepparam.RowGap) 'RA' num2str(geoparam.Rarea)] ;
+    else
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
+                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
+                'Rgap' num2str(sepparam.RowGap)  'xi' num2str(geoparam.xi)] ;
     end
 end
 end

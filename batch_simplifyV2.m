@@ -69,6 +69,7 @@ for batnum = 1
     end
 end
 %%
+clear geoparam
 geoparam.shape = 2;
 FOI = 'ellipsoid'; % field of interest
 for batnum = 1
@@ -88,6 +89,7 @@ for batnum = 1
     end
 end
 %%
+clear geoparam
 geoparam.shape = 3;
 FOI = 'tetradecahedron'; % field of interest
 for batnum = 1
