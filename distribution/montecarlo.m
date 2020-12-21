@@ -2,10 +2,10 @@ function [numBubbles, grit_profile_all]=montecarlo(filename,workpiece_length,wor
 %% use Monte Carlo algorithm to generate the distribution of abrasive grains
 %% parameters
 %%%%%%%%%%
-mu = 10; sigma=0.1;
+mu = 10;
 %%%%%%%%%%
 MuRadius=mu;       % minimum MuRadius
-SigMuRadius=sigma;      % maximum MuRadius
+SigMuRadius=geoparam.Rsigma;      % maximum MuRadius
 MaxSep=MuRadius*0.8;         % maximum Separation distance
 MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
@@ -62,6 +62,9 @@ bubbles.pos=roundn(bubbles.pos,-1);
 grits.posx=bubbles.pos(:,1);
 grits.posy=bubbles.pos(:,2);
 grits.Tradius=roundn(bubbles.Tradius,-3);
+grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
+grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
+
 index=find((grits.posy<GrdToollength).*(grits.posx<GrdToolwidth).*(grits.posx>1e-7).*(grits.posy>1e-7));
 grits.posx=grits.posx(index);
 grits.posy=grits.posy(index);

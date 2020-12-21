@@ -17,7 +17,7 @@ for batnum = 1
                         FOI = 'EF_RA';  % field of interest
                         if wheel_type == 2 % within different distribution
                             for theta = [30, 60]
-                                geoparam.theta = theta;
+                                sepparam.theta = theta;
                                 GrdProcess4(batnum,FOI,sepparam,geoparam);
                             end
                         else
@@ -39,7 +39,7 @@ for batnum = 1
                     FOI = 'EF_sigmah';
                     if wheel_type == 2
                         for theta = [30, 60]
-                            geoparam.theta = theta;
+                            sepparam.theta = theta;
                             GrdProcess4(batnum,FOI,sepparam,geoparam);
                         end
                     else
@@ -65,6 +65,23 @@ for batnum = 1
                     end
                 end
             end
+            geoparam.sigmasw = 0;
+            %% for grains radius
+            for Rsigma = [0.05, 0.1, 0.15]
+                geoparam.Rsigma = Rsigma;
+                for Rarea = [0.1, 0.7]
+                    geoparam.Rarea = Rarea;
+                    FOI = 'EF_Rsigma';
+                    if wheel_type == 2
+                        for theta = [30, 60]
+                            sepparam.theta = theta;
+                            GrdProcess4(batnum,FOI,sepparam,geoparam);
+                        end
+                    else
+                        GrdProcess4(batnum,FOI,sepparam,geoparam);
+                    end
+                end
+            end
         end
     end
 end
@@ -80,7 +97,7 @@ for batnum = 1
             geoparam.Rarea = Rarea;
             if wheel_type == 2
                 for theta = [30, 60]
-                    geoparam.theta = theta;
+                    sepparam.theta = theta;
                     GrdProcess4(batnum,FOI,sepparam,geoparam);
                 end
             else
@@ -100,7 +117,7 @@ for batnum = 1
         for xi = [0, 1/(2*1.732), 1/1.732, 1/2]
             if wheel_type == 2
                 for theta = [30, 60]
-                    geoparam.theta = theta;
+                    sepparam.theta = theta;
                     GrdProcess4(batnum,FOI,sepparam,geoparam);
                 end
             else
@@ -121,6 +138,10 @@ if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
 newsubfolder = 'UT_data/EF_sigmasw';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'UT_data/EF_Rsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end

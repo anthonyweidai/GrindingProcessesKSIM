@@ -1,4 +1,3 @@
-
 function [grit_profile_all]=whl_generation(mode,grits,filename,geoparam)
 %% geometrical parameters
 % R = 10;

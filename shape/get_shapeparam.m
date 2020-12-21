@@ -81,7 +81,7 @@ if geoparam.shape == 1
             %% get point to fill up top place
             % top
             Zmax = max(nodes_z);
-            Sz = Zmax + 1/15*setback*(omega^(6/11)/7+0.55); % compensate
+            Sz = Zmax + 1/15*setback*(omega^(6/11)/7+0.6); % compensate
             Rs = Sz/vtex(3);
             Sx = Rs*vtex(1);
             Sy = Rs*vtex(2);
