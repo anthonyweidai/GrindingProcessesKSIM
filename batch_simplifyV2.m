@@ -1,6 +1,6 @@
 set(0,'defaultfigurecolor',[1 1 1])
 create_folder();
-%%
+%% if the programme works well, then use batnum 2
 geoparam.shape = 1;
 for batnum = 1
     for wheel_type = 1:2
@@ -8,7 +8,7 @@ for batnum = 1
         for fillet_mode = 0:1%
             geoparam.fillet_mode = fillet_mode;
             %% for rake angle
-            for omega = [3, 5, 7, 9, 25]        
+            for omega = [3, 5, 7, 9, 25]
                 geoparam.omega = omega;
                 for RA_mode = 0:1 %
                     geoparam.RA_mode = RA_mode;
@@ -31,6 +31,7 @@ for batnum = 1
         geoparam.RA_mode = 1;
         %% for sigmah
         for omega = [7, 25]
+            geoparam.omega = omega;
             for sigmah = [0.02, 0.04, 0.06] % R = 10, 3sigma
                 geoparam.sigmah = sigmah;
                 for Rarea = [0.1, 0.7] % pyramid and trapzoid
@@ -68,9 +69,10 @@ for batnum = 1
     end
 end
 %%
+clear geoparam
 geoparam.shape = 2;
 FOI = 'ellipsoid'; % field of interest
-for batnum = 1:2
+for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
         for Rarea = [0.4, 0.6, 0.8, 1, 1.5, 2, 2.5]
@@ -87,9 +89,10 @@ for batnum = 1:2
     end
 end
 %%
+clear geoparam
 geoparam.shape = 3;
 FOI = 'tetradecahedron'; % field of interest
-for batnum = 1:2
+for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
         for xi = [0, 1/(2*1.732), 1/1.732, 1/2]

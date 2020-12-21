@@ -22,13 +22,13 @@ res=.2;
 %% rotate grit
 if geoparam.shape == 3
     rotate_z1 = [cos(pi/4) -sin(pi/4) 0; sin(pi/4) cos(pi/4) 0; 0 0 1];
-    rotate_y1 = [cos(pi/2-asin((3^0.5)/3)) 0 sin(pi/2-asin((3^0.5)/3)); 0 1 0; -sin(pi/2-asin((3^0.5)/3)) 0 cos(pi/2-asin((3^0.5)/3))];
+    % rotate_y1 = [cos(pi/2-asin((3^0.5)/3)) 0 sin(pi/2-asin((3^0.5)/3)); 0 1 0; -sin(pi/2-asin((3^0.5)/3)) 0 cos(pi/2-asin((3^0.5)/3))];
     
     for i = 1:size(P,1)
         P(i,:) = rotate_z1*P(i,:)';
-        if orimode == 2
-            P(i,:) = rotate_y1*P(i,:)';
-        end
+       % if orimode == 2
+       %    P(i,:) = rotate_y1*P(i,:)';
+       % end
     end
 end
 
