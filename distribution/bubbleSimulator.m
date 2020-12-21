@@ -1,6 +1,5 @@
-
 function [grits,grit_profille_all]=bubbleSimulator(filename, workpiece_length,...
-    workpiece_width, num_grits,geoparam)
+    workpiece_width, num_grits, geoparam)
 % [mu,sigma]=mesh2diameter(2500);
 % filename='N2000_r1';
 % cycle=1;
@@ -67,6 +66,8 @@ bubbles.pos=roundn(bubbles.pos,-1);
 grits.posx=bubbles.pos(:,1);
 grits.posy=bubbles.pos(:,2);
 grits.Tradius=roundn(bubbles.Tradius,-3);
+grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
+grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
 
 index=find((grits.posy<workpiece_length).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
 grits.posx=grits.posx(index)-w_boundary;

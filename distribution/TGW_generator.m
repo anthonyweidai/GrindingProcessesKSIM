@@ -5,7 +5,7 @@ mu=10;sigma=geoparam.Rsigma;         %smaller grit configuration
 % numBubbles=num_grits;        % number of bubbles; 1000 for 5um grits /170/330/620, 80d560,80d8gap=392
 MuRadius=mu;            % average radius
 SigRadius=sigma;        % 3 sigma /deviation
-theta = ( geoparam.theta )/180*pi;    %degree in bracket
+theta = ( sepparam.theta )/180*pi;    %degree in bracket
 RowGap = sepparam.RowGap;
 SepGap = sepparam.SepGap;
 k_dev = sepparam.k_dev;
