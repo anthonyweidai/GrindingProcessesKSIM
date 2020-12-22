@@ -5,7 +5,7 @@ function [numBubbles, grit_profile_all]=montecarlo(filename,workpiece_length,wor
 mu = 10;
 %%%%%%%%%%
 MuRadius=mu;       % minimum MuRadius
-SigMuRadius=geoparam.Rsigma;      % maximum MuRadius
+SigRadius=geoparam.Rsigma;      % maximum MuRadius
 MaxSep=MuRadius*0.8;         % maximum Separation distance
 MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
@@ -42,7 +42,7 @@ blockbound(:,2) = reshape(repmat(sort(temp1:temp1:GrdToolwidth)',1,y_blocknum),1
 blockbound(:,3) = reshape(repmat(sort(0:temp2:GrdToollength-temp2),x_blocknum,1),1,blocknum);
 blockbound(:,4) = reshape(repmat(sort(temp2:temp2:GrdToollength),x_blocknum,1),1,blocknum);
 bubbles.pos = zeros(numBubbles,2);
-bubbles.Tradius = normrnd(MuRadius,SigMuRadius,[numBubbles,1]);
+bubbles.Tradius = normrnd(MuRadius,SigRadius,[numBubbles,1]);
 bubbles.radius = bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
 bubbles.blockflag1 = zeros(numBubbles,1);
 bubbles.blockflag2 = zeros(numBubbles,1);

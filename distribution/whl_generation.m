@@ -18,7 +18,7 @@ else
     mode=0;
 end
 %----------------------------------------
-Surf_res=.2;
+Surf_res=1;
 %----------------------------------------
 if mode==0
     x_upper=Surf_l/Surf_res;
@@ -66,7 +66,7 @@ for grit_n = 1:numgrits
         end
     end
     %%
-    grit_P=get_gritshape(rad,geoparam); 
+    grit_P=get_gritshape(rad,geoparam,Surf_res); 
     grit_profile_all=[grit_profile_all; {grit_P}];
     
     %%

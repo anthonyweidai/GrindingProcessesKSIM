@@ -1,4 +1,4 @@
-function [vq] = get_gritshape(R,geoparam)
+function [vq] = get_gritshape(R,geoparam,res)
 %% parameters notion, use structure for input variables
 % R-DEFAULT grit size, shape: 1-pyramid&trapezoid 2-shpere&ellipsoid
 % omega, number of edges for pyramid and trapezoid
@@ -18,7 +18,6 @@ function [vq] = get_gritshape(R,geoparam)
 %%
 rotate_angle = rand*3.1415926;
 P = get_shapeparam(R,geoparam);
-res=.2;
 %% rotate grit
 if geoparam.shape == 3
     rotate_z1 = [cos(pi/4) -sin(pi/4) 0; sin(pi/4) cos(pi/4) 0; 0 0 1];
