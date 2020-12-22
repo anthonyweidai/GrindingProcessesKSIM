@@ -14,7 +14,7 @@ for batnum = 1
                     geoparam.RA_mode = RA_mode;
                     for Rarea = [0.1, 0.3, 0.5, 0.7, 0.9]
                         geoparam.Rarea = Rarea;
-                        FOI = 'EF_RA';  % field of interest
+                        FOI = 'EFrake';  % field of interest
                         if wheel_type == 2 % within different distribution
                             for theta = [30, 60]
                                 sepparam.theta = theta;
@@ -36,7 +36,7 @@ for batnum = 1
                 geoparam.sigmah = sigmah;
                 for Rarea = [0.1, 0.7] % pyramid and trapzoid
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF_sigmah';
+                    FOI = 'EFsigmah';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -54,7 +54,7 @@ for batnum = 1
                 geoparam.sigmasw = sigmasw;
                 for Rarea = [0.1, 0.7]
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF_sigmasw';
+                    FOI = 'EFsigmasw';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -71,7 +71,7 @@ for batnum = 1
                 geoparam.Rsigma = Rsigma;
                 for Rarea = [0.1, 0.7]
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF_Rsigma';
+                    FOI = 'EFRsigma';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -89,7 +89,7 @@ end
 clear geoparam
 clear sepparam
 geoparam.shape = 2;
-FOI = 'ellipsoid'; % field of interest
+FOI = 'ELS'; % field of interest ellipsoid
 for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
@@ -110,7 +110,7 @@ end
 clear geoparam
 clear sepparam
 geoparam.shape = 3;
-FOI = 'tetradecahedron'; % field of interest
+FOI = 'TTDD'; % field of interest tetradecahedron
 for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
@@ -131,27 +131,27 @@ end
 
 function create_folder()
 %% create folder
-newsubfolder = 'UT_data/EF_RA';
+newsubfolder = 'UT_data/EFrake';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF_sigmah';
+newsubfolder = 'UT_data/EFsigmah';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF_sigmasw';
+newsubfolder = 'UT_data/EFsigmasw';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF_Rsigma';
+newsubfolder = 'UT_data/EFRsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/ellipsoid';
+newsubfolder = 'UT_data/ELS';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/tetradecahedron';
+newsubfolder = 'UT_data/TTDD';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
