@@ -11,6 +11,7 @@ Vy2 = blocknum-x_blocknum+1:1:blocknum; % up -
 dismax = 2*ceil(max(bubbles.Tradius)*100)/100;
 
 Ntotal = length(bubbles.Tradius);
+numcount = 0;
 %% montecar update
 while(Ntotal>=1e-7)
     for nblock = 1:numel(blockflag1_map)
@@ -42,7 +43,7 @@ while(Ntotal>=1e-7)
         end
         %% overlap invalidation
         forflag1 = 0;
-        if bubbles.numcount >= 1e-7
+        if numcount >= 1e-7
             xthld1 = 0;
             xthld2 = 0;
             ythld1 = 0;
@@ -56,11 +57,11 @@ while(Ntotal>=1e-7)
             elseif ismember(nblock,Vy2)
                 ythld2 = 1;
             end
-            for k = 1:bubbles.numcount
+            for k = 1:numcount
                 % invalidate overplap within the same block
                 if bubbles.blockflag1(k) == blockflag1
                     distance1 = sqrt((bubbles.pos(k,1)-posx)^2 + (bubbles.pos(k,2)-posy)^2);
-                    if distance1 < (bubbles.Tradius(k)+bubbles.Tradius(bubbles.numcount+1))
+                    if distance1 < (bubbles.Tradius(k)+bubbles.Tradius(numcount+1))
                         forflag1 = 1;
                         break
                     end
@@ -70,7 +71,7 @@ while(Ntotal>=1e-7)
                     continue
                 elseif boundflag == 1
                     Thred = [xthld1,xthld2,ythld1,ythld2];
-                    judgeblock = ajacent_inval(k,bubbles,blockflag1,blockflag2,Thred,posx,posy,x_blocknum);
+                    judgeblock = ajacent_inval(k,numcount,bubbles,blockflag1,blockflag2,Thred,posx,posy,x_blocknum);
                     if judgeblock == 0
                         forflag1 = 1;
                         break
@@ -80,12 +81,12 @@ while(Ntotal>=1e-7)
         end
         %% without overlap
         if forflag1 == 0
-            bubbles.numcount = bubbles.numcount + 1;
+            numcount = numcount + 1;
             Ntotal = Ntotal - 1;
-            bubbles.pos(bubbles.numcount,1) = posx;
-            bubbles.pos(bubbles.numcount,2) = posy;
-            bubbles.blockflag1(bubbles.numcount) = blockflag1;
-            bubbles.blockflag2(bubbles.numcount) = blockflag2;
+            bubbles.pos(numcount,1) = posx;
+            bubbles.pos(numcount,2) = posy;
+            bubbles.blockflag1(numcount) = blockflag1;
+            bubbles.blockflag2(numcount) = blockflag2;
         end
         if Ntotal <= 1e-7
             break

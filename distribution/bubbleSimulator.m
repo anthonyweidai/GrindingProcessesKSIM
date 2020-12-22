@@ -1,4 +1,4 @@
-function [grits,grit_profille_all]=bubbleSimulator(filename, workpiece_length,...
+function [grits,grit_profille_all]=bubbleSimulator(filename, sepparam, workpiece_length,...
     workpiece_width, num_grits, geoparam)
 % [mu,sigma]=mesh2diameter(2500);
 % filename='N2000_r1';
@@ -23,7 +23,8 @@ Ts=0.005;           % simulation sampling time
 damparea=0;
 w_boundary=4;
 w_gt=mu*50;
-GrdToolwidth=mu*50+w_boundary*2;
+GrdToollength = workpiece_length*2;
+GrdToolwidth = mu*50+w_boundary*2;
 % generate bubbles and initialise
 %bubbles.radius=rand(numBubbles,1)*(maxRadius-minRadius)+minRadius;
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[numBubbles,1]);
@@ -38,9 +39,9 @@ rr=repmat(bubbles.radius,1,numBubbles);
 sumRadius=(rr+rr');
 
 t=0;
-figure;
-circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
-axis equal;drawnow;
+% figure;
+% circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
+% axis equal;drawnow;
 % simulation starts
 while t<5
     t=t+Ts;
@@ -50,18 +51,22 @@ while t<5
         g=0.2/mu;
     end
     bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,GrdToolwidth,sumRadius,damparea);
-    if ~mod(round(t/Ts),10)
-        clf;
-        circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
-        
-        cr=numBubbles*1e6/(max(bubbles.pos(:,1))*max(bubbles.pos(:,2)));
-        title(cr);axis equal;drawnow;
-        %disp(['dropping....',int2str(round(t/15*100)),'%' ])
-    end
-    
+    %     if ~mod(round(t/Ts),10)
+    %         %disp(['dropping....',int2str(round(t/15*100)),'%' ])
+    %     end
 end
 close gcf;
 % print([filename '-cr.jpg'], '-djpeg' );
+%% laser frame
+bubbles(sepparam.LS_mode == 1) = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+    sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
+%%
+clf;
+circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
+
+cr=numBubbles*1e6/(max(bubbles.pos(:,1))*max(bubbles.pos(:,2)));
+title(cr);axis equal;drawnow;
+%%
 bubbles.pos=roundn(bubbles.pos,-1);
 grits.posx=bubbles.pos(:,1);
 grits.posy=bubbles.pos(:,2);

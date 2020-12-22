@@ -13,7 +13,7 @@ test_change.m
 experiment_monte/
 experiment_shape/
 former/
-new/
+experiment_laser/
 UT_data/
 # 忽略 doc/notes.txt, 不包括 doc/server/arch.txt
 # doc/*.txt

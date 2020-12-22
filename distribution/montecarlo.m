@@ -50,7 +50,9 @@ blockflag1_map = reshape(1:blocknum,[x_blocknum,y_blocknum]); % block = 35; bloc
 bubbles.numcount = 0;
 %% monte carlo generation
 bubbles = montecar_update(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum);
-
+%% laser frame
+bubbles(sepparam.LS_mode == 1) = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+    sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
 % figure;
 % axis equal;drawnow;
 % circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
