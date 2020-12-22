@@ -14,7 +14,7 @@ for batnum = 1
                     geoparam.RA_mode = RA_mode;
                     for Rarea = [0.1, 0.3, 0.5, 0.7, 0.9]
                         geoparam.Rarea = Rarea;
-                        FOI = 'EF\_RA';  % field of interest
+                        FOI = 'EFrake';  % field of interest
                         if wheel_type == 2 % within different distribution
                             for theta = [30, 60]
                                 sepparam.theta = theta;
@@ -36,7 +36,7 @@ for batnum = 1
                 geoparam.sigmah = sigmah;
                 for Rarea = [0.1, 0.7] % pyramid and trapzoid
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF\_sigmah';
+                    FOI = 'EFsigmah';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -54,7 +54,7 @@ for batnum = 1
                 geoparam.sigmasw = sigmasw;
                 for Rarea = [0.1, 0.7]
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF\_sigmasw';
+                    FOI = 'EFsigmasw';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -71,7 +71,7 @@ for batnum = 1
                 geoparam.Rsigma = Rsigma;
                 for Rarea = [0.1, 0.7]
                     geoparam.Rarea = Rarea;
-                    FOI = 'EF\_Rsigma';
+                    FOI = 'EFRsigma';
                     if wheel_type == 2
                         for theta = [30, 60]
                             sepparam.theta = theta;
@@ -131,19 +131,19 @@ end
 
 function create_folder()
 %% create folder
-newsubfolder = 'UT_data/EF\_RA';
+newsubfolder = 'UT_data/EFrake';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF\_sigmah';
+newsubfolder = 'UT_data/EFsigmah';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF\_sigmasw';
+newsubfolder = 'UT_data/EFsigmasw';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EF\_Rsigma';
+newsubfolder = 'UT_data/EFRsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
