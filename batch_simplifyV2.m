@@ -115,6 +115,7 @@ for batnum = 1
     for wheel_type = 1:2
         sepparam.wheel_type = wheel_type;
         for xi = [0, 1/(2*1.732), 1/1.732, 1/2]
+            geoparam.xi = xi;
             if wheel_type == 2
                 for theta = [30, 60]
                     sepparam.theta = theta;
@@ -124,6 +125,7 @@ for batnum = 1
                 GrdProcess4(batnum,FOI,sepparam,geoparam);
             end
         end
+        % sigma_h can be added
     end
 end
 
