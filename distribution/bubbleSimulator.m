@@ -41,7 +41,7 @@ t=0;
 figure;
 circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
 axis equal;drawnow;
-simulation starts
+% simulation starts
 while t<5
     t=t+Ts;
     if t<5
