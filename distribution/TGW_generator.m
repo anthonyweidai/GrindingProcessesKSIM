@@ -13,8 +13,8 @@ k_dev = sepparam.k_dev;
 %% gap with grains' sizes
 g_Gap = (SepGap+1)*mu*2;
 r_Gap = (RowGap+1)*mu*2;
-wheel_width=workpiece_width;
-wheel_length=2*workpiece_length;
+GrdToolwidth=workpiece_width;
+GrdToollength=2*workpiece_length;
 %% generate lattice with angle
 xlattice = [];
 ylattice = [];
@@ -22,8 +22,8 @@ if theta == pi/2
     theta = 0;
 end
 
-ycoord = 0:g_Gap*sin(theta):wheel_length; % cut point in y-coordinate
-xtemp = -wheel_length/tan(theta):r_Gap/sin(theta):wheel_width;
+ycoord = 0:g_Gap*sin(theta):GrdToollength; % cut point in y-coordinate
+xtemp = -GrdToollength/tan(theta):r_Gap/sin(theta):GrdToolwidth;
 start_rnd = g_Gap*rand([1,length(xtemp)]);
 xtemp = xtemp + start_rnd.*cos(theta);
 for i = 1:length(ycoord)
@@ -41,7 +41,7 @@ for i = 1:length(ycoord)
     xlattice = [xlattice xtemp+x_dev];
     ylattice = [ylattice ytemp+y_dev];
 end
-index=find((ylattice<2*wheel_length).*(xlattice<wheel_width).*(ylattice>1e-7).*(xlattice>1e-7));
+index=find((ylattice<2*GrdToollength).*(xlattice<GrdToolwidth).*(ylattice>1e-7).*(xlattice>1e-7));
 bubbles.pos(:,1) = xlattice(index);
 bubbles.pos(:,2) = ylattice(index);
 
@@ -53,9 +53,11 @@ grits.Tradius=round(bubbles.Tradius,3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
 grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
 
-figure('visible','off');%;
+%figure('visible','off');%;
+clf;
 circles(grits.posx,grits.posy,grits.Tradius);
 axis equal;drawnow;
+close gcf;
 %%
 T= struct2table(grits); % convert the struct array to a table
 sortedT = sortrows(T, 'posy'); % sort the table by 'DOB'

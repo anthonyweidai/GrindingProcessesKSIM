@@ -22,7 +22,15 @@ workpiece_length=1000;   %the length of a workpiece
 workpiece_width=500;     %max(grits.posx);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% seperation parameters
-sepparam.wheel_type(~isfield(sepparam,'wheel_type'))=2;   % 1-random; 2-tgw
+sepparam.wheel_type(~isfield(sepparam,'wheel_type')) = 2;   % 1-random; 2-tgw
+if sepparam.wheel_type == 1
+    sepparam.LS_mode(~isfield(sepparam,'LS_mode')) = 0;
+    if sepparam.LS_mode == 1
+        sepparam.theta(~isfield(sepparam,'theta')) = 60;
+        sepparam.SepGap(~isfield(sepparam,'SepGap')) = 150;
+        sepparam.SaveGap(~isfield(sepparam,'RowGap')) = 100;
+    end
+end
 if sepparam.wheel_type == 2
     sepparam.theta(~isfield(sepparam,'theta')) = 80;   % line tilt angle:30 40 50 60 70 80
     sepparam.SepGap(~isfield(sepparam,'SepGap')) = 0.5; % column gap: 0.5,1,3,5
@@ -48,8 +56,8 @@ premise = cell2mat(struct2cell(geoparam))';
 if sepparam.wheel_type==1
     num_grits = 1200;
     filename = get_filename(batnum, sepparam, geoparam, FOI);
-    [grits,grit_profile_all]=bubbleSimulator(filename, workpiece_length,...
-    workpiece_width, num_grits, geoparam);
+    [grits,grit_profile_all]=bubbleSimulator(filename, sepparam, workpiece_length,...
+        workpiece_width, num_grits, geoparam);
 else
     temp = rmfield(sepparam,'wheel_type');
     premise = [cell2mat(struct2cell(temp))',premise];
@@ -82,13 +90,13 @@ elseif wheel_type == 2
             'Hsg' num2str(geoparam.sigmah) 'Ssg' num2str(geoparam.sigmasw) 'Rsg' num2str(geoparam.Rsigma) ...
             'FT' num2str(geoparam.fillet_mode) 'RA' num2str(geoparam.Rarea) 'RAM' num2str(geoparam.RA_mode)] ;
     elseif geoparam.shape == 2
-            filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
-                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
-                'Rgap' num2str(sepparam.RowGap) 'RA' num2str(geoparam.Rarea) 'Rsg' num2str(geoparam.Rsigma)] ;
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
+            'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
+            'Rgap' num2str(sepparam.RowGap) 'RA' num2str(geoparam.Rarea) 'Rsg' num2str(geoparam.Rsigma)] ;
     else
         filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
-                'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
-                'Rgap' num2str(sepparam.RowGap)  'xi' num2str(geoparam.xi) 'Rsg' num2str(geoparam.Rsigma)] ;
+            'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
+            'Rgap' num2str(sepparam.RowGap)  'xi' num2str(geoparam.xi) 'Rsg' num2str(geoparam.Rsigma)] ;
     end
 end
 end
