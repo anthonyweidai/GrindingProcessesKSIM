@@ -286,19 +286,19 @@ elseif geoparam.shape == 2
     nodes_y=b*sin(phi).*sin(theta);
     nodes_z=c*cos(phi);
 elseif geoparam.shape == 3
-    %% tetradecahedron = cube by cuting its 6 vertecies
-    % eight vertecies coordinates + half of it
-    xi = geoparam.xi;
-    a = 2;
-    rectangle = [1, -1, 0; %
-        1, 1, 0;
-        -1, 1, 0;
-        -1, -1, 0;
-        1, -1, 1;
-        1, 1, 1;
-        -1, 1, 1;
-        -1, -1, 1];
+    %% tetradecahedron = cube by cuting its 6 vertecies  
+    a = 1.414*R_culet; % the length of cube
+    temp = a/2;
+    rectangle = [temp, -temp, 0; %
+        temp, temp, 0;
+        -temp, temp, 0;
+        -temp, -temp, 0;
+        temp, -temp, temp;
+        temp, temp, temp;
+        -temp, temp, temp;
+        -temp, -temp, temp];
     
+    xi = geoparam.xi;
     b = 0.707*a + 1.414*a*xi;
     octahedron = [0, -0.707*b, 0; % b = sqrt(2)*(a/2+a*xi)
         0.707*b, 0, 0;
@@ -357,8 +357,14 @@ elseif geoparam.shape == 3
         num_temp = num_temp + 2;
     end
     %%
+    mu_r = 2.828; % 2x1.414 times 
+    sigmah = geoparam.sigmah;
+    Hr = normrnd(mu_r,mu_r*sigmah);
+    Hr = max(Hr,(mu_r-3*mu_r*sigmah));
+    Hr = min(Hr,(mu_r+3*mu_r*sigmah));
+    tetradecahedron(:,3) = tetradecahedron(:,3)*Hr;
     tetradecahedron = [tetradecahedron; rectangle(1:realnum_vertex,:)];
-    tetradecahedron = R_culet/norm(tetradecahedron(end,:)-[0 0 0])*tetradecahedron;
+
     nodes_x = tetradecahedron(:,1)';
     nodes_y = tetradecahedron(:,2)';
     nodes_z = tetradecahedron(:,3)';
