@@ -3,7 +3,7 @@ create_folder();
 %% if the programme works well, then use batnum 2
 geoparam.shape = 1;
 for batnum = 1
-    for wheel_type = 1:2
+    for wheel_type = 2
         sepparam.wheel_type = wheel_type;
         for fillet_mode = 0:1%
             geoparam.fillet_mode = fillet_mode;
@@ -18,6 +18,9 @@ for batnum = 1
                         if wheel_type == 2 % within different distribution
                             for theta = [30, 60]
                                 sepparam.theta = theta;
+                                sepparam.RowGap = 60;
+                                sepparam.SaveGap = 60;
+                                sepparam.LS_mode = 1;
                                 GrdProcess4(batnum,FOI,sepparam,geoparam);
                             end
                         else

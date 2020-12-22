@@ -4,7 +4,7 @@ function bubbles = Laser_Frame(Laser_theta, RowGap, SaveGap, GrdToollength, GrdT
 % RowGap - row gap between ajacent centers of lines
 % SaveGap - save gap of each line
 theta = Laser_theta/180*pi;
-if RowGap <= SaveGap
+if RowGap < SaveGap
    disp('Wrong gap, cannot lasering!') 
    return
 end
@@ -38,7 +38,7 @@ end
 %% remove elements with outside points
 fnames = fieldnames(bubbles);
 temp1 = length(fnames);
-for j = 1:temp1
+for j = 1:temp1-1
     bubbles.(fnames{j}) = bubbles.(fnames{j})(idx,:);
 end
 end

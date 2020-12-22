@@ -1,4 +1,4 @@
-function [numBubbles, grit_profile_all]=montecarlo(filename,workpiece_length,workpiece_width,geoparam)
+function [grits, grit_profile_all]=montecarlo(filename,sepparam,workpiece_length,workpiece_width,geoparam)
 %% use Monte Carlo algorithm to generate the distribution of abrasive grains
 %% parameters
 %%%%%%%%%%
@@ -77,5 +77,5 @@ sortedT =sortrows(T, 'posy'); % sort the table by 'DOB'
 % cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 % disp(cr);
 writetable(sortedT,[filename '.csv']);
-grit_profile_all=whl_generation(1,[filename],geoparam);
+grit_profile_all=whl_generation(1,grits,[filename],geoparam);
 end
