@@ -1,4 +1,4 @@
-function bubbles = montecar_update(bubbles,blockbound, blockflag1_map, x_blocknum, y_blocknum)
+function bubbles = montecar_update(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum)
 %% update bubbles's postion by monte carlo algorithm and block area idea
 % these blocks are located in boundaries
 blocknum = x_blocknum * y_blocknum;

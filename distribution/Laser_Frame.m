@@ -38,7 +38,7 @@ end
 %% remove elements with outside points
 fnames = fieldnames(bubbles);
 temp1 = length(fnames);
-for j = 1:temp1-1
+for j = 1:temp1
     bubbles.(fnames{j}) = bubbles.(fnames{j})(idx,:);
 end
 end
