@@ -37,7 +37,7 @@ After that, you can **change whatever you want reference to your backup ones.**
 
 What if there is also without commit in others' sub branches, when the next time you push? --- Jump to step 2.
 
-
+简而言之，就是不要自己merge自己的branch到default branch。
 
 Cheers,
 
