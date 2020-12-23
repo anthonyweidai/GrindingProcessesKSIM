@@ -10,13 +10,13 @@ if RowGap < SaveGap
 end
 %%
 % get center lines lattice
-temp1 = RowGap*cos(theta);
+temp1 = RowGap/cos(theta);
 lengthen = GrdToolwidth*tan(theta);
 num_polygon = floor((GrdToollength+lengthen)/(temp1)); % number polygon vertecies
 Center_Lylattice = -lengthen:temp1:GrdToollength; % left |
 Center_Rylattice = 0:temp1:GrdToollength + lengthen; % right |
 % get saved area boundries lattice
-temp2 = SaveGap*cos(theta)/2;
+temp2 = SaveGap/cos(theta)/2;
 L_ylattice1 = Center_Lylattice - temp2;
 L_ylattice2 = Center_Lylattice + temp2;
 R_ylattice1 = Center_Rylattice - temp2;
