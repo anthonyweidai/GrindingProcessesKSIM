@@ -63,5 +63,5 @@ T= struct2table(grits); % convert the struct array to a table
 sortedT = sortrows(T, 'posy'); % sort the table by 'DOB'
 sort(bubbles.pos,2);
 writetable(sortedT,[filename '.csv']);
-[grit_profile_all]=whl_generation(1,grits,[filename],geoparam);
+[grits, grit_profile_all]=whl_generation(1,grits,[filename],geoparam);
 end
