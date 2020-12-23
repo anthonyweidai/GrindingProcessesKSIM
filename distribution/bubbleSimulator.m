@@ -58,8 +58,10 @@ end
 close gcf;
 % print([filename '-cr.jpg'], '-djpeg' );
 %% laser frame
-bubbles(sepparam.LS_mode == 1) = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
+bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
     sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
+end
 %%
 clf;
 circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
