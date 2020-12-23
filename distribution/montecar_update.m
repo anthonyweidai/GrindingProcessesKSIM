@@ -8,9 +8,9 @@ Vy1 = 1:1:x_blocknum; % down -
 Vy2 = blocknum-x_blocknum+1:1:blocknum; % up -
 
 % distance to boundary ceil
-dismax = 2*ceil(max(bubbles.Tradius)*100)/100;
+dismax = 2*ceil(max(bubbles.radius)*100)/100;
 
-Ntotal = length(bubbles.Tradius);
+Ntotal = length(bubbles.radius);
 numcount = 0;
 %% montecar update
 while(Ntotal>=1e-7)
@@ -61,7 +61,7 @@ while(Ntotal>=1e-7)
                 % invalidate overplap within the same block
                 if bubbles.blockflag1(k) == blockflag1
                     distance1 = sqrt((bubbles.pos(k,1)-posx)^2 + (bubbles.pos(k,2)-posy)^2);
-                    if distance1 < (bubbles.Tradius(k)+bubbles.Tradius(numcount+1))
+                    if distance1 < (bubbles.radius(k)+bubbles.radius(numcount+1))
                         forflag1 = 1;
                         break
                     end

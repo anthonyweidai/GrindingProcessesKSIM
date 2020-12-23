@@ -2,9 +2,9 @@
 
 ## Step 1: Before you push your local repo
 
-Firstly, please check the others' branches such as Dave_update. If there are some commits in their repo, be careful. 
+Firstly, please check the others' pull request.
 
-### They haven't changed your new files
+### They haven't changed your new files or the changed parts are different
 
 In this case, merge their repo into the default repo, and then pull the default repo to merge your local one. You should know that it won't change the files you have changed. Instead, it will show you
 
@@ -13,7 +13,7 @@ branch            main       -> FETCH_HEAD
 Already up to date.
 ```
 
-### Your new files have changed by them
+### The parts you've changed were also changed by them
 
 This is intriguing and should be taken care. At that time, you are supposed to back up the files you have changed, and merge their repo to the default repo. Then,
 
@@ -35,7 +35,8 @@ After that, you can **change whatever you want reference to your backup ones.**
 
 ## Some questions
 
-What if there is also without commit in others' sub branches, when the next time you push? --- Jump to step 2.
+1. What if there is also without commit in others' sub branches, when the next time you push? --- Jump to step 2.
+2. Can I just create a pull request to default branch? --- If you are not the repo owner, you are welcomed to do that.
 
 简而言之，就是不要自己merge自己的branch到default branch。
 
