@@ -1,8 +1,48 @@
-I have created a new branch "Dave_update". You can merge it with the main branch.
+# To avoid interference
 
-# GrdProcess
+## Step 1: Before you push your local repo
 
-The repo is grinding process kinematic simulation in MATLAB.
+Firstly, please check the others' pull request.
+
+### They haven't changed your new files or the changed parts are different
+
+In this case, merge their repo into the default repo, and then pull the default repo to merge your local one. You should know that it won't change the files you have changed. Instead, it will show you
+
+```c
+branch            main       -> FETCH_HEAD
+Already up to date.
+```
+
+### The parts you've changed were also changed by them
+
+This is intriguing and should be taken care. At that time, you are supposed to back up the files you have changed, and merge their repo to the default repo. Then,
+
+```c
+git pull origin main
+```
+
+or
+
+```c
+git pull upstream main 
+```
+
+After that, you can **change whatever you want reference to your backup ones.**
+
+## Step 2: Push
+
+ Finally, **push your code in your sub branch.**
+
+## Some questions
+
+1. What if there is also without commit in others' sub branches, when the next time you push? --- Jump to step 2.
+2. Can I just create a pull request to default branch? --- If you are not the repo owner, you are welcomed to do that.
+
+简而言之，就是不要自己merge自己的branch到default branch。
+
+Cheers,
+
+Anthon Dave
 
 # About Git
 ## Frok 之后的初始化
@@ -61,3 +101,6 @@ git commit -m "remove file1.txt"
 
 增加文件直接加就好了，然后也是commit
 
+# GrdProcess
+
+The repo is grinding process kinematic simulation in MATLAB.
