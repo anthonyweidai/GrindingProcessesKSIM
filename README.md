@@ -2,7 +2,7 @@
 
 ## Step 1: Before you push your local repo
 
-Firstly, please check the others' pull request.
+Firstly, please check the others' pull requests.
 
 ### They haven't changed your new files or the changed parts are different
 
