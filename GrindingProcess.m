@@ -12,6 +12,9 @@ testmode=0;
 H=7.6e-3; %Pa, 7.6GPa=7.6e-3N/um2^
 sigma_s=0.253e-3; %shear strength 0.253GPa
 sigma_y=3.5e-3; %yield strength 3.5GPa
+E=83e-3;
+v=0.203;
+f=0.108;
 %%
 %reading and get grit data
 %grit_list=readtable([filename '.csv'],'Range', 'A:F');
@@ -139,20 +142,29 @@ for v_i=1:num_vgrits
     temp_uct=max((h_origin-h_grit>0).*(h_origin-h_grit));
     temp_chparea=res*sum((h_origin-h_grit>0).*(h_origin-h_grit));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+%     stats_indented = 0;
+    a_temp = sum(h_grit<h_origin)*0.2/2;
+    alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+    b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
+%         if b_temp > 20
+%             b_temp=b_temp;
+%         end
 %     indents = find(rs_surf(round(g_y/res),:)>0); % find all stress field on the same roll
 %     for i = indents
-%         stats_indented = 0;
 %         b = rs_surf(round( g_y / res ), i);
-%         if abs( i - round( g_y / res )) < b 
+% 
+%         if abs( i - round( g_y / res ) ) < b/3 
 %             rs_surf(round( g_y / res ), i) = ( b ^ 2 + b_temp ^ 2 ) ^ 0.5;
 %             stats_indented = 1;
-%             continue
+%             break
 %         end
 %     end
-%     if stats_indented == 0
-%         rs_surf(round( g_y / res ), round(g_x /res) ) = b_temp;
-%     end
+    b_prev = rs_surf( round( g_y / res ), round( g_x / res ) );
+    if b_prev == 0
+        rs_surf( round( g_y / res ), round( g_x / res ) ) = b_temp;
+    else
+        rs_surf( round( g_y / res ), round( g_x / res ) ) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+    end
     
     %recording hmax, logging cut mode data
 %     h_m(t_tick,v_i)=temp_uct;
@@ -201,9 +213,9 @@ for v_i=1:num_vgrits
 end
 end
 
-
 %%
 h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res);
+rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res);
 Ra=SurfRoughANA(h_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 
@@ -313,7 +325,7 @@ else
     print([filename '-ucthisto.jpg'], '-djpeg' );
     close gcf;
     
-    %  3
+    % 3
     figure('units','normalized','outerposition',[0 0 1 1]);
     writematrix([vgrit hmax],[filename '-hmax.csv']);
     index_cut=find(hmax(:,2)==3);
@@ -325,6 +337,14 @@ else
     stem3(grits.posx(vgrit(index_plow,1)),vgrit(index_plow,3),hmax(index_plow,1),'r');
     stem3(grits.posx(vgrit(index_rub,1)),vgrit(index_rub,3),hmax(index_rub,1),'g');
     savefig([filename '-uctdist.fig']);
+    close gcf;
+
+    % 4
+    figure('units','normalized','outerposition',[0 0 1 1]);
+    surf_x=res:res:size(h_surf,2)*res;
+    surf_y=res:res:size(h_surf,1)*res;
+    surf(surf_x,surf_y,rs_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra)]);
+    print([filename 'rsdist.jpg'], '-djpeg' );
     close gcf;
 end
 end

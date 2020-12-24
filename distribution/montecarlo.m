@@ -9,7 +9,7 @@ SigRadius=geoparam.Rsigma;      % maximum MuRadius
 MaxSep=MuRadius*0.8;         % maximum Separation distance
 MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
-GrdToollength=2*workpiece_length;
+GrdToollength=4*workpiece_length;
 GrdToolwidth=workpiece_width;
 
 num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
@@ -47,7 +47,6 @@ bubbles.radius = bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
 bubbles.blockflag1 = zeros(numBubbles,1);
 bubbles.blockflag2 = zeros(numBubbles,1);
 blockflag1_map = reshape(1:blocknum,[x_blocknum,y_blocknum]); % block = 35; block = floor(sqrt(num));
-bubbles.numcount = 0;
 %% monte carlo generation
 bubbles = montecar_update(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum);
 %% laser frame
