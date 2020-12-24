@@ -14,7 +14,7 @@ k_dev = sepparam.k_dev;
 g_Gap = (SepGap+1)*mu*2;
 r_Gap = (RowGap+1)*mu*2;
 GrdToolwidth=workpiece_width;
-GrdToollength=2*workpiece_length;
+GrdToollength=5*workpiece_length;
 %% generate lattice with angle
 xlattice = [];
 ylattice = [];
@@ -51,7 +51,7 @@ grits.posy=round(bubbles.pos(:,2),3);
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[length(grits.posx),1]);
 grits.Tradius=round(bubbles.Tradius,3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
-grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
+grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
 %figure('visible','off');%;
 clf;

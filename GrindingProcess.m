@@ -23,7 +23,7 @@ k_t=1;
 %% grinding parameters
 rpm=3000;               %wheel spinning speed, round/min
 ds=30e3;                %diameter of a grd wheel, um
-vw=600e3;               %feed speed, um/min
+vw=200e3;               %feed speed, um/min
 % vw=vw/60;
 vs=floor(ds*pi*rpm/60);        %grd wheel line speed, um/s
 dp=2;                 %input('R_m2dgmax:');
