@@ -26,9 +26,6 @@ if mode==0
     wheel_x=0:Surf_res:Surf_l;
     wheel_y=0:Surf_res:Surf_w;
     wheel_h=zeros(y_upper+1,x_upper+1);
-    % figure;
-    %surf(wheel_x,wheel_y,wheel_h);
-    %axis equal;
     
     grits.lowbounds=max(0,round(grits.posx*10)/10-round(grits.Tradius*10)/10);
     grits.highbounds=min(Surf_w,round(grits.posx*10)/10+round(grits.Tradius*10)/10);
@@ -36,13 +33,7 @@ if mode==0
     grits.rightbounds=min(Surf_l,round(grits.posy*10)/10+round(grits.Tradius*10)/10);
     
 end
-% posx=repmat(wheel_x',[1,y_upper,numgrits]);
-% posy=repmat(wheel_y',[x_upper,1,numgrits]);
-% gritsx=repmat(grits.posx,[x_upper,y_upper,1])
-% gritsy=repmat(grits.posy,[x_upper,y_upper,1])
-hw_all=[];
-orim_all=[];
-r_angle_all=[];
+
 proh_all=[];
 outline_all=[];
 if isfile(['gprofile_temp\' filename '_temp.csv'])
@@ -56,11 +47,7 @@ for grit_n = 1:numgrits
         RB=find(wheel_y>=grits.highbounds(grit_n),1,'first');
         LB=find(wheel_x<=grits.leftbounds(grit_n),1,'last');
         HB=find(wheel_x>=grits.rightbounds(grit_n),1,'first');
-        
-        %         if mod(grit_n/numgrits*100,10)==0
-        %             disp([int2str(fix(grit_n/numgrits*100)),'%']);
-        %         end
-        
+
         if isempty(LB)
             LB=1;
         end
@@ -70,25 +57,20 @@ for grit_n = 1:numgrits
     grit_profile_all=[grit_profile_all; {grit_P}];
     
     %%
-    %     hw_all=[hw_all; hw];
-    %     proh_all=[proh_all; grit_ph];
-    %     orim_all=[orim_all;orimode];
-    %     r_angle_all=[r_angle_all;rotate_angle];
     outline=max(grit_P);
-    
-    outline=[outline , NaN(1,100-length(outline))];
+    proh_temp=max(outline);
+    proh_all=[proh_all; proh_temp];
+    outline=[outline , NaN(1,200-length(outline))];
     outline_all=[outline_all;outline];
-    num_P=size(grit_P,1);
-    %     pos_grit=repmat([grits.posx(grit_n),grits.posy(grit_n),0],num_P,1);
-    %     grit_P=grit_P+pos_grit;
+
     if mode==0
         for x_i=LB:HB
             for y_i=LFB:RB
                 relx=wheel_x(x_i)-round(grits.posy(grit_n)/Surf_res)*Surf_res;
-                rel_xi=round(relx/Surf_res+rad/Surf_res);
+                rel_xi=round(relx/Surf_res+rad/Surf_res)-1;
                 rel_xi=max(rel_xi,1);
                 rely=wheel_y(y_i)-round(grits.posx(grit_n)/Surf_res)*Surf_res;
-                    rel_yi=round(rely/Surf_res+rad/Surf_res);
+                    rel_yi=round(rely/Surf_res+rad/Surf_res)-1;
                     rel_yi=max(rel_yi,1);
                     wheel_h(y_i,x_i)=max(wheel_h(y_i,x_i),grit_P(rel_yi,rel_xi));
             end
@@ -116,8 +98,10 @@ if mode==0
     %SurfRoughANA(wheel_h);
 %     figure;
 %     histogram(hw_all);
-%     figure;
-%     histogram(proh_all);
+    figure;
+    histogram(proh_all);
+    print([filename '-phdist.jpg'], '-djpeg' );
+    close gcf;
 end
 % T= array2table(outline_all);
 % writetable(T,[filename '_gritols.csv']);

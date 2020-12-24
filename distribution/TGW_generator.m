@@ -1,10 +1,10 @@
 function [grits,grit_profile_all]=TGW_generator(filename, sepparam, workpiece_length,...
     workpiece_width, geoparam)
 %%
-mu=10;sigma=geoparam.Rsigma;         %smaller grit configuration
+mu=10;         %smaller grit configuration
 % numBubbles=num_grits;        % number of bubbles; 1000 for 5um grits /170/330/620, 80d560,80d8gap=392
 MuRadius=mu;            % average radius
-SigRadius=sigma;        % 3 sigma /deviation
+SigRadius=geoparam.Rsigma;        % 3 sigma /deviation
 theta = ( sepparam.theta )/180*pi;    %degree in bracket
 RowGap = sepparam.RowGap;
 SepGap = sepparam.SepGap;
@@ -14,7 +14,7 @@ k_dev = sepparam.k_dev;
 g_Gap = (SepGap+1)*mu*2;
 r_Gap = (RowGap+1)*mu*2;
 GrdToolwidth=workpiece_width;
-GrdToollength=2*workpiece_length;
+GrdToollength=5*workpiece_length;
 %% generate lattice with angle
 xlattice = [];
 ylattice = [];
@@ -51,17 +51,17 @@ grits.posy=round(bubbles.pos(:,2),3);
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[length(grits.posx),1]);
 grits.Tradius=round(bubbles.Tradius,3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
-grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
+grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
 %figure('visible','off');%;
-clf;
-circles(grits.posx,grits.posy,grits.Tradius);
-axis equal;drawnow;
-close gcf;
+% clf;
+% circles(grits.posx,grits.posy,grits.Tradius);
+% axis equal;drawnow;
+% close gcf;
 %%
 T= struct2table(grits); % convert the struct array to a table
 sortedT = sortrows(T, 'posy'); % sort the table by 'DOB'
 sort(bubbles.pos,2);
 writetable(sortedT,[filename '.csv']);
-[grits, grit_profile_all]=whl_generation(1,grits,[filename],geoparam);
+[grit_profile_all]=whl_generation(1,grits,[filename],geoparam);
 end

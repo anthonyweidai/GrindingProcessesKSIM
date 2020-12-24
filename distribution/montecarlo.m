@@ -9,7 +9,7 @@ SigRadius=geoparam.Rsigma;      % maximum MuRadius
 MaxSep=MuRadius*0.8;         % maximum Separation distance
 MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
-GrdToollength=4*workpiece_length;
+GrdToollength=5*workpiece_length;
 GrdToolwidth=workpiece_width;
 
 num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
