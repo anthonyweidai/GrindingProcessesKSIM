@@ -1,16 +1,16 @@
-set(0,'defaultfigurecolor',[1 1 1])
+Aset(0,'defaultfigurecolor',[1 1 1])
 create_folder();
 %% if the programme works well, then use batnum 2
 geoparam.shape = 1;
-for batnum = 5:10
+for batnum = 1:3
     for wheel_type = 2
         sepparam.wheel_type = wheel_type;
-        for fillet_mode = 1%
+        for fillet_mode = 0:1%
             geoparam.fillet_mode = fillet_mode;
             %% for rake angle
             for omega = [8]
                 geoparam.omega = omega;
-                for RA_mode = 1 %
+                for RA_mode = 0:1 %
                     geoparam.RA_mode = RA_mode;
                     for Rarea = [0.3, 0.7]
                         geoparam.Rarea = Rarea;
