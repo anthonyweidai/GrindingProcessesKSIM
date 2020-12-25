@@ -7,7 +7,7 @@ if geoparam.shape == 1
     fillet_mode = geoparam.fillet_mode;
     
     % h2w_ratio = 1;
-    mutemp = 2*R_culet*geoparam.h2w_ratio;
+    mutemp = R_culet*geoparam.h2w_ratio;
     % mutemp = 2*R_culet*h2w_ratio;
     hmax = normrnd(mutemp,mutemp*geoparam.sigmah);
     hmax = max(hmax,(mutemp-3*mutemp*geoparam.sigmah));
@@ -115,7 +115,7 @@ if geoparam.shape == 1
     else
         %% trapezoid, get top flat surface
         Rarea(Rarea == 1) = 0.99;
-        Rfv = sqrt(Rarea);
+        Rfv = Rarea;
         
         nodes_zt = zeros(1,omega);
         nodes_xt = zeros(1,omega);

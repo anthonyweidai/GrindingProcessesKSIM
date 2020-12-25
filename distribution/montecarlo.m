@@ -7,7 +7,7 @@ mu = 10;
 MuRadius=mu;       % minimum MuRadius
 SigRadius=geoparam.Rsigma;      % maximum MuRadius
 %% Self adaptive for different dimensions of wheel
-GrdToollength=2*workpiece_length;
+GrdToollength=5*workpiece_length;
 GrdToolwidth=workpiece_width;
 
 num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
