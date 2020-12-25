@@ -3,7 +3,7 @@ create_folder();
 %% if the programme works well, then use batnum 2
 geoparam.shape = 1;
 for batnum = 1:10
-    for wheel_type = 2
+    for wheel_type = 3
         sepparam.wheel_type = wheel_type;
         geoparam.fillet_mode = 1;
         geoparam.RA_mode = 0;
@@ -12,7 +12,7 @@ for batnum = 1:10
             geoparam.omega = omega;
             for Rarea = [0.3, 0.7]
                 geoparam.Rarea = Rarea;
-                FOI = 'EFdist_new';  % field of interest
+                FOI = 'EFdist';  % field of interest
                 if wheel_type == 2 % within different distribution
                     for theta = [15, 30, 45, 60, 75]
                         sepparam.theta = theta;
@@ -45,6 +45,10 @@ end
 function create_folder()
 %% create folder
 newsubfolder = 'UT_data/EFdist';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'UT_data/EFdist_new';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end

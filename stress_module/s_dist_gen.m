@@ -9,7 +9,7 @@ for i=1:l_b
     for j=1:w_b
         if b_field_all(i,j)>0
             b_temp=round(b_field_all(i,j)/res);
-            for k=j-b_temp:j+temp+c_clr
+            for k=j-b_temp:j+b_temp+c_clr
                 if mode == 1
                     pdz_field(i,k)=max(pdz_field(i,k),(b_temp^2-abs(j-k)^2)^0.5 *res);
                 elseif mode ==2

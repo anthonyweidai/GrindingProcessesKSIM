@@ -1,5 +1,5 @@
 %% simulation function
-function [Ra,Ra_b,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
+function [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,Rarea)
 % cycle=1;
 % filename=['N2000_tgw80kd1-' num2str(cycle)];%tgw80kd1 bubbles_list_tgw60kd1-2
@@ -78,6 +78,7 @@ h_clearance=workpiece_width*0.1;
 c_clr=h_clearance/res/2;
 h_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 rs_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
+pdz_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 hmax=zeros(num_vgrits,2);
 t_tick=0;
 % h_m=zeros(t_count,num_vgrits);
@@ -165,7 +166,11 @@ for v_i=1:num_vgrits
     else
         rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
     end
-    
+    b_current=rs_surf( round( g_y / res ), round( g_x / res ) +c_clr);
+    b_temp_r = round(b_current/res);
+    for k = round( g_x / res ) + c_clr - b_temp_r : round( g_x / res ) + c_clr + b_temp_r
+        pdz_surf(round( g_y / res ) , k) = pdz_surf(round( g_y / res ), k)+ (b_temp_r ^ 2 - abs( round( g_x / res ) +c_clr-k ) ^ 2 ) ^ 0.5 * res;
+    end
     %recording hmax, logging cut mode data
 %     h_m(t_tick,v_i)=temp_uct;
 %     area_chp(t_tick,v_i)=temp_chparea;
@@ -196,11 +201,11 @@ for v_i=1:num_vgrits
             continue
             %%%%%%%%%
         else
-            if hmax(v_i,1)<0.1/5
+            if hmax(v_i,1)<0.075
                 hmax(v_i,2)=1;
                 c_mode(t_ana_i,v_i)=1;
             else
-                if hmax(v_i,1)<0.6/5
+                if hmax(v_i,1)<0.6
                     hmax(v_i,2)=2;
                     c_mode(t_ana_i,v_i)=2;
                 else
@@ -215,9 +220,9 @@ end
 
 %%
 h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res);
-rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res);
-Ra=SurfRoughANA(h_surf);
-Ra_b=SurfRoughANA(rs_surf);
+pdz_surf=pdz_surf(:,c_clr:c_clr+workpiece_width/res);
+[Ra,Rz]=SurfRoughANA(h_surf);
+[Ra_pdz,Rz_pdz]=SurfRoughANA(pdz_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 
 %%
@@ -344,9 +349,9 @@ else
     figure('units','normalized','outerposition',[0 0 1 1]);
     surf_x=res:res:size(h_surf,2)*res;
     surf_y=res:res:size(h_surf,1)*res;
-    surf(surf_x,surf_y,rs_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_b)]);
-    writematrix(rs_surf,[filename '-rs_b_dist.csv']);
-    print([filename '-rsdist.jpg'], '-djpeg' );
+    surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_pdz)]);
+    writematrix(pdz_surf,[filename '-pdz_dist.csv']);
+    print([filename '-pdzdist.jpg'], '-djpeg' );
     close gcf;
 end
 end
