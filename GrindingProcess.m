@@ -345,7 +345,8 @@ else
     surf_x=res:res:size(h_surf,2)*res;
     surf_y=res:res:size(h_surf,1)*res;
     surf(surf_x,surf_y,rs_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_b)]);
-    print([filename 'rsdist.jpg'], '-djpeg' );
+    writematrix(rs_surf,[filename '-rs_b_dist.csv']);
+    print([filename '-rsdist.jpg'], '-djpeg' );
     close gcf;
 end
 end
