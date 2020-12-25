@@ -1,3 +1,0 @@
-filename="Bat1tgw15kd0Sgap0.5Rgap3w8Hsg0Ssg0Rsg2FT1RA0.3RAM0"
-grit_list=readtable([filename 'rsdist.csv']);
-grits=table2struct(grit_list,'ToScalar',true);
