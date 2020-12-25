@@ -1,5 +1,5 @@
 %% simulation function
-function [Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
+function [Ra,Ra_b,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,Rarea)
 % cycle=1;
 % filename=['N2000_tgw80kd1-' num2str(cycle)];%tgw80kd1 bubbles_list_tgw60kd1-2
@@ -129,7 +129,7 @@ for v_i=1:num_vgrits
     
     % obtaining the calbound
     lbound=(g_x)/res+c_clr-fix(0.5*length(g_outline));
-    hbound=(g_x)/res+c_clr-round(0.5*length(g_outline))+length(g_outline);
+    hbound=(g_x)/res+c_clr-fix(0.5*length(g_outline))+length(g_outline)-1;
     
     %when two bound is within boundary of h_surf, start replacing
     h_origin=h_surf(round(g_y/res),lbound:hbound);
@@ -159,11 +159,11 @@ for v_i=1:num_vgrits
 %             break
 %         end
 %     end
-    b_prev = rs_surf( round( g_y / res ), round( g_x / res ) );
+    b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
     if b_prev == 0
-        rs_surf( round( g_y / res ), round( g_x / res ) ) = b_temp;
+        rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
     else
-        rs_surf( round( g_y / res ), round( g_x / res ) ) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+        rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
     end
     
     %recording hmax, logging cut mode data
@@ -217,6 +217,7 @@ end
 h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res);
 rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res);
 Ra=SurfRoughANA(h_surf);
+Ra_b=SurfRoughANA(rs_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 
 %%
@@ -343,7 +344,7 @@ else
     figure('units','normalized','outerposition',[0 0 1 1]);
     surf_x=res:res:size(h_surf,2)*res;
     surf_y=res:res:size(h_surf,1)*res;
-    surf(surf_x,surf_y,rs_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra)]);
+    surf(surf_x,surf_y,rs_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_b)]);
     print([filename 'rsdist.jpg'], '-djpeg' );
     close gcf;
 end

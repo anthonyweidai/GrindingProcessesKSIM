@@ -67,8 +67,8 @@ else
     filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
-[Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
-writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra C_grit F_n_steadystage F_t_steadystage num_mode percent_mode],['UT_data\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_premise.csv'],'WriteMode','append');
+[Ra,Ra_b,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
+writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra Ra_b C_grit F_n_steadystage F_t_steadystage num_mode percent_mode],['UT_data\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_premise.csv'],'WriteMode','append');
 toc;
 end
 
