@@ -6,10 +6,8 @@ mu = 10;
 %%%%%%%%%%
 MuRadius=mu;       % minimum MuRadius
 SigRadius=geoparam.Rsigma;      % maximum MuRadius
-MaxSep=MuRadius*0.8;         % maximum Separation distance
-MinSep=MuRadius*0.1;           % minimum Separation distance
 %% Self adaptive for different dimensions of wheel
-GrdToollength=2*workpiece_length;
+GrdToollength=5*workpiece_length;
 GrdToolwidth=workpiece_width;
 
 num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
@@ -34,7 +32,7 @@ y_blocknum = max(divisors);
 temp1 = floor(GrdToolwidth/x_blocknum*10)*0.1;
 temp2 = floor(GrdToollength/y_blocknum*10)*0.1;
 %% Self adaptive bubbles number
-numBubbles = round(num_grits*0.6);
+numBubbles = round(num_grits*0.5);
 %% generate bubbles and initialise
 blockbound = zeros(blocknum,4);
 blockbound(:,1) = reshape(repmat(sort(0:temp1:GrdToolwidth-temp1)',1,y_blocknum),1,blocknum);
@@ -43,16 +41,17 @@ blockbound(:,3) = reshape(repmat(sort(0:temp2:GrdToollength-temp2),x_blocknum,1)
 blockbound(:,4) = reshape(repmat(sort(temp2:temp2:GrdToollength),x_blocknum,1),1,blocknum);
 bubbles.pos = zeros(numBubbles,2);
 bubbles.Tradius = normrnd(MuRadius,SigRadius,[numBubbles,1]);
-bubbles.radius = bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
+bubbles.radius = bubbles.Tradius + 0.15*MuRadius; % 10 seconds per generation
 bubbles.blockflag1 = zeros(numBubbles,1);
 bubbles.blockflag2 = zeros(numBubbles,1);
 blockflag1_map = reshape(1:blocknum,[x_blocknum,y_blocknum]); % block = 35; block = floor(sqrt(num));
-bubbles.numcount = 0;
 %% monte carlo generation
 bubbles = montecar_update(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum);
 %% laser frame
-bubbles(sepparam.LS_mode == 1) = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
+bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
     sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
+end
 % figure;
 % axis equal;drawnow;
 % circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
