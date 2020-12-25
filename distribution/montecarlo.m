@@ -64,7 +64,7 @@ grits.posx=bubbles.pos(:,1);
 grits.posy=bubbles.pos(:,2);
 grits.Tradius=roundn(bubbles.Tradius,-3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
-grits.Tradius=max(bubbles.Tradius,MuRadius+3*SigRadius);
+grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
 index=find((grits.posy<GrdToollength).*(grits.posx<GrdToolwidth).*(grits.posx>1e-7).*(grits.posy>1e-7));
 grits.posx=grits.posx(index);
