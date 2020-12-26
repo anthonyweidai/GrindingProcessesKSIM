@@ -47,6 +47,7 @@ for grit_n = 1:numgrits
         RB=find(wheel_y>=grits.highbounds(grit_n),1,'first');
         LB=find(wheel_x<=grits.leftbounds(grit_n),1,'last');
         HB=find(wheel_x>=grits.rightbounds(grit_n),1,'first');
+
         if isempty(LB)
             LB=1;
         end
@@ -94,9 +95,10 @@ if mode==0
     print([filename '-wheel.jpg'], '-djpeg' );
     close gcf;
     %SurfRoughANA(wheel_h);
+%     figure;
+%     histogram(hw_all);
     figure;
     histogram(proh_all);
-    writetable(proh_all,[filename '-proh.csv']);
     print([filename '-phdist.jpg'], '-djpeg' );
     close gcf;
 end

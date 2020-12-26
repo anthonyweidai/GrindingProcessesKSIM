@@ -271,13 +271,8 @@ elseif geoparam.shape == 2
     else
         Rarea = geoparam.Rarea;
     end
-    if Rarea <=1
-        a = Rarea * R_culet;
-        c = R_culet;
-    else
-        a = R_culet;
-        c = R_culet/Rarea;
-    end
+    a = R_culet;
+    c = R_culet/Rarea;
     b = a;
     
     theta=2*pi*rand(1,700);
@@ -286,7 +281,7 @@ elseif geoparam.shape == 2
     nodes_y=b*sin(phi).*sin(theta);
     nodes_z=c*cos(phi);
 elseif geoparam.shape == 3
-    %% tetradecahedron = cube by cuting its 6 vertecies  
+    %% tetradecahedron = cube by cuting its 6 vertecies
     a = 1.414*R_culet; % the length of cube
     temp = a/2;
     rectangle = [temp, -temp, 0; %
@@ -345,6 +340,7 @@ elseif geoparam.shape == 3
         planeNormal = normal_vector(k,:);
         planePoint = octahedron(end,:);
         I1 = intersectPoint(edges_coordinate(k,:),rayPoint,planeNormal,planePoint);
+        I1(3) = - I1(3);
         I2 = intersectPoint(edges_coordinate(k+realnum_vertex,:),rayPoint,planeNormal,planePoint);
         if k == 1
             k2 = realnum_vertex;
@@ -357,14 +353,14 @@ elseif geoparam.shape == 3
         num_temp = num_temp + 2;
     end
     %%
-    mu_r = 2.828; % 2x1.414 times 
+    mu_r = 2.828; % 2x1.414 times
     sigmah = geoparam.sigmah;
     Hr = normrnd(mu_r,mu_r*sigmah);
     Hr = max(Hr,(mu_r-3*mu_r*sigmah));
     Hr = min(Hr,(mu_r+3*mu_r*sigmah));
     tetradecahedron(:,3) = tetradecahedron(:,3)*Hr;
     tetradecahedron = [tetradecahedron; rectangle(1:realnum_vertex,:)];
-
+    
     nodes_x = tetradecahedron(:,1)';
     nodes_y = tetradecahedron(:,2)';
     nodes_z = tetradecahedron(:,3)';

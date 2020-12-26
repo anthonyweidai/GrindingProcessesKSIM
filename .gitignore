@@ -5,6 +5,9 @@ test2.m
 GrdTversion.m
 batch.m
 test_change.m
+pathdef.m
+beenoera
+beenoera.pub
 # 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件
 # !lib.a
 # 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO
@@ -15,6 +18,7 @@ experiment_shape/
 former/
 experiment_laser/
 UT_data/
+PT_data/
 *.csv
 # 忽略 doc/notes.txt, 不包括 doc/server/arch.txt
 # doc/*.txt

@@ -2,11 +2,11 @@
 
 ## Step 1: Before you push your local repo
 
-Firstly, please check the others' pull request.
+Firstly, please check the others' pull requests.
 
 ### They haven't changed your new files or the changed parts are different
 
-In this case, merge their repo into the default repo, and then pull the default repo to merge your local one. You should know that it won't change the files you have changed. Instead, it will show you
+In this case, **merge their pull request** into the default repo, and then pull the default repo to merge with your local one. You should know that **it won't change the files you have changed.** Instead, it will show you
 
 ```c
 branch            main       -> FETCH_HEAD
@@ -15,7 +15,7 @@ Already up to date.
 
 ### The parts you've changed were also changed by them
 
-This is intriguing and should be taken care. At that time, you are supposed to back up the files you have changed, and merge their repo to the default repo. Then,
+This is intriguing and should be taken care. At that time, you are supposed to **back up the files you have changed**, and merge their repo to the default repo. Then,
 
 ```c
 git pull origin main
@@ -29,16 +29,15 @@ git pull upstream main
 
 After that, you can **change whatever you want reference to your backup ones.**
 
-## Step 2: Push
+## Step 2: Pull Request
 
- Finally, **push your code in your sub branch.**
+ **Create a new pull request**, so that the others can saw. Sometimes, you can't be sure that your codes must be right. Thus, Other contributors can **give you some comments** to help you enhance your work. After that, if everything is fine, then **they will help you merge the pull request.**
 
 ## Some questions
 
-1. What if there is also without commit in others' sub branches, when the next time you push? --- Jump to step 2.
-2. Can I just create a pull request to default branch? --- If you are not the repo owner, you are welcomed to do that.
+1. What if there is no commit by others, when the next time you push? --- Jump to step 2.
 
-简而言之，就是不要自己merge自己的branch到default branch。
+简而言之，就是**创建pull request**，**不要自己merge自己的branch到default branch。**
 
 Cheers,
 

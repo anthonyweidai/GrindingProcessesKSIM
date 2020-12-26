@@ -44,11 +44,31 @@ end
 
 function create_folder()
 %% create folder
-newsubfolder = 'UT_data/EFdist';
+newsubfolder = 'PT_data/EFdist';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EFdist_new';
+newsubfolder = 'UT_data/EFrake';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'UT_data/EFsigmah';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'UT_data/EFsigmasw';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'UT_data/EFRsigma';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'PT_data/ELS';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'PT_data/TTDD';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
