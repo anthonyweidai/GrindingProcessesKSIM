@@ -134,7 +134,7 @@ clear sepparam
 
 function create_folder()
 %% create folder
-newsubfolder = 'UT_data/EFdist';
+newsubfolder = 'PT_data/EFdist';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
@@ -154,11 +154,11 @@ newsubfolder = 'UT_data/EFRsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/ELS';
+newsubfolder = 'PT_data/ELS';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/TTDD';
+newsubfolder = 'PT_data/TTDD';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
