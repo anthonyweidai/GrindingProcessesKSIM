@@ -1,5 +1,5 @@
 %% simulation function
-function [Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
+function [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,Rarea)
 % cycle=1;
 % filename=['N2000_tgw80kd1-' num2str(cycle)];%tgw80kd1 bubbles_list_tgw60kd1-2
@@ -12,6 +12,9 @@ testmode=0;
 H=7.6e-3; %Pa, 7.6GPa=7.6e-3N/um2^
 sigma_s=0.253e-3; %shear strength 0.253GPa
 sigma_y=3.5e-3; %yield strength 3.5GPa
+E=83e-3;
+v=0.203;
+f=0.108;
 %%
 %reading and get grit data
 %grit_list=readtable([filename '.csv'],'Range', 'A:F');
@@ -75,6 +78,7 @@ h_clearance=workpiece_width*0.1;
 c_clr=h_clearance/res/2;
 h_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 rs_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
+pdz_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 hmax=zeros(num_vgrits,2);
 t_tick=0;
 % h_m=zeros(t_count,num_vgrits);
@@ -126,7 +130,7 @@ for v_i=1:num_vgrits
     
     % obtaining the calbound
     lbound=(g_x)/res+c_clr-fix(0.5*length(g_outline));
-    hbound=(g_x)/res+c_clr-round(0.5*length(g_outline))+length(g_outline);
+    hbound=(g_x)/res+c_clr-fix(0.5*length(g_outline))+length(g_outline)-1;
     
     %when two bound is within boundary of h_surf, start replacing
     h_origin=h_surf(round(g_y/res),lbound:hbound);
@@ -139,21 +143,34 @@ for v_i=1:num_vgrits
     temp_uct=max((h_origin-h_grit>0).*(h_origin-h_grit));
     temp_chparea=res*sum((h_origin-h_grit>0).*(h_origin-h_grit));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+%     stats_indented = 0;
+    a_temp = sum(h_grit<h_origin)*0.2/2;
+    alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+    b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
+%         if b_temp > 20
+%             b_temp=b_temp;
+%         end
 %     indents = find(rs_surf(round(g_y/res),:)>0); % find all stress field on the same roll
 %     for i = indents
-%         stats_indented = 0;
 %         b = rs_surf(round( g_y / res ), i);
-%         if abs( i - round( g_y / res )) < b 
+% 
+%         if abs( i - round( g_y / res ) ) < b/3 
 %             rs_surf(round( g_y / res ), i) = ( b ^ 2 + b_temp ^ 2 ) ^ 0.5;
 %             stats_indented = 1;
-%             continue
+%             break
 %         end
 %     end
-%     if stats_indented == 0
-%         rs_surf(round( g_y / res ), round(g_x /res) ) = b_temp;
-%     end
-    
+    b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+    if b_prev == 0
+        rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+    else
+        rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+    end
+    b_current=rs_surf( round( g_y / res ), round( g_x / res ) +c_clr);
+    b_temp_r = round(b_current/res);
+    for k = round( g_x / res ) + c_clr - b_temp_r : round( g_x / res ) + c_clr + b_temp_r
+        pdz_surf(round( g_y / res ) , k) = pdz_surf(round( g_y / res ), k)+ (b_temp_r ^ 2 - abs( round( g_x / res ) +c_clr-k ) ^ 2 ) ^ 0.5 * res;
+    end
     %recording hmax, logging cut mode data
 %     h_m(t_tick,v_i)=temp_uct;
 %     area_chp(t_tick,v_i)=temp_chparea;
@@ -184,11 +201,11 @@ for v_i=1:num_vgrits
             continue
             %%%%%%%%%
         else
-            if hmax(v_i,1)<0.1/5
+            if hmax(v_i,1)<0.075
                 hmax(v_i,2)=1;
                 c_mode(t_ana_i,v_i)=1;
             else
-                if hmax(v_i,1)<0.6/5
+                if hmax(v_i,1)<0.6
                     hmax(v_i,2)=2;
                     c_mode(t_ana_i,v_i)=2;
                 else
@@ -201,10 +218,11 @@ for v_i=1:num_vgrits
 end
 end
 
-
 %%
 h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res);
-Ra=SurfRoughANA(h_surf);
+pdz_surf=pdz_surf(:,c_clr:c_clr+workpiece_width/res);
+[Ra,Rz]=SurfRoughANA(h_surf);
+[Ra_pdz,Rz_pdz]=SurfRoughANA(pdz_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 
 %%
@@ -313,7 +331,7 @@ else
     print([filename '-ucthisto.jpg'], '-djpeg' );
     close gcf;
     
-    %  3
+    % 3
     figure('units','normalized','outerposition',[0 0 1 1]);
     writematrix([vgrit hmax],[filename '-hmax.csv']);
     index_cut=find(hmax(:,2)==3);
@@ -325,6 +343,15 @@ else
     stem3(grits.posx(vgrit(index_plow,1)),vgrit(index_plow,3),hmax(index_plow,1),'r');
     stem3(grits.posx(vgrit(index_rub,1)),vgrit(index_rub,3),hmax(index_rub,1),'g');
     savefig([filename '-uctdist.fig']);
+    close gcf;
+
+    % 4
+    figure('units','normalized','outerposition',[0 0 1 1]);
+    surf_x=res:res:size(h_surf,2)*res;
+    surf_y=res:res:size(h_surf,1)*res;
+    surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_pdz)]);
+    writematrix(pdz_surf,[filename '-pdz_dist.csv']);
+    print([filename '-pdzdist.jpg'], '-djpeg' );
     close gcf;
 end
 end

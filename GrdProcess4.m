@@ -58,14 +58,17 @@ if sepparam.wheel_type==1
     filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=bubbleSimulator(filename, sepparam, workpiece_length,...
         workpiece_width, num_grits, geoparam);
-else
+elseif sepparam.wheel_type==2
 %     temp = rmfield(sepparam,'wheel_type');
 %    premise = [cell2mat(struct2cell(temp))',premise];
     filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=montecarlo(filename,sepparam,workpiece_length,workpiece_width,geoparam);
+else
+    filename = get_filename(batnum, sepparam, geoparam, FOI);
+    [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
-[Ra,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
-writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra C_grit F_n_steadystage F_t_steadystage num_mode percent_mode],['UT_data\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_premise.csv'],'WriteMode','append');
+[Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
+writematrix([convertCharsToStrings(char(datetime)) cycle premise Ra Ra_pdz Rz_pdz C_grit F_n_steadystage F_t_steadystage num_mode percent_mode],['UT_data\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_premise.csv'],'WriteMode','append');
 toc;
 end
 
@@ -97,6 +100,14 @@ elseif wheel_type == 2
         filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
             'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
             'Rgap' num2str(sepparam.RowGap)  'xi' num2str(geoparam.xi) 'Rsg' num2str(geoparam.Rsigma)] ;
+    end
+else
+    if geoparam.shape == 1
+        filename = ['UT_data/' FOI '/' 'Bat' num2str(batnum) ...
+            'tgw' num2str(sepparam.theta) 'kd' num2str(sepparam.k_dev) 'Sgap' num2str(sepparam.SepGap) ...
+            'Rgap' num2str(sepparam.RowGap) 'w' num2str(geoparam.omega)  ...
+            'Hsg' num2str(geoparam.sigmah) 'Ssg' num2str(geoparam.sigmasw) 'Rsg' num2str(geoparam.Rsigma) ...
+            'FT' num2str(geoparam.fillet_mode) 'RA' num2str(geoparam.Rarea) 'RAM' num2str(geoparam.RA_mode)] ;
     end
 end
 end

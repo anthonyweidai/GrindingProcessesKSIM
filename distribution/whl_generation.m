@@ -34,9 +34,6 @@ if mode==0
     
 end
 
-hw_all=[];
-orim_all=[];
-r_angle_all=[];
 proh_all=[];
 outline_all=[];
 if isfile(['gprofile_temp\' filename '_temp.csv'])
@@ -59,13 +56,11 @@ for grit_n = 1:numgrits
     grit_profile_all=[grit_profile_all; {grit_P}];
     
     %%
-    proh_all=[proh_all; grit_ph];
     outline=max(grit_P);
     proh_temp=max(outline);
     proh_all=[proh_all; proh_temp];
     outline=[outline , NaN(1,200-length(outline))];
     outline_all=[outline_all;outline];
-    num_P=size(grit_P,1);
     if mode==0
         for x_i=LB:HB
             for y_i=LFB:RB
