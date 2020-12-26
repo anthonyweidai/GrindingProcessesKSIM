@@ -1,5 +1,5 @@
 function POSTangleDist()
-filename='UT_data/EFrake/Bat1tgw30kd0Sgap0.5Rgap120w3Hsg0Ssg0Rsg0FT0RA0.1RAM0';
+filename='UT_data/EFrake/Bat1tgw60kd0Sgap0.5Rgap100w3Hsg0Ssg0Rsg0FT0RA0.1RAM0';
 % filename='N2000_tgw80kd1Sgap0.5Rgap4-2';
 % grit_list=readtable([filename '.csv']);
 grits=table2array(readtable([filename '.csv']));

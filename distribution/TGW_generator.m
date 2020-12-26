@@ -1,10 +1,10 @@
 function [grits,grit_profile_all]=TGW_generator(filename, sepparam, workpiece_length,...
     workpiece_width, geoparam)
 %%
-mu=10;sigma=geoparam.Rsigma;         %smaller grit configuration
+mu=10;         %smaller grit configuration
 % numBubbles=num_grits;        % number of bubbles; 1000 for 5um grits /170/330/620, 80d560,80d8gap=392
 MuRadius=mu;            % average radius
-SigRadius=sigma;        % 3 sigma /deviation
+SigRadius=geoparam.Rsigma;        % 3 sigma /deviation
 theta = ( sepparam.theta )/180*pi;    %degree in bracket
 RowGap = sepparam.RowGap;
 SepGap = sepparam.SepGap;
@@ -54,10 +54,10 @@ grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
 grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
 %figure('visible','off');%;
-clf;
-circles(grits.posx,grits.posy,grits.Tradius);
-axis equal;drawnow;
-close gcf;
+% clf;
+% circles(grits.posx,grits.posy,grits.Tradius);
+% axis equal;drawnow;
+% close gcf;
 %%
 T= struct2table(grits); % convert the struct array to a table
 sortedT = sortrows(T, 'posy'); % sort the table by 'DOB'

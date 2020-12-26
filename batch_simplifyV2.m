@@ -18,8 +18,8 @@ for batnum = 1
                         if wheel_type == 2 % within different distribution
                             for theta = [ 30]
                                 sepparam.theta = theta;
-                                sepparam.RowGap = 120;
-                                sepparam.SaveGap = 30;
+                                sepparam.RowGap = 100;
+                                sepparam.SaveGap = 25;
                                 sepparam.LS_mode = 1;
                                 GrdProcess4(batnum,FOI,sepparam,geoparam);
                             end

@@ -62,7 +62,6 @@ for grit_n = 1:numgrits
     proh_all=[proh_all; proh_temp];
     outline=[outline , NaN(1,200-length(outline))];
     outline_all=[outline_all;outline];
-
     if mode==0
         for x_i=LB:HB
             for y_i=LFB:RB

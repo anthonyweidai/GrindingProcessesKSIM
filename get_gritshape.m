@@ -50,7 +50,7 @@ vq(isnan(vq)) = 0;
 %% trimming
 if geoparam.trim_h == 0
 else
-    trim_h = normrnd(geoparam.trim_h,0.1);
+    trim_h = normrnd(geoparam.trim_h,0.01);
     vq = min(vq,trim_h);
 end
 end
