@@ -1,6 +1,10 @@
 ## template
-# 忽略 .a 文件
-# *.a
+# 忽略 .csv 文件
+*.csv
+*.asv
+*.m~
+
+# 忽略 test2.m
 test2.m
 GrdTversion.m
 batch.m
@@ -8,10 +12,8 @@ test_change.m
 pathdef.m
 beenoera
 beenoera.pub
-# 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件
-# !lib.a
-# 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO
-# /TODO
+.DS_Store
+
 # 忽略 experiment_monte/ 文件夹下的所有文件
 experiment_monte/
 experiment_shape/
@@ -19,7 +21,11 @@ former/
 experiment_laser/
 UT_data/
 PT_data/
-*.csv
+
+# 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件
+# !lib.a
+# 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO
+# /TODO
 # 忽略 doc/notes.txt, 不包括 doc/server/arch.txt
 # doc/*.txt
 # 忽略所有的 .pdf 文件 在 doc/ directory 下的

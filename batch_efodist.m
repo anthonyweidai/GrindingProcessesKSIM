@@ -48,19 +48,19 @@ newsubfolder = 'PT_data/EFdist';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EFrake';
+newsubfolder = 'PT_data/EFrake';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EFsigmah';
+newsubfolder = 'PT_data/EFsigmah';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EFsigmasw';
+newsubfolder = 'PT_data/EFsigmasw';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'UT_data/EFRsigma';
+newsubfolder = 'PT_data/EFRsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
