@@ -60,10 +60,12 @@ if sepparam.wheel_type==1
         workpiece_width, num_grits, geoparam);
 elseif sepparam.wheel_type==2
 %     temp = rmfield(sepparam,'wheel_type');
-%    premise = [cell2mat(struct2cell(temp))',premise];
+%    premise = [cell2mat(struct2cell(temp))',premise];  
     filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=montecarlo(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 else
+    temp = rmfield(sepparam,'wheel_type');
+    premise = [cell2mat(struct2cell(temp))',premise];
     filename = get_filename(batnum, sepparam, geoparam, FOI);
     [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
