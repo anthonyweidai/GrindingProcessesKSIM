@@ -12,7 +12,7 @@ for batnum = 1:10
             geoparam.omega = omega;
             for Rarea = [0.3, 0.7]
                 geoparam.Rarea = Rarea;
-                FOI = 'EFdist';  % field of interest
+                FOI = 'EFdist_new';  % field of interest
                 if wheel_type == 2 % within different distribution
                     for theta = [15, 30, 45, 60, 75]
                         sepparam.theta = theta;

@@ -32,7 +32,7 @@ y_blocknum = max(divisors);
 temp1 = floor(GrdToolwidth/x_blocknum*10)*0.1;
 temp2 = floor(GrdToollength/y_blocknum*10)*0.1;
 %% Self adaptive bubbles number
-numBubbles = round(num_grits*0.5);
+numBubbles = round(num_grits*0.4);
 %% generate bubbles and initialise
 blockbound = zeros(blocknum,4);
 blockbound(:,1) = reshape(repmat(sort(0:temp1:GrdToolwidth-temp1)',1,y_blocknum),1,blocknum);

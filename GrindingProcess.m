@@ -166,11 +166,6 @@ for v_i=1:num_vgrits
     else
         rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
     end
-    b_current=rs_surf( round( g_y / res ), round( g_x / res ) +c_clr);
-    b_temp_r = round(b_current/res);
-    for k = round( g_x / res ) + c_clr - b_temp_r : round( g_x / res ) + c_clr + b_temp_r
-        pdz_surf(round( g_y / res ) , k) = pdz_surf(round( g_y / res ), k)+ (b_temp_r ^ 2 - abs( round( g_x / res ) +c_clr-k ) ^ 2 ) ^ 0.5 * res;
-    end
     %recording hmax, logging cut mode data
 %     h_m(t_tick,v_i)=temp_uct;
 %     area_chp(t_tick,v_i)=temp_chparea;
@@ -219,12 +214,27 @@ end
 end
 
 %%
-h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res);
-pdz_surf=pdz_surf(:,c_clr:c_clr+workpiece_width/res);
+h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res-1);
+rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res-1);
 [Ra,Rz]=SurfRoughANA(h_surf);
-[Ra_pdz,Rz_pdz]=SurfRoughANA(pdz_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
-
+%%
+[l_b,w_b]=size(rs_surf);
+b_clr=0.2*w_b;
+pdz_field=zeros(l_b,w_b+2*b_clr);
+res=0.2;
+for i=1:l_b
+    for j=1:w_b
+        if rs_surf(i,j)>0
+            b_temp=round(rs_surf(i,j)/res);
+            for k=j-b_temp:j+b_temp
+                pdz_field(i,k+b_clr)=pdz_field(i,k+b_clr)+(b_temp^2-abs(j-k)^2)^0.5 *res;
+            end
+        end
+    end
+end
+pdz_surf=pdz_field(:,b_clr:b_clr+workpiece_width/res-1);
+[Ra_pdz,Rz_pdz]=SurfRoughANA(pdz_surf);
 %%
 %draw the final ground surface
 if report_mode==0
