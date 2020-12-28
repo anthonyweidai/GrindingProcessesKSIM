@@ -1,6 +1,8 @@
 set(0,'defaultfigurecolor',[1 1 1])
 create_folder();
-%% if the programme works well, then use batnum 2
+% Add your new FOI path to function create_folder()
+clear geoparam
+clear sepparam
 geoparam.shape = 1;
 for batnum = 1:10
     for wheel_type = 3
@@ -40,36 +42,4 @@ for batnum = 1:10
             end                
         end
     end
-end
-
-function create_folder()
-%% create folder
-newsubfolder = 'PT_data/EFdist';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/EFrake';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/EFsigmah';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/EFsigmasw';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/EFRsigma';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/ELS';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'PT_data/TTDD';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
 end

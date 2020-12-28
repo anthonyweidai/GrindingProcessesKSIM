@@ -1,5 +1,5 @@
 %% simulation function
-function [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode]=GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
+function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,Rarea)
 % cycle=1;
 % filename=['N2000_tgw80kd1-' num2str(cycle)];%tgw80kd1 bubbles_list_tgw60kd1-2
@@ -365,4 +365,9 @@ else
     close gcf;
 end
 end
+%%
+Grd_output = [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode];
+Grd_outputname = {'Ra', 'Ra_pdz', 'Rz_pdz', 'C_grit', 'F_n_steadystage', 'F_t_steadystage', ...
+    'num_cut', 'num_plg', 'num_rub', 'num_ina', 'percent_cut', 'percent_plg', 'percent_rub', 'percent_ina'};
+Grd_output = array2table(Grd_output,'VariableNames',Grd_outputname); % Instead, you can use struct
 end

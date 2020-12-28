@@ -1,5 +1,5 @@
 function [grits,grit_profille_all]=bubbleSimulator(filename, sepparam, workpiece_length,...
-    workpiece_width, num_grits, geoparam)
+    workpiece_width, geoparam)
 % [mu,sigma]=mesh2diameter(2500);
 % filename='N2000_r1';
 % cycle=1;
@@ -8,7 +8,6 @@ function [grits,grit_profille_all]=bubbleSimulator(filename, sepparam, workpiece
 %%%%%%%%%%
 mu=10;sigma=geoparam.Rsigma;
 %%%%%%%%%%
-numBubbles=num_grits;     % number of bubbles
 MuRadius=mu;       % minimum radius
 SigRadius=sigma;      % maximum radius
 MaxSep=mu*0.8;         % maximum Separation distance
@@ -23,8 +22,11 @@ Ts=0.005;           % simulation sampling time
 damparea=0;
 w_boundary=4;
 w_gt=mu*50;
+%
 GrdToollength = workpiece_length*2;
-GrdToolwidth = mu*50+w_boundary*2;
+GrdToolwidth = workpiece_width + w_boundary*2;
+num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
+numBubbles = round(num_grits*0.4);     % number of bubbles
 % generate bubbles and initialise
 %bubbles.radius=rand(numBubbles,1)*(maxRadius-minRadius)+minRadius;
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[numBubbles,1]);
@@ -55,19 +57,19 @@ while t<5
     %         %disp(['dropping....',int2str(round(t/15*100)),'%' ])
     %     end
 end
-close gcf;
 % print([filename '-cr.jpg'], '-djpeg' );
-%% laser frame
-if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
-bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
-    sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
-end
+% %% laser frame
+% if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
+% bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+%     sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
+% end
 %%
 clf;
 circles(bubbles.pos(:,1),bubbles.pos(:,2),bubbles.Tradius);
 
 cr=numBubbles*1e6/(max(bubbles.pos(:,1))*max(bubbles.pos(:,2)));
 title(cr);axis equal;drawnow;
+close gcf;
 %%
 bubbles.pos=roundn(bubbles.pos,-1);
 grits.posx=bubbles.pos(:,1);
@@ -76,7 +78,7 @@ grits.Tradius=roundn(bubbles.Tradius,-3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
 grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
-index=find((grits.posy<workpiece_length).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
+index=find((grits.posy<GrdToollength).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
 grits.posx=grits.posx(index)-w_boundary;
 grits.posy=grits.posy(index);
 grits.Tradius=grits.Tradius(index);

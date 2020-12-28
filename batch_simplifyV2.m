@@ -1,6 +1,9 @@
 set(0,'defaultfigurecolor',[1 1 1])
 create_folder();
-%% if the programme works well, then use batnum 2
+% Add your new FOI path to function create_folder()
+%%
+clear geoparam
+clear sepparam
 geoparam.shape = 1;
 for batnum = 1
     for wheel_type = 2
@@ -16,7 +19,7 @@ for batnum = 1
                         geoparam.Rarea = Rarea;
                         FOI = 'EFrake';  % field of interest
                         if wheel_type == 2 % within different distribution
-                            for theta = [ 30]
+                            for theta = [30]
                                 sepparam.theta = theta;
                                 sepparam.RowGap = 100;
                                 sepparam.SaveGap = 25;
@@ -130,32 +133,4 @@ for batnum = 1
         end
         % sigma_h can be added
     end
-end
-
-function create_folder()
-%% create folder
-newsubfolder = 'UT_data/EFrake';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'UT_data/EFsigmah';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'UT_data/EFsigmasw';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'UT_data/EFRsigma';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'UT_data/ELS';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
-newsubfolder = 'UT_data/TTDD';
-if ~exist(newsubfolder,'dir')
-    mkdir(newsubfolder);
-end
 end
