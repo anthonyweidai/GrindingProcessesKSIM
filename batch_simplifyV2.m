@@ -38,7 +38,7 @@ for batnum = 1
         %% for sigmah
         for omega = [7, 25]
             geoparam.omega = omega;
-            for sigmah = [0.02, 0.04, 0.06] % R = 10, 3sigma
+            for sigmah = [0.02, 0.04, 0.06, 0.1, 0.15] % R = 10, 3sigma
                 geoparam.sigmah = sigmah;
                 for Rarea = [0.1, 0.7] % pyramid and trapzoid
                     geoparam.Rarea = Rarea;
@@ -73,7 +73,7 @@ for batnum = 1
             end
             geoparam.sigmasw = 0;
             %% for grains radius
-            for Rsigma = [0.05, 0.1, 0.15]
+            for Rsigma = [0.02, 0.04, 0.06, 0.1, 0.15]
                 geoparam.Rsigma = Rsigma;
                 for Rarea = [0.1, 0.7]
                     geoparam.Rarea = Rarea;
