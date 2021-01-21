@@ -6,18 +6,16 @@ if geoparam.shape == 1
     Rarea = geoparam.Rarea;
     fillet_mode = geoparam.fillet_mode;
     
-    % h2w_ratio = 1;
     mutemp = R_culet*geoparam.h2w_ratio;
-    % mutemp = 2*R_culet*h2w_ratio;
-    hmax = normrnd(mutemp,mutemp*geoparam.sigmah);
-    hmax = max(hmax,(mutemp-3*mutemp*geoparam.sigmah));
-    hmax = min(hmax,(mutemp+3*mutemp*geoparam.sigmah));
+    hv = normrnd(mutemp,mutemp*geoparam.sigmah); % the height of vertex
+    hv = max(hv,(mutemp-3*mutemp*geoparam.sigmah));
+    hv = min(hv,(mutemp+3*mutemp*geoparam.sigmah));
     
-    vertex_theta = rand*3.1415926*2; % orientation of the vertex, vertex_theta = 0~2*pi
+    theta_v = rand*3.1415926*2; % orientation of the vertex, theta_v = 0~2*pi
     mutemp = 0.4;
-    Rvertex = normrnd(mutemp,mutemp*geoparam.sigmasw); % ratio of the vertex's location, Rvertex = 0~0.8
-    Rvertex = max(Rvertex,0);
-    Rvertex = min(0.8,Rvertex);
+    Rv = normrnd(mutemp,mutemp*geoparam.sigmasw); % ratio of the vertex's location, Rvertex = 0~0.8
+    Rv = max(Rv,0);
+    Rv = min(0.8,Rv);
     %% polygon vertices on bottom plane
     nodes_x = zeros(1,omega);
     nodes_y = zeros(1,omega);
@@ -28,7 +26,7 @@ if geoparam.shape == 1
         nodes_x(i+1) = R_culet*cos(theta_culet);
         nodes_y(i+1) = R_culet*sin(theta_culet);
     end
-    [xc, yc] = getvertex(nodes_x(1:omega),nodes_y(1:omega),vertex_theta,Rvertex);
+    [xc, yc] = getvertex(nodes_x(1:omega),nodes_y(1:omega),theta_v,Rv);
     %%
     if Rarea<=1e-7
         %% pyramid with fillet
@@ -36,7 +34,7 @@ if geoparam.shape == 1
             setback = 0.5*R_culet/2;
             xtemp = xc;
             ytemp = yc;
-            ztemp = hmax;
+            ztemp = hv;
             vtex = [xtemp,ytemp,ztemp];
             A = zeros(omega,3); % points in edge
             B = zeros(omega,3); % points between highest points on edge fillet (C)
@@ -110,22 +108,22 @@ if geoparam.shape == 1
         else
             nodes_x = [nodes_x xc];
             nodes_y = [nodes_y yc];
-            nodes_z = [nodes_z hmax];
+            nodes_z = [nodes_z hv];
         end
     else
         %% trapezoid, get top flat surface
         Rarea(Rarea == 1) = 0.99;
-        Rfv = Rarea;
+        Rfv = sqrt(Rarea);
         
         nodes_zt = zeros(1,omega);
         nodes_xt = zeros(1,omega);
         nodes_yt = zeros(1,omega);
         if geoparam.RA_mode == 1
-            zc = hmax;
-            nodes_zt(:) = hmax * Rfv;
+            zc = hv;
+            nodes_zt(:) = hv * Rfv;
         else
-            zc = hmax/(1-Rfv);
-            nodes_zt(:) = hmax;
+            zc = hv/(1-Rfv);
+            nodes_zt(:) = hv;
         end
         vtex = [xc,yc,zc]; %vertex
         
@@ -266,14 +264,17 @@ if geoparam.shape == 1
     end
 elseif geoparam.shape == 2
     %% ellipsoid
+    a = R_culet;
+    b = a;
+    
     if geoparam.Rarea<=1e-7
-        Rarea = 0.01;
+        Rarea = 0; % the ratio of area of cross section 
     else
         Rarea = geoparam.Rarea;
     end
-    a = R_culet;
-    c = R_culet/Rarea;
-    b = a;
+    mutemp = R_culet/Rarea;
+    c = max(mutemp,(mutemp-3*mutemp*geoparam.sigmah));
+    c = min(c,(mutemp+3*mutemp*geoparam.sigmah));
     
     theta=2*pi*rand(1,700);
     phi=24*pi/50*rand(1,700)+pi/50;
@@ -373,7 +374,7 @@ if outline_mode == 1
     if geoparam.shape == 1
         hold on
         if geoparam.Rarea <= 1e-7
-            vtex = [xc,yc,hmax];
+            vtex = [xc,yc,hv];
         end
         scatter3(vtex(1),vtex(2),vtex(3))
     end

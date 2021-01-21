@@ -24,7 +24,7 @@ workpiece_width=500;     %max(grits.posx);
 
 [sepparam, geoparam] = param_initialize(sepparam, geoparam);
 %%
-filename = get_filename(batnum, sepparam, geoparam, FOI); % sort filename by wheel_type and field of interest
+filename = get_filename(cycle, sepparam, geoparam, FOI); % sort filename by wheel_type and field of interest
 if sepparam.wheel_type==1
     [grits,grit_profile_all]=bubbleSimulator(filename, sepparam, workpiece_length, workpiece_width, geoparam);
 elseif sepparam.wheel_type==2
@@ -39,7 +39,7 @@ batch_info = [batch_info table(cycle)];
 batch_info = [batch_info struct2table(sepparam) struct2table(geoparam)];
 batch_info = [batch_info Grd_output];
 writetable(batch_info,...
-    ['GrdData\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(batnum) '_info.csv'],...
+    ['GrdData\\' FOI '\\' 'w' num2str(sepparam.wheel_type) 'batch_' num2str(cycle) '_info.csv'],...
     'WriteMode','append');
 toc;
 end
