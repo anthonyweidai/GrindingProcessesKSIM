@@ -25,11 +25,11 @@ workpiece_width=500;     %max(grits.posx);
 [sepparam, geoparam] = param_initialize(sepparam, geoparam);
 %%
 filename = get_filename(cycle, sepparam, geoparam, FOI); % sort filename by wheel_type and field of interest
-if sepparam.wheel_type==1
+if sepparam.wheel_type == 1
     [grits,grit_profile_all]=bubbleSimulator(filename, sepparam, workpiece_length, workpiece_width, geoparam);
-elseif sepparam.wheel_type==2
+elseif sepparam.wheel_type == 2
     [grits,grit_profile_all]=montecarlo(filename,sepparam,workpiece_length,workpiece_width,geoparam);
-else
+elseif sepparam.wheel_type == 3
     [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
 Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);

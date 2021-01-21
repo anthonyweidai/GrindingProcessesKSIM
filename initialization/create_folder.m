@@ -1,5 +1,5 @@
 function create_folder()
-%% create folder
+%% Add your new FOI path to function to create your folder
 %% Patrick
 newsubfolder = 'GrdData/EFdist';
 if ~exist(newsubfolder,'dir')
@@ -10,27 +10,39 @@ if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
 %% Dave
-newsubfolder = 'GrdData/EFrake';
+% shape == 1
+newsubfolder = 'GrdData/ConeAngle';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/EFsigmah';
+newsubfolder = 'GrdData/sigmasw';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/EFsigmasw';
+newsubfolder = 'GrdData/edges';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/EFRsigma';
+newsubfolder = 'GrdData/FruRarea';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/ELS';
+% shape == 2
+newsubfolder = 'GrdData/ELSRarea';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/TTDD';
+% shape == 3
+newsubfolder = 'GrdData/xi';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+% all
+newsubfolder = 'GrdData/sigmah';
+if ~exist(newsubfolder,'dir')
+    mkdir(newsubfolder);
+end
+newsubfolder = 'GrdData/Rsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end

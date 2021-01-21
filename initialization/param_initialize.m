@@ -23,7 +23,7 @@ if geoparam.shape == 1
     geoparam.h2w_ratio(~isfield(geoparam,'h2w_ratio')) = 1;
     geoparam.Rarea(~isfield(geoparam,'Rarea')) = 0.5;
     geoparam.Rsigma(~isfield(geoparam,'Rsigma')) = 0;
-    geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 0;
+    geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 1;
     geoparam.sigmasw(~isfield(geoparam,'sigmasw')) = 0;
     geoparam.fillet_mode(~isfield(geoparam,'fillet_mode')) = 0;
 elseif geoparam.shape == 3

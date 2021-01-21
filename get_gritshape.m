@@ -1,6 +1,6 @@
 function [vq] = get_gritshape(R,geoparam,res)
 %% parameters notion, use structure for input variables
-% R-DEFAULT grit size, shape: 1-pyramid&trapezoid 2-shpere&ellipsoid
+% R-DEFAULT grit size, shape: 1-pyramid&frustum 2-shpere&ellipsoid
 % omega, number of edges for pyramid and trapezoid
 % orien, orientation for ellipsoid
 % h2w_ratio = height/(2*R)

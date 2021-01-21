@@ -111,7 +111,7 @@ if geoparam.shape == 1
             nodes_z = [nodes_z hv];
         end
     else
-        %% trapezoid, get top flat surface
+        %% frustum, get top flat surface
         Rarea(Rarea == 1) = 0.99;
         Rfv = sqrt(Rarea);
         
@@ -131,7 +131,7 @@ if geoparam.shape == 1
             nodes_xt(j) = vtex(1) + Rfv*(nodes_x(j)-vtex(1));
             nodes_yt(j) = vtex(2) + Rfv*(nodes_y(j)-vtex(2));
         end
-        %% trapezoid with/without fillet
+        %% frustum with/without fillet
         if fillet_mode == 1
             %% with fillet
             R_fillet = 0.5*R_culet/2;
