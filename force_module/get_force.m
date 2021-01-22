@@ -1,4 +1,5 @@
-function [F_n,F_t]=get_force(d_i,A_n,A_t,Rarea)%
+function [F_n,F_t]=get_force(H,E,v,u_a,d_i,A_n,A_t,Rarea)
+%%%% 
 %% by default
 % d_i=0.0383;
 % A_n=19;
@@ -8,27 +9,21 @@ g_radius=10;
 a=1;
 Rarea(Rarea <= 1e-7) = 0.0001;
 alpha=atan((a*(1-sqrt(Rarea))/2/a))/pi*180;
-H=7.6e-3;%N/um2
-E=84.5e-3;%N/um2
-v=0.203;
-sigma_s=0.253e-3; %shear strength 0.253GPa
-sigma_y=3.5e-3; %yield strength 3.5GPa
 D_grit=g_radius*sqrt(Rarea);
-u_a=pi/2*sigma_s/sigma_y;
-u_a=0.4;
+% u_a=pi/2*sigma_s/sigma_y;
+% u_a=0.4;
 u_p=2/pi*((g_radius/D_grit)^2*asin(D_grit/g_radius)-((g_radius/D_grit)^2-1)^0.5);
 %% d_crit_pl
-
 k_pc=0.4;
 d_crit_pl=(1-v^2)*D_grit/E*k_pc*H;
-d_crit_pl=0.075;
+% d_crit_pl=0.075;
 %% d_crit_cut
 rho=2;% grit edge radius, um
 [theta_a,beta_a]=get_shearangle(alpha);
 theta_a=theta_a/180*pi;
 beta_a=beta_a/180*pi;
 d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
-d_crit_cut=0.6;
+% d_crit_cut=0.6;
 %% force cal
 mode=1;
 if mode==1

@@ -32,7 +32,9 @@ elseif sepparam.wheel_type == 2
 elseif sepparam.wheel_type == 3
     [grits,grit_profile_all]=TGW_generator(filename,sepparam,workpiece_length,workpiece_width,geoparam);
 end
-Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,workpiece_length,workpiece_width,geoparam.Rarea);
+Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
+    workpiece_length,workpiece_width,...
+    geoparam.shape,geoparam.Rarea);
 %% Record input and output variables
 batch_info = array2table(convertCharsToStrings(char(datetime)),'VariableNames',{'datetime'});
 batch_info = [batch_info table(cycle)];
