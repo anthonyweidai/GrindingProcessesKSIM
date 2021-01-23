@@ -1,4 +1,4 @@
-function [F_n,F_t]=get_force(H,E,v,u_a,d_i,A_n,A_t,Rarea)
+function [F_n,F_t]=get_force(H,E,v,u_a,temp_uct,area_n,area_t,Rarea)
 %%%% 
 %% by default
 % d_i=0.0383;
@@ -27,29 +27,29 @@ d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
 %% force cal
 mode=1;
 if mode==1
-    if d_i<d_crit_pl %% rubbing
-        F_n=D_grit*d_i*E/(1-v^2);
+    if temp_uct<d_crit_pl %% rubbing
+        F_n=D_grit*temp_uct*E/(1-v^2);
         F_t=F_n*u_a;
-    elseif d_i<d_crit_cut %% plowing
-        F_n=H*(D_grit+g_radius)/2*d_i+D_grit*(d_i)*E/(1-v^2);
-        F_t=D_grit*(d_i)*E/(1-v^2)*u_a+H*(D_grit+g_radius)/2*d_i*u_p;
+    elseif temp_uct<d_crit_cut %% plowing
+        F_n=H*(D_grit+g_radius)/2*temp_uct+D_grit*(temp_uct)*E/(1-v^2);
+        F_t=D_grit*(temp_uct)*E/(1-v^2)*u_a+H*(D_grit+g_radius)/2*temp_uct*u_p;
     else %% cutting
         tao=1.5e-3;%1.5e-3;%n/um2
-        F_n=tao*(D_grit+g_radius)/2*d_i*sin(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*d_i*E/(1-v^2);
-        F_t=tao*(D_grit+g_radius)/2*d_i*cos(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*d_i*E/(1-v^2)*u_a;
+        F_n=tao*(D_grit+g_radius)/2*temp_uct*sin(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*temp_uct*E/(1-v^2);
+        F_t=tao*(D_grit+g_radius)/2*temp_uct*cos(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*temp_uct*E/(1-v^2)*u_a;
     end
     
 elseif mode==2
-    if d_i<d_crit_pl %% rubbing
-        F_n=D_grit*d_i*E/(1-v^2);
+    if temp_uct<d_crit_pl %% rubbing
+        F_n=D_grit*temp_uct*E/(1-v^2);
         F_t=F_n*u_a;
-    elseif d_i<d_crit_cut %% plowing
-        F_n=H*A_n*(d_i-d_crit_pl)/(d_crit_cut-d_crit_pl)+D_grit*(d_i)*E/(1-v^2);
-        F_t=D_grit*(d_i)*E/(1-v^2)*u_a+H*A_n*u_p*(d_i-d_crit_pl)/(d_crit_cut-d_crit_pl);
+    elseif temp_uct<d_crit_cut %% plowing
+        F_n=H*area_n*(temp_uct-d_crit_pl)/(d_crit_cut-d_crit_pl)+D_grit*(temp_uct)*E/(1-v^2);
+        F_t=D_grit*(temp_uct)*E/(1-v^2)*u_a+H*area_n*u_p*(temp_uct-d_crit_pl)/(d_crit_cut-d_crit_pl);
     else %% cutting
         tao=1.5e-3;%1.5e-3;%n/um2
-        F_n=tao*A_t*sin(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*d_i*E/(1-v^2);
-        F_t=tao*A_t*cos(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*d_i*E/(1-v^2)*u_a;
+        F_n=tao*area_t*sin(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*temp_uct*E/(1-v^2);
+        F_t=tao*area_t*cos(beta_a-alpha)/(sin(theta_a)*cos(beta_a-alpha+theta_a))+D_grit*temp_uct*E/(1-v^2)*u_a;
     end
     
 end

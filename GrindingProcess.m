@@ -37,9 +37,7 @@ f=0.108;
 %grit_list=readtable([filename '.csv'],'Range', 'A:F');
 %grits=table2struct(grit_list,'ToScalar',true);
 numgrits=size(grits.Tradius,1);
-
 k_t=1;
-
 %% grinding parameters
 rpm=3000;               %wheel spinning speed, round/min
 ds=30e3;                %diameter of a grd wheel, um
@@ -199,7 +197,7 @@ for t_i=dt:dt:t_step
                 [area_t,area_n]=COF_CAL(g_shape_temp,g_base,h_origin);
             end
             
-            [F_n_temp,F_t_temp]=get_force(H,E,v,u_a,d_i,A_n,A_t,Rarea);
+            [F_n_temp,F_t_temp]=get_force(H,E,v,u_a,temp_uct,area_n,area_t,Rarea);
             %         F_n_temp=area_n*H
             %         F_t_temp=u(t_ana_i,v_i)*area_n*H
             F_n(t_ana_i,v_i)=F_n_temp;
@@ -287,7 +285,7 @@ else
         c_mode_cut=sum(c_mode==3,2);
         c_mode_plg=sum(c_mode==2,2);
         c_mode_rub=sum(c_mode==1,2);
-        c_mode_ina=sum(c_mode==0,2);
+        % c_mode_ina=sum(c_mode==0,2);
         c_mode_act=c_mode_cut+c_mode_plg+c_mode_rub;
         
         c_mode_sum=max(c_mode);
