@@ -2,10 +2,10 @@ set(0,'defaultfigurecolor',[1 1 1])
 create_folder();
 %%
 batnum = 1;
-parallel_mode = 1;
+parallel_mode = 0;
 % FOI_edges(batnum, parallel_mode);
 FOI_ConeAngle(batnum, parallel_mode);
-FOI_sigmasw(batnum, parallel_mode);
+% FOI_sigmasw(batnum, parallel_mode);
 
 % FOI_ELSRarea(batnum, parallel_mode);
 
