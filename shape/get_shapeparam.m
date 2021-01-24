@@ -6,7 +6,7 @@ if geoparam.shape == 1
     Rarea = geoparam.Rarea;
     fillet_mode = geoparam.fillet_mode;
     
-    mutemp = 2*R_culet*geoparam.h2w_ratio;
+    mutemp = R_culet*geoparam.h2w_ratio;
     hv = normrnd(mutemp,mutemp*geoparam.sigmah); % the height of vertex
     hv = max(hv,(mutemp-3*mutemp*geoparam.sigmah));
     hv = min(hv,(mutemp+3*mutemp*geoparam.sigmah));

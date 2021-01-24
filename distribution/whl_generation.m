@@ -12,11 +12,6 @@ Surf_w=fix(max(grits.posx));
 mode=0;
 grit_profile_all={};
 
-if mode==1
-    
-else
-    mode=0;
-end
 %----------------------------------------
 Surf_res=.2;
 %----------------------------------------
