@@ -48,7 +48,7 @@ blockflag1_map = reshape(1:blocknum,[x_blocknum,y_blocknum]); % block = 35; bloc
 %% monte carlo generation
 bubbles = montecar_update(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum);
 %% laser frame
-if sepparam.wheel_type == 2&&sepparam.LS_mode == 1 % to prevent from field theta is not exsited
+if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
 bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
     sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
 end

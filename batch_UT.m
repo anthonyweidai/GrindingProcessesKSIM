@@ -3,8 +3,8 @@ create_folder();
 %%
 batnum = 1;
 parallel_mode = 0; % exceed memeory of the computer
-% FOI_edges(batnum, parallel_mode);
-FOI_ConeAngle(batnum, parallel_mode);
+FOI_edges(batnum, parallel_mode);
+% FOI_ConeAngle(batnum, parallel_mode);
 % FOI_sigmasw(batnum, parallel_mode);
 
 % FOI_ELSRarea(batnum, parallel_mode);

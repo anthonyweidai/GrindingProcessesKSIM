@@ -2,9 +2,9 @@ function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mo
     workpiece_length,workpiece_width,shape,Rarea)
 %% simulation function
 %% function mode
-export_mode=0;
-report_mode=2;
-testmode=0;
+export_mode = 0;
+report_mode = 2;
+testmode = 0;
 UT_mode = 1;
 %% material properties
 if UT_mode == 1
@@ -24,14 +24,14 @@ if UT_mode == 1
         % S. Dub et al., 2017, doi: 10.3390/cryst7120369.
     end
 else
-    H=7.6e-3; %Pa, 7.6GPa=7.6e-3N/um^2
-    E=83e-3;
-    v=0.203;
+    H = 7.6e-3; %Pa, 7.6GPa=7.6e-3N/um^2
+    E = 83e-3;
+    v = 0.203;
 end
-sigma_s=0.253e-3; %shear strength 0.253GPa
-sigma_y=3.5e-3; %yield strength 3.5GPa
-u_a=pi/2*sigma_s/sigma_y;
-f=0.108;
+sigma_s = 0.253e-3; %shear strength 0.253GPa
+sigma_y = 3.5e-3; %yield strength 3.5GPa
+u_a = pi/2*sigma_s/sigma_y;
+f = 0.108;
 %%
 %reading and get grit data
 %grit_list=readtable([filename '.csv'],'Range', 'A:F');
@@ -159,27 +159,41 @@ for t_i=dt:dt:t_step
         temp_chparea=res*sum((h_origin-h_grit>0).*(h_origin-h_grit));
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %     stats_indented = 0;
-        a_temp = sum(h_grit<h_origin)*0.2/2;
-        alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
-        b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
-        %         if b_temp > 20
-        %             b_temp=b_temp;
-        %         end
-        %     indents = find(rs_surf(round(g_y/res),:)>0); % find all stress field on the same roll
-        %     for i = indents
-        %         b = rs_surf(round( g_y / res ), i);
-        %
-        %         if abs( i - round( g_y / res ) ) < b/3
-        %             rs_surf(round( g_y / res ), i) = ( b ^ 2 + b_temp ^ 2 ) ^ 0.5;
-        %             stats_indented = 1;
-        %             break
-        %         end
-        %     end
-        b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
-        if b_prev == 0
-            rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+        rs_testmode=2;
+        if rs_testmode==1
+            a_temp = sum(h_grit<h_origin)*0.2/2;
+            alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+            b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
+            b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+            if b_prev == 0
+                rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+            else
+                rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+            end
         else
-            rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+            if temp_uct<0.075
+            elseif temp_uct<0.6
+                a_temp = sum(h_grit<h_origin)*0.2/2;
+                alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+                b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
+                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+                if b_prev == 0
+                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+                else
+                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+                end
+            else
+                a_temp = sum(h_grit<h_origin)*0.2/2;
+                alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+                temp_chparea = temp_chparea/temp_uct*0.6;
+                b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
+                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+                if b_prev == 0
+                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+                else
+                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+                end
+            end
         end
         %recording hmax, logging cut mode data
         %     h_m(t_tick,v_i)=temp_uct;
@@ -285,7 +299,7 @@ else
         c_mode_cut=sum(c_mode==3,2);
         c_mode_plg=sum(c_mode==2,2);
         c_mode_rub=sum(c_mode==1,2);
-        % c_mode_ina=sum(c_mode==0,2);
+        c_mode_ina=sum(c_mode==0,2);
         c_mode_act=c_mode_cut+c_mode_plg+c_mode_rub;
         
         c_mode_sum=max(c_mode);
@@ -312,30 +326,16 @@ else
         writematrix(T,[filename '-uct.csv']);
         T=[t_axis' ucarea];
         writematrix(T,[filename '-ucarea.csv']);
-        %friction
-        subplot(2,2,4);
-        %         u_sum=sum(u,1)';
-        %         u_max=max(u,1)';
-        %         u_aver=u_sum./roll_count;
-        %         friction_sum=sum(u_aver);
-        %         histogram(u_aver);title(['aver_friction|' num2str(numgrits) ' grits/ttl fric ' num2str(friction_sum) ]);
-        %         print([filename '-report.jpg'], '-djpeg' );
         
-        %%
-        %force output
+        %% force output
+        subplot(2,2,4);
         F_n_total=sum(F_n,2);
         F_t_total=sum(F_t,2);
         lb_F=floor(0.35*t_count/k_t_cof);hb_F=floor(0.55*t_count/k_t_cof);
         F_n_steadystage=mean(F_n_total(lb_F:hb_F));
         F_t_steadystage=mean(F_t_total(lb_F:hb_F));
-        %         figure;
-        %         if size(u,1)==2501
-        %             t_axis=0:dt:t_step;
-        %         else
         t_axis=0*dt:k_t_cof*dt:t_step;
-        
         plot(t_axis,F_n_total,'k-',t_axis,F_t_total,'r-');title(['GForce|red-tang;black-normal;(N vs s)|' filename '|' num2str(numgrits) ' grits'])
-        %         print([filename '-GForce.jpg'], '-djpeg' );
         T=[t_axis' F_n_total F_t_total];
         writematrix(T,[filename '-GForce.csv']);
         T=[t_axis' F_n];
@@ -375,6 +375,7 @@ else
         surf_x=res:res:size(h_surf,2)*res;
         surf_y=res:res:size(h_surf,1)*res;
         surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_pdz)]);
+        writematrix(rs_surf,[filename '-rs_b_dist.csv']);
         writematrix(pdz_surf,[filename '-pdz_dist.csv']);
         print([filename '-pdzdist.jpg'], '-djpeg' );
         close gcf;
