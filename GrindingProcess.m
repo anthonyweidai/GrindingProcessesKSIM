@@ -1,5 +1,5 @@
 function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
-    workpiece_length,workpiece_width,shape,Rarea)
+    workpiece_length,workpiece_width,wheel_length,shape,Rarea,res,vw)
 %% simulation function
 %% function mode
 export_mode = 0;
@@ -40,12 +40,11 @@ numgrits=size(grits.Tradius,1);
 k_t=1;
 %% grinding parameters
 rpm=3000;               %wheel spinning speed, round/min
-ds=30e3;                %diameter of a grd wheel, um
-vw=200e3;               %feed speed, um/min
+% ds=30e3;                %diameter of a grd wheel, um
+ds = wheel_length/pi;
 % vw=vw/60;
 vs=floor(ds*pi*rpm/60);        %grd wheel line speed, um/s
-dp=2;                 %input('R_m2dgmax:');
-res=.2;                %resolution of all axis
+dp=2;                 %input('R_m2dgmax:'); depth of cut   
 %%
 wheel_l=round(max(grits.posy));
 %% simulation time
@@ -137,7 +136,7 @@ for t_i=dt:dt:t_step
         g_x=vgrit(v_i,2);
         g_y=-vgrit(v_i,3);
         g_y_lowest=vgrit(v_i,4);
-        g_base_ori=(g_y-g_y_lowest)^2/(ds)/(1+vw/vs)^2;
+        g_base_ori=(g_y-g_y_lowest)^2/(ds)/(1+vw/vs)^2; %% origin 要改
         g_base=dd+g_base_ori;
         g_outline=cell2mat(grit_outline(vgrit(v_i,1)));
         h_temp=g_outline+g_base;

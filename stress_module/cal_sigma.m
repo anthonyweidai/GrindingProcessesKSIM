@@ -1,5 +1,5 @@
-function [sigma_maxps,sigma_maxoyps,sigma_mayozps]=cal_sigma(sigma_11,sigma_21,sigma_22,sigma_31,sigma_32,sigma_33)
-sigma_d=[sigma_11,sigma_21,sigma_31;sigma_21,sigma_22,sigma_32;sigma_31,sigma_32,sigma_33];
+function [sigma_maxps,sigma_maxoyps,sigma_mayozps]=cal_sigma(sigma_d)
+%sigma_d=[sigma_11,sigma_21,sigma_31;sigma_21,sigma_22,sigma_32;sigma_31,sigma_32,sigma_33];
 sigma_xoy=sigma_d(1:2,1:2);
 sigma_yoz=sigma_d(2:3,2:3);
 %-----------max pricipal stress-----------------------

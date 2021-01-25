@@ -1,8 +1,4 @@
-function [grits,grit_profille_all]=bubbleSimulator(filename, sepparam, workpiece_length,...
-    workpiece_width, geoparam)
-% [mu,sigma]=mesh2diameter(2500);
-% filename='N2000_r1';
-% cycle=1;
+function [grits,grit_profille_all]=bubbleSimulator(filename, wheel_length, wheel_width, geoparam, res)
 %%
 % parameters
 %%%%%%%%%%
@@ -23,16 +19,16 @@ damparea=0;
 w_boundary=4;
 w_gt=mu*50;
 %
-GrdToollength = workpiece_length*2;
-GrdToolwidth = workpiece_width + w_boundary*2;
-num_grits = GrdToollength*GrdToolwidth / (4*MuRadius^2);
+% wheel_length = workpiece_length*2;
+% wheel_width = workpiece_width + w_boundary*2;
+num_grits = wheel_length*wheel_width / (4*MuRadius^2);
 numBubbles = round(num_grits*0.4);     % number of bubbles
 % generate bubbles and initialise
 %bubbles.radius=rand(numBubbles,1)*(maxRadius-minRadius)+minRadius;
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[numBubbles,1]);
 bubbles.radius=bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
 bubbles.mass=0.1*ones(numBubbles,1);
-bubbles.pos=rand(numBubbles,2).*GrdToolwidth;
+bubbles.pos=rand(numBubbles,2).*wheel_width;
 bubbles.pos(:,2)=bubbles.pos(:,2)*4; %4for 800,8for2k
 bubbles.vel=zeros(numBubbles,2);
 
@@ -52,7 +48,7 @@ while t<5
     else
         g=0.2/mu;
     end
-    bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,GrdToolwidth,sumRadius,damparea);
+    bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,wheel_width,sumRadius,damparea);
     %     if ~mod(round(t/Ts),10)
     %         %disp(['dropping....',int2str(round(t/15*100)),'%' ])
     %     end
@@ -78,7 +74,7 @@ grits.Tradius=roundn(bubbles.Tradius,-3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
 grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
-index=find((grits.posy<GrdToollength).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
+index=find((grits.posy<wheel_length).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
 grits.posx=grits.posx(index)-w_boundary;
 grits.posy=grits.posy(index);
 grits.Tradius=grits.Tradius(index);
@@ -90,7 +86,7 @@ cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 disp(cr);
 % writetable(sortedT,[filename '-' num2str(cycle) '.csv']);
 writetable(sortedT,[filename '.csv']);
-grit_profille_all=whl_generation(1,grits,[filename],geoparam);
+grit_profille_all=whl_generation(1,grits,[filename],geoparam,res);
 
 end
 

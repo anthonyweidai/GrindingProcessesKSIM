@@ -127,7 +127,7 @@ A_t=A_t*g_res*res;
 A_n=sum(mark_A_n,'all')*g_res*g_res;
 
 if testmode==3
-%     figure
+    figure
     plot(1:length(grit_outline),h_0,'k-',1:length(grit_outline),h_res,'r-',1:length(grit_outline),h_pileup,'b-');
     title([num2str(h_max) ' | ' num2str(A_n) ' | ' num2str(A_t)]);
 end
