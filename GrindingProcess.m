@@ -2,9 +2,7 @@ function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mo
     workpiece_length,workpiece_width,wheel_length,shape,Rarea,res,vw)
 %% simulation function
 %% function mode
-export_mode = 0;
 report_mode = 2;
-testmode = 0;
 UT_mode = 1;
 %% material properties
 if UT_mode == 1
@@ -31,59 +29,45 @@ end
 sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = pi/2*sigma_s/sigma_y;
-f = 0.108;
+% f = 0.108;
 %%
 %reading and get grit data
 %grit_list=readtable([filename '.csv'],'Range', 'A:F');
 %grits=table2struct(grit_list,'ToScalar',true);
 numgrits=size(grits.Tradius,1);
-k_t=1;
+% k_t=1;
 %% grinding parameters
-rpm=3000;               %wheel spinning speed, round/min
-% ds=30e3;                %diameter of a grd wheel, um
-ds = wheel_length/pi;
-% vw=vw/60;
-vs=floor(ds*pi*rpm/60);        %grd wheel line speed, um/s
-dp=2;                 %input('R_m2dgmax:'); depth of cut   
-%%
-wheel_l=round(max(grits.posy));
+rpm = 3000;               %wheel spinning speed, round/min          
+ds = wheel_length/pi;   %diameter of a grd wheel, um
+vw = floor(vw/60);             % um/s
+vs = floor(wheel_length*rpm/60);        %grd wheel line speed, um/s
+dp = 2;                 %input('R_m2dgmax:'); depth of cut   
 %% simulation time
 %step time can be adjusted accordingly, longer=better Ra, will reach plateu
 % t_step=50e-5*k_t;%workpiece_length/vs;
 %considering that the interval should be small enough, we now use fix time
 %interval to prevent any type of unexpected problems.
 % dt=2e-8*k_t;%t_step/t_interval;
-active_dw=((dp)*1.05*(ds)*(1+vw/vs)^2)^0.5;
-dy=res;%roundn((vs+vw)*dt,-3);
-dt=floor(1e10*dy/(vs+vw))/1e10;
-t_step=(workpiece_length+2*active_dw)/vw;
-t_count=floor(t_step/dt);
-k_t_cof=floor(t_count/100);
-k_width=5e3/workpiece_width;
-% workpiece_length=t_step*vw;
-%%
-%getting the outline of grits
-grit_pool=[roundn(grits.posx,-1),roundn(grits.posy,-1),grits.Tradius];
-% Copy_of_GrdWhl_generation(1,filename);
-% grit_outline=table2array(readtable(filename,'Range', 'G:end','ReadVariableNames',false));
-
-%%
-%-initializing
-% vitual grinding wheel generation
-
-num_cycle=floor(t_step*(vs+vw)/wheel_l)+1;
+% active_dw should be small
+active_dw = ((dp)*1.05*(ds)*(1+vw/vs)^2)^0.5; %% prisoner's dilemma, dp, dd, active_dw
+dy = res;%roundn((vs+vw)*dt,-3);
+dt = floor(1e10*dy/(vs+vw))/1e10;
+t_step = (workpiece_length + 2*active_dw)/vw;
+t_count = floor(t_step/dt);
+k_t_cof = floor(t_count/100);
+%% vitual grinding wheel generation
+num_cycle=floor(t_step*(vs+vw)/wheel_length)+1;
 v_i=0;
 for c_i=1:num_cycle
     for g_i=1:numgrits
-        if (c_i-1)*wheel_l+grits.posy(g_i)>t_step*(vs+vw)
+        if (c_i-1)*wheel_length+grits.posy(g_i)>t_step*(vs+vw)
             continue
         end
         v_i=v_i+1;
         vgrit(v_i,1)=g_i;
         vgrit(v_i,2)=round(grits.posx(g_i)/res)*res;
-        vgrit(v_i,3)=(c_i-1)*wheel_l+grits.posy(g_i);
+        vgrit(v_i,3)=(c_i-1)*wheel_length+grits.posy(g_i);
         vgrit(v_i,4)=vgrit(v_i,3)/vs*vw-active_dw;
-        
     end
 end
 num_vgrits=length(vgrit);
@@ -92,7 +76,7 @@ h_clearance=workpiece_width*0.1;
 c_clr=h_clearance/res/2;
 h_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 rs_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
-pdz_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
+% pdz_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
 hmax=zeros(num_vgrits,2);
 t_tick=0;
 % h_m=zeros(t_count,num_vgrits);
@@ -112,16 +96,16 @@ c_mode=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 F_n=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 F_t=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 %%
-g_shape=grit_profile_all;
-for g_i=1:numgrits
-    grit_outline{g_i}=-max(g_shape{g_i});
-    grit_proh(g_i)=-min(cell2mat(grit_outline(g_i)));
+g_shape = grit_profile_all;
+grit_outline = cell(1,numgrits);
+grit_proh = zeros(1,numgrits);
+for g_i = 1:numgrits
+    grit_outline{g_i} = -max(g_shape{g_i});
+    grit_proh(g_i) = -min(cell2mat(grit_outline(g_i)));
 end
-g_proh_max=max(grit_proh);
-dd=g_proh_max-dp;
-
-%%
-%grinding process, calculating for each time step
+g_proh_max = max(grit_proh);
+dd = g_proh_max - dp;
+%% grinding process, calculating for each time step
 for t_i=dt:dt:t_step
     t_tick=t_tick+1;
     wheel_location=vw*t_i-active_dw;
@@ -131,17 +115,19 @@ for t_i=dt:dt:t_step
         if (-vgrit(v_i,3)<=max(0,(wheel_location-active_dw)))||(-vgrit(v_i,3)>=min( workpiece_length,(wheel_location+active_dw)))
             continue
         end
-        
         % basic calculation of grit positions
         g_x=vgrit(v_i,2);
         g_y=-vgrit(v_i,3);
         g_y_lowest=vgrit(v_i,4);
-        g_base_ori=(g_y-g_y_lowest)^2/(ds)/(1+vw/vs)^2; %% origin 要改
-        g_base=dd+g_base_ori;
+        g_base_ori=(g_y-g_y_lowest)^2/(ds)/(1+vw/vs)^2;
+        g_base = dd + g_base_ori;
         g_outline=cell2mat(grit_outline(vgrit(v_i,1)));
         h_temp=g_outline+g_base;
-        h_temp(find(h_temp>0))=0;
-        
+        for i = 1:length(h_temp)
+            if h_temp(i)>0
+                h_temp(i)=0;
+            end
+        end
         % obtaining the calbound
         lbound=(g_x)/res+c_clr-fix(0.5*length(g_outline));
         hbound=(g_x)/res+c_clr-fix(0.5*length(g_outline))+length(g_outline)-1;
@@ -160,8 +146,8 @@ for t_i=dt:dt:t_step
         %     stats_indented = 0;
         rs_testmode=2;
         if rs_testmode==1
-            a_temp = sum(h_grit<h_origin)*0.2/2;
-            alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+            % a_temp = sum(h_grit<h_origin)*0.2/2;
+            % alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
             b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
             b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
             if b_prev == 0
@@ -172,8 +158,8 @@ for t_i=dt:dt:t_step
         else
             if temp_uct<0.075
             elseif temp_uct<0.6
-                a_temp = sum(h_grit<h_origin)*0.2/2;
-                alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+                % a_temp = sum(h_grit<h_origin)*0.2/2;
+                % alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
                 b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
                 b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
                 if b_prev == 0
@@ -182,8 +168,8 @@ for t_i=dt:dt:t_step
                     rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
                 end
             else
-                a_temp = sum(h_grit<h_origin)*0.2/2;
-                alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
+                % a_temp = sum(h_grit<h_origin)*0.2/2;
+                % alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
                 temp_chparea = temp_chparea/temp_uct*0.6;
                 b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
                 b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
@@ -244,7 +230,7 @@ end
 %%
 h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res-1);
 rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res-1);
-[Ra,Rz]=SurfRoughANA(h_surf);
+[Ra,~]=SurfRoughANA(h_surf);
 C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 %%
 [l_b,w_b]=size(rs_surf);
@@ -267,9 +253,8 @@ pdz_surf=pdz_field(:,b_clr:b_clr+workpiece_width/res-1);
 %draw the final ground surface
 if report_mode==0
 else
-    
     if report_mode==1
-        f=figure;
+        figure;
         fig=gcf;
         fig.Units='normalized';
         fig.OuterPosition=[0 0 1 1];
@@ -278,7 +263,6 @@ else
         surf_y=res:res:size(h_surf,1)*res;
         surf(surf_x,surf_y,h_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra)]);
         print([filename '-report.jpg'], '-djpeg' );
-        
     else
         %%
         figure('units','normalized','outerposition',[0 0 1 1]); %,'visible','off'
@@ -298,7 +282,7 @@ else
         c_mode_cut=sum(c_mode==3,2);
         c_mode_plg=sum(c_mode==2,2);
         c_mode_rub=sum(c_mode==1,2);
-        c_mode_ina=sum(c_mode==0,2);
+        % c_mode_ina=sum(c_mode==0,2);
         c_mode_act=c_mode_cut+c_mode_plg+c_mode_rub;
         
         c_mode_sum=max(c_mode);
@@ -352,6 +336,7 @@ else
         figure('units','normalized','outerposition',[0 0 1 1]);
         dist_uct=hmax(:,1);
         histogram(dist_uct);
+        title('UCT histogram')
         print([filename '-ucthisto.jpg'], '-djpeg' );
         close gcf;
         
@@ -366,6 +351,7 @@ else
         hold on;
         stem3(grits.posx(vgrit(index_plow,1)),vgrit(index_plow,3),hmax(index_plow,1),'r');
         stem3(grits.posx(vgrit(index_rub,1)),vgrit(index_rub,3),hmax(index_rub,1),'g');
+        title('UST dist')
         savefig([filename '-uctdist.fig']);
         close gcf;
         
@@ -373,7 +359,8 @@ else
         figure('units','normalized','outerposition',[0 0 1 1]);
         surf_x=res:res:size(h_surf,2)*res;
         surf_y=res:res:size(h_surf,1)*res;
-        surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra_pdz)]);
+        surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;
+        title([filename '| Ra=' num2str(Ra_pdz)]);
         writematrix(rs_surf,[filename '-rs_b_dist.csv']);
         writematrix(pdz_surf,[filename '-pdz_dist.csv']);
         print([filename '-pdzdist.jpg'], '-djpeg' );
@@ -384,5 +371,5 @@ end
 Grd_output = [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode];
 Grd_outputname = {'Ra', 'Ra_pdz', 'Rz_pdz', 'C_grit', 'F_n_steadystage', 'F_t_steadystage', ...
     'num_cut', 'num_plg', 'num_rub', 'num_ina', 'percent_cut', 'percent_plg', 'percent_rub', 'percent_ina'};
-Grd_output = array2table(Grd_output,'VariableNames',Grd_outputname); % Instead, you can use struct
+Grd_output = array2table(Grd_output,'VariableNames',Grd_outputname);
 end

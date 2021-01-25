@@ -12,9 +12,9 @@ function [vq, active_Rarea] = get_gritshape(R, geoparam, res)
 % RA_mode: 1 - Rake angle is const, 0 - Rake angle is not const
 % xi: intercept parameter of tetradecahedron
 %%
-rotate_angle = rand*3.1415926;
 P = get_shapeparam(R,geoparam);
 %% rotate grit
+rotate_angle = rand*3.1415926;
 rotate_z_ori = [cos(rotate_angle) -sin(rotate_angle) 0; sin(rotate_angle) cos(rotate_angle) 0; 0 0 1];
 for i = 1:size(P,1)
     P(i,:) = rotate_z_ori*P(i,:)';
@@ -29,6 +29,7 @@ while isempty(vq)
 end
 vq = vq - lowerb_p;
 vq(isnan(vq)) = 0;
+h_vq = max(vq,[],'all');
 %% trimming
 if geoparam.trim_h == 0
 else

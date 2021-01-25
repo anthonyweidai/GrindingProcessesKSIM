@@ -1,3 +1,19 @@
+# list of function
+GrdProcess.m
+%% list of functions
+%   GrdProcess2
+%-------------------------------step
+%1  - TGW_generator
+%   -- wheel_generator
+%   === get_octacube.m
+%1  - bubbleSimulator_cluster
+%   -- updatePosition
+%   -- wheel_generator
+%   === get_octacube.m
+%-------------------------------step
+%2  - GrindingProcess   % simulation process
+%   -- COF_CAL
+
 # To avoid interference
 
 ## Step 1: Before you push your local repo

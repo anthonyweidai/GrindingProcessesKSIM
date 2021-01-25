@@ -77,7 +77,8 @@ if mode==0
     draw_x=0:1:Surf_l;
     draw_y=0:1:Surf_w;
     draw_h=wheel_h(1:1/res:1/res*length(draw_y),1:1/res:1/res*length(draw_x));
-    surf(draw_x,draw_y,draw_h,'Linestyle','none');axis equal;%tight;
+    surf(draw_x,draw_y,draw_h,'Linestyle','none');axis equal;
+    title('wheel topography')
     % R_m=mean(mean(wheel_h));
     % Ra=mean(mean(abs(wheel_h-ones(y_upper+1,x_upper+1).*R_m)));
     % Rd=max(max(wheel_h))-min(min(wheel_h));
@@ -94,13 +95,15 @@ if mode==0
     %%
     figure;
     histogram(proh_all);
+    title(['Proh all: ' num2str(mean(ac_Rarea_all,'all'))]);
     writematrix(proh_all,[filename '-proh.csv']);
     print([filename '-phdist.jpg'], '-djpeg' );
     close gcf;
     %%
     figure;
     histogram(ac_Rarea_all);
-    writematrix(proh_all,[filename '-ac_Rarea.csv']);title(num2str(mean(ac_Rarea_all,'all')));
+    writematrix(ac_Rarea_all,[filename '-ac_Rarea.csv']);
+    title(['Active Rarea all: ' num2str(mean(ac_Rarea_all,'all'))]);
     print([filename '-ac_Rarea.jpg'], '-djpeg' );
     close gcf;
 end
