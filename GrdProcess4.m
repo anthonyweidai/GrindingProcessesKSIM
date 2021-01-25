@@ -2,15 +2,16 @@ function GrdProcess4(cof_cal_mode, cycle, FOI, sepparam, geoparam)
 warning off;
 tic;
 %%
-% cof_cal_mode % 0-none 1-simplified mode 2-accurate mode
 workpiece_length = 1000;
 workpiece_width = 500;     % max(grits.posx);
-wheel_length = 5*workpiece_length;
+wheel_length = 10*workpiece_length;
 wheel_width = workpiece_width;
 vw = 200e3;               %feed speed, um/min
 res=.2;              % surf resolution of all axis
 %% Input parameters initialization
 [sepparam, geoparam] = param_initialize(sepparam, geoparam);
+%% Simplified mode won't calculate force, but the other will 
+cof_cal_mode(geoparam.shape==2 || geoparam.shape==3) = 0; % 0-simplified mode 1-accurate mode
 %% Generate grinding wheel
 filename = get_filename(cycle, sepparam, geoparam, FOI, vw);
 if sepparam.wheel_type == 1
@@ -23,7 +24,7 @@ end
 %% Kinematic simulation
 Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
     workpiece_length,workpiece_width,wheel_length,...
-    geoparam.shape,geoparam.Rarea,res,vw);
+    geoparam.Rarea,res,vw);
 %% Record input and output variables
 batch_info = array2table(convertCharsToStrings(char(datetime)),'VariableNames',{'datetime'});
 batch_info = [batch_info table(cycle) table(vw)];

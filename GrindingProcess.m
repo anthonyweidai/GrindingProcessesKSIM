@@ -1,31 +1,12 @@
 function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
-    workpiece_length,workpiece_width,wheel_length,shape,Rarea,res,vw)
+    workpiece_length,workpiece_width,wheel_length,Rarea,res,vw)
 %% simulation function
 %% function mode
 report_mode = 2;
-UT_mode = 1;
 %% material properties
-if UT_mode == 1
-    if shape == 1 || shape == 2
-        H = 45e-3; %Pa, 45GPa=45e-3N/um^2
-        E = 865e-3;
-        v = 0.12;
-        % A. Falin et al., 2017, doi: 10.1038/ncomms15815.
-        % M. P. D’Evelyn and T. Taniguchi, 1999, doi: 10.1016/s0925-9635(99)00077-1.
-        % Y. Tian et al., 2013, doi: 10.1038/nature11728.
-    elseif shape == 3
-        H = 90e-3;
-        E = 752e-3;
-        v = 0.034;
-        % M. Mohr et al., 2014, doi: 10.1063/1.4896729.
-        % M. D. Drory, R. H. Dauskardt, 1995, doi: 10.1063/1.360060.
-        % S. Dub et al., 2017, doi: 10.3390/cryst7120369.
-    end
-else
-    H = 7.6e-3; %Pa, 7.6GPa=7.6e-3N/um^2
-    E = 83e-3;
-    v = 0.203;
-end
+H = 7.6e-3; %Pa, 7.6GPa=7.6e-3N/um^2
+E = 83e-3;
+v = 0.203;
 sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = pi/2*sigma_s/sigma_y;
@@ -37,18 +18,16 @@ u_a = pi/2*sigma_s/sigma_y;
 numgrits=size(grits.Tradius,1);
 % k_t=1;
 %% grinding parameters
-rpm = 3000;               %wheel spinning speed, round/min          
+rpm = 3000;               %wheel spinning speed, round/min
 ds = wheel_length/pi;   %diameter of a grd wheel, um
-vw = floor(vw/60);             % um/s
 vs = floor(wheel_length*rpm/60);        %grd wheel line speed, um/s
-dp = 2;                 %input('R_m2dgmax:'); depth of cut   
+dp = 2;                 %input('R_m2dgmax:'); depth of grinding
 %% simulation time
 %step time can be adjusted accordingly, longer=better Ra, will reach plateu
 % t_step=50e-5*k_t;%workpiece_length/vs;
 %considering that the interval should be small enough, we now use fix time
 %interval to prevent any type of unexpected problems.
 % dt=2e-8*k_t;%t_step/t_interval;
-% active_dw should be small
 active_dw = ((dp)*1.05*(ds)*(1+vw/vs)^2)^0.5; %% prisoner's dilemma, dp, dd, active_dw
 dy = res;%roundn((vs+vw)*dt,-3);
 dt = floor(1e10*dy/(vs+vw))/1e10;
@@ -195,7 +174,6 @@ for t_i=dt:dt:t_step
                 g_shape_temp=cell2mat(g_shape(vgrit(v_i,1)));
                 [area_t,area_n]=COF_CAL(g_shape_temp,g_base,h_origin);
             end
-            
             [F_n_temp,F_t_temp]=get_force(H,E,v,u_a,temp_uct,area_n,area_t,Rarea);
             %         F_n_temp=area_n*H
             %         F_t_temp=u(t_ana_i,v_i)*area_n*H
