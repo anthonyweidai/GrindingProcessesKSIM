@@ -1,3 +1,17 @@
+%%%% list of functions
+%   GrdProcess2
+%-------------------------------step
+%1  - TGW_generator
+%   -- wheel_generator
+%   === get_octacube.m
+%1  - bubbleSimulator_cluster
+%   -- updatePosition
+%   -- wheel_generator
+%   === get_octacube.m
+%-------------------------------step
+%2  - GrindingProcess   % simulation process
+%   -- COF_CAL
+%%
 function GrdProcess4(cof_cal_mode, cycle, FOI, sepparam, geoparam)
 warning off;
 tic;
