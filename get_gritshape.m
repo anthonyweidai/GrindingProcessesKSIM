@@ -1,5 +1,5 @@
 function [vq, active_Rarea] = get_gritshape(R, geoparam, res)
-%% generate geometries of grains 
+%% generate geometries of grains
 %% parameters notion, use structure for input variables
 % R: default grit size
 % shape: 1 - pyramid&frustum 2 - shpere&ellipsoid
@@ -37,7 +37,11 @@ else
     vq = min(vq,trim_h);
 end
 newh_vq = max(vq,[],'all');
-active_Rarea = 1-(1-(h_vq-newh_vq)/h_vq)*(1-geoparam.Rarea);
+if geoparam.shape == 1
+    active_Rarea = 1-(1-(h_vq-newh_vq)/h_vq)*(1-geoparam.Rarea);
+else
+    active_Rarea = 0;
+end
 end
 %% list of functions
 %   get_gritshape

@@ -1,5 +1,5 @@
 function Grd_output = GrindingProcess(filename,grits,grit_profile_all,cof_cal_mode,...
-    workpiece_length,workpiece_width,wheel_length,Rarea,res,vw)
+    workpiece_length,workpiece_width,wheel_length,geoparam,res,vw)
 %% simulation function
 %% function mode
 report_mode = 2;
@@ -11,24 +11,25 @@ sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = pi/2*sigma_s/sigma_y;
 % f = 0.108;
-%%
-%reading and get grit data
-%grit_list=readtable([filename '.csv'],'Range', 'A:F');
-%grits=table2struct(grit_list,'ToScalar',true);
-numgrits=size(grits.Tradius,1);
-% k_t=1;
+%% initialize Rarea
+if geoparam.shape == 3
+    Rarea = 0;
+else
+    Rarea = geoparam.Rarea;
+end
 %% grinding parameters
+numgrits=size(grits.Tradius,1);
 rpm = 3000;               %wheel spinning speed, round/min
 ds = wheel_length/pi;   %diameter of a grd wheel, um
 vs = floor(wheel_length*rpm/60);        %grd wheel line speed, um/s
-dp = 2;                 %input('R_m2dgmax:'); depth of grinding
+ap = 2;                 %input('R_m2dgmax:'); depth of grinding
 %% simulation time
 %step time can be adjusted accordingly, longer=better Ra, will reach plateu
 % t_step=50e-5*k_t;%workpiece_length/vs;
 %considering that the interval should be small enough, we now use fix time
 %interval to prevent any type of unexpected problems.
 % dt=2e-8*k_t;%t_step/t_interval;
-active_dw = ((dp)*1.05*(ds)*(1+vw/vs)^2)^0.5; %% prisoner's dilemma, dp, dd, active_dw
+active_dw = ((ap)*1.05*(ds)*(1+vw/vs)^2)^0.5; %% prisoner's dilemma, dp, dd, active_dw
 dy = res;%roundn((vs+vw)*dt,-3);
 dt = floor(1e10*dy/(vs+vw))/1e10;
 t_step = (workpiece_length + 2*active_dw)/vw;
@@ -83,7 +84,7 @@ for g_i = 1:numgrits
     grit_proh(g_i) = -min(cell2mat(grit_outline(g_i)));
 end
 g_proh_max = max(grit_proh);
-dd = g_proh_max - dp;
+dd = g_proh_max - ap;
 %% grinding process, calculating for each time step
 for t_i=dt:dt:t_step
     t_tick=t_tick+1;

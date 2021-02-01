@@ -11,38 +11,38 @@ if ~exist(newsubfolder,'dir')
 end
 %% Dave
 % shape == 1
-newsubfolder = 'GrdData/ConeAngle';
+newsubfolder = 'M:/GrdData/ConeAngle';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/sigmasw';
+newsubfolder = 'M:/GrdData/sigmasw';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/edges';
+newsubfolder = 'M:/GrdData/edges';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/FruRarea';
+newsubfolder = 'M:/GrdData/FruRarea';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
 % shape == 2
-newsubfolder = 'GrdData/ELSRarea';
+newsubfolder = 'M:/GrdData/ELSRarea';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
 % shape == 3
-newsubfolder = 'GrdData/xi';
+newsubfolder = 'M:/GrdData/xi';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
 % all
-newsubfolder = 'GrdData/sigmah';
+newsubfolder = 'M:/GrdData/sigmah';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end
-newsubfolder = 'GrdData/Rsigma';
+newsubfolder = 'M:/GrdData/Rsigma';
 if ~exist(newsubfolder,'dir')
     mkdir(newsubfolder);
 end

@@ -7,7 +7,7 @@ function [F_n,F_t]=get_force(H,E,v,u_a,temp_uct,area_n,area_t,Rarea)
 % Rarea=0.5;
 g_radius=10;
 a=1;
-Rarea(Rarea <= 1e-7) = 0.0001;
+Rarea(Rarea < 0.1) = 0.1;
 alpha=atan((a*(1-sqrt(Rarea))/2/a))/pi*180;
 D_grit=g_radius*sqrt(Rarea);
 % u_a=pi/2*sigma_s/sigma_y;
