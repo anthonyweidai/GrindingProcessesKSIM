@@ -1,5 +1,4 @@
-
-function [xc, yc]=getvertex(nx, ny, theta, Ratio)
+function [xc, yc] = getVertex(nx, ny, theta, Ratio)
 % get the vertex
 len = length(nx);
 
@@ -16,12 +15,12 @@ for i = 1:len
     b = ny(i) - nx(i)*k;
     
     if b>=0&&theta<pi&&theta>=0
-        [xtemp,ytemp]=findintersection([0,0;1,tan(theta)],[nx(px1),ny(px1);...
+        [xtemp,ytemp]=findIntersection2D([0,0;1,tan(theta)],[nx(px1),ny(px1);...
             nx(px2),ny(px2)]);
         x = [x xtemp];
         y = [y ytemp];
     elseif b<0&&theta<=2*pi&&theta>=pi
-        [xtemp,ytemp]=findintersection([0,0;1,tan(theta)],[nx(px1),ny(px1);...
+        [xtemp,ytemp]=findIntersection2D([0,0;1,tan(theta)],[nx(px1),ny(px1);...
             nx(px2),ny(px2)]);
         x = [x xtemp];
         y = [y ytemp];

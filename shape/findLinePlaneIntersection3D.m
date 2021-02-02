@@ -1,5 +1,5 @@
-function point = intersectPoint(rayVector, rayPoint, planeNormal, planePoint)
-%% get 3d line and plane intersection
+function point = findLinePlaneIntersection3D(rayVector, rayPoint, planeNormal, planePoint)
+%% Find 3d line and plane intersection
 % they should not perpendicular
 pdiff = rayPoint - planePoint;
 prod1 = dot(pdiff, planeNormal);

@@ -1,4 +1,4 @@
-function filename = get_filename(cycle, sepparam, geoparam, FOI, vw)
+function filename = getFilename(cycle, sepparam, geoparam, FOI, vw)
 %% get_filename is usedd to set path and files' names
 wheel_type = sepparam.wheel_type;
 shape = geoparam.shape;

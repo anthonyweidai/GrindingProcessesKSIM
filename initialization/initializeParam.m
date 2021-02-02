@@ -1,4 +1,4 @@
-function [sepparam, geoparam] = param_initialize(sepparam, geoparam)
+function [sepparam, geoparam] = initializeParam(sepparam, geoparam)
 %% Initialize input variables
 %% seperation parameters
 sepparam.wheel_type(~isfield(sepparam,'wheel_type')) = 2;   % 1-random; 2-tgw

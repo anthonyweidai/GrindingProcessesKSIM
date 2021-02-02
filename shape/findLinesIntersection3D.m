@@ -1,4 +1,4 @@
-function [P_intersect] = lineintersection3D(P1,P2,u,v)
+function [P_intersect] = findLinesIntersection3D(P1,P2,u,v)
 %% Find intersection point of lines in 3D space, in the least squares sense.
 % the intersect should exsist
 a = abs(u(1))<=1e-7;

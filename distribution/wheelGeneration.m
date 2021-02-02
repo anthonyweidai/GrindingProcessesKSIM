@@ -1,4 +1,4 @@
-function [grit_profile_all]=whl_generation(mode, grits, filename, geoparam, res)
+function [grit_profile_all, ConeAngle]=wheelGeneration(mode, grits, filename, geoparam, res)
 %% geometrical parameters
 % R = 10;
 %%
@@ -28,6 +28,7 @@ end
 proh_all=[];
 outline_all=[];
 ac_Rarea_all=[];
+temp = 0;
 
 if isfile(['gprofile_temp\' filename '_temp.csv'])
     delete(['gprofile_temp\' filename '_temp.csv']);
@@ -40,15 +41,16 @@ for grit_n = 1:numgrits
         RB=find(wheel_y>=grits.highbounds(grit_n),1,'first');
         LB=find(wheel_x<=grits.leftbounds(grit_n),1,'last');
         HB=find(wheel_x>=grits.rightbounds(grit_n),1,'first');
-
+        
         if isempty(LB)
             LB=1;
         end
     end
     %%
-    [grit_P, active_Rarea] = get_gritshape(rad,geoparam,res); 
+    [grit_P, active_Rarea, ConeAngle] = getGritShape(rad,geoparam,res);
     grit_profile_all=[grit_profile_all; {grit_P}];
-    
+    %%
+    temp = temp + ConeAngle;
     %%
     outline=max(grit_P);
     proh_temp=max(outline);
@@ -63,13 +65,15 @@ for grit_n = 1:numgrits
                 rel_xi=round(relx/res+rad/res)-1;
                 rel_xi=max(rel_xi,1);
                 rely=wheel_y(y_i)-round(grits.posx(grit_n)/res)*res;
-                    rel_yi=round(rely/res+rad/res)-1;
-                    rel_yi=max(rel_yi,1);
-                    wheel_h(y_i,x_i)=max(wheel_h(y_i,x_i),grit_P(rel_yi,rel_xi));
+                rel_yi=round(rely/res+rad/res)-1;
+                rel_yi=max(rel_yi,1);
+                wheel_h(y_i,x_i)=max(wheel_h(y_i,x_i),grit_P(rel_yi,rel_xi));
             end
         end
     end
 end
+%%
+ConeAngle = temp*180/(numgrits*pi);
 %%
 if mode==0
     %%

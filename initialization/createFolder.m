@@ -1,4 +1,4 @@
-function create_folder()
+function createFolder()
 %% Add your new FOI path to function to create your folder
 %% Patrick
 newsubfolder = 'GrdData/EFdist';

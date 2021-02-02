@@ -1,4 +1,4 @@
-function bubbles = Laser_Frame(Laser_theta, RowGap, SaveGap, GrdToollength, GrdToolwidth, bubbles)
+function bubbles = laserFrame(Laser_theta, RowGap, SaveGap, GrdToollength, GrdToolwidth, bubbles)
 %% Lasering to remove unwanted grains
 % Laser_theta - the angle between saved line and bottom line
 % RowGap - row gap between ajacent centers of lines

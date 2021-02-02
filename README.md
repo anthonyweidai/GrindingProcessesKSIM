@@ -1,5 +1,7 @@
 # To avoid interference
-
+使用驼峰命名法。Camel case: "iPhone", "JavaScript", and "eBay"
+变量大驼峰
+函数名小驼峰
 ## Step 1: Before you push your local repo
 
 Firstly, please check the others' pull requests.

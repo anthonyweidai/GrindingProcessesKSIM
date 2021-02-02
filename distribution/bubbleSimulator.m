@@ -1,8 +1,10 @@
-function [grits,grit_profille_all]=bubbleSimulator(filename, wheel_length, wheel_width, geoparam, res)
+function [grits,grit_profille_all,ConeAngle] = ...
+    bubbleSimulator(filename, wheel_length, wheel_width, geoparam, res)
 %%
 % parameters
 %%%%%%%%%%
-mu=10;sigma=geoparam.Rsigma;
+mu = 10;
+sigma = geoparam.Rsigma;
 %%%%%%%%%%
 MuRadius=mu;       % minimum radius
 SigRadius=sigma;      % maximum radius
@@ -13,7 +15,7 @@ k1=4;              % wall bounce constant
 k2=20;              % spring constant
 c=1;                % damping constant
 cg=0.1;             % damping w.r.t. ground
-g=0.2;                % gravity
+% g=0.2;                % gravity
 Ts=0.005;           % simulation sampling time
 damparea=0;
 w_boundary=4;
@@ -56,7 +58,7 @@ end
 % print([filename '-cr.jpg'], '-djpeg' );
 % %% laser frame
 % if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
-% bubbles = Laser_Frame(sepparam.theta, sepparam.RowGap, ...
+% bubbles = laserFrame(sepparam.theta, sepparam.RowGap, ...
 %     sepparam.SaveGap, GrdToollength, GrdToolwidth, bubbles);
 % end
 %%
@@ -86,8 +88,7 @@ cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 disp(cr);
 % writetable(sortedT,[filename '-' num2str(cycle) '.csv']);
 writetable(sortedT,[filename '.csv']);
-grit_profille_all=whl_generation(1,grits,[filename],geoparam,res);
-
+[grit_profille_all, ConeAngle] = wheelGeneration(1,grits,filename,geoparam,res);
 end
 
 function bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,GrdToolwidth,sumRadius,damparea)

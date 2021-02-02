@@ -1,4 +1,4 @@
-function [vq, active_Rarea] = get_gritshape(R, geoparam, res)
+function [vq, active_Rarea, ConeAngle] = getGritShape(r, geoparam, res)
 %% generate geometries of grains
 %% parameters notion, use structure for input variables
 % R: default grit size
@@ -12,7 +12,7 @@ function [vq, active_Rarea] = get_gritshape(R, geoparam, res)
 % RA_mode: 1 - Rake angle is const, 0 - Rake angle is not const
 % xi: intercept parameter of tetradecahedron
 %%
-P = get_shapeparam(R,geoparam);
+[P, ConeAngle] = getShapeParam(r,geoparam);
 %% rotate grit
 rotate_angle = rand*3.1415926;
 rotate_z_ori = [cos(rotate_angle) -sin(rotate_angle) 0; sin(rotate_angle) cos(rotate_angle) 0; 0 0 1];
@@ -23,7 +23,7 @@ end
 vq = [];
 while isempty(vq)
     lowerb_p = min(P(:,3));
-    [xq,yq] = meshgrid(-R:res:R, -R:res:R);
+    [xq,yq] = meshgrid(-r:res:r, -r:res:r);
     vq = griddata(P(:,1),P(:,2),P(:,3),xq,yq);
     P(:,3) = P(:,3) + max(P(:,3)-min(P(:,3)))/2;
 end

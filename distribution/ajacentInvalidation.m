@@ -1,4 +1,4 @@
-function judgeblock = ajacent_inval(k,numcount,bubbles,blockflag1,blockflag2,Thred,posx,posy,x_blocknum)
+function judgeblock = ajacentInvalidation(k,numcount,bubbles,blockflag1,blockflag2,Thred,posx,posy,x_blocknum)
 %% invalidate bubble overlap within four ajacent small blocks
 judgeblock = 1;
 temp = 0;
