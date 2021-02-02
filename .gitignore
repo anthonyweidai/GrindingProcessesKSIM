@@ -14,7 +14,7 @@ pathdef.m
 beenoera
 beenoera.pub
 .DS_Store
-batch_Dave.m
+batchDave.m
 
 # 忽略 experiment_monte/ 文件夹下的所有文件
 experiment_monte/
