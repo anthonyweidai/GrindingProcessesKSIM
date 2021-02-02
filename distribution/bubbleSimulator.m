@@ -1,10 +1,10 @@
-function [grits,grit_profille_all,ConeAngle] = ...
-    bubbleSimulator(filename, wheel_length, wheel_width, geoparam, res)
+function [grits,GritsProfile,GeoParam] = ...
+    bubbleSimulator(FileName, wheel_length, wheel_width, GeoParam, res)
 %%
 % parameters
 %%%%%%%%%%
 mu = 10;
-sigma = geoparam.Rsigma;
+sigma = GeoParam.Sigmarg;
 %%%%%%%%%%
 MuRadius=mu;       % minimum radius
 SigRadius=sigma;      % maximum radius
@@ -87,8 +87,8 @@ sortedT =sortrows(T, 'posy'); % sort the table by 'DOB'
 cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 disp(cr);
 % writetable(sortedT,[filename '-' num2str(cycle) '.csv']);
-writetable(sortedT,[filename '.csv']);
-[grit_profille_all, ConeAngle] = wheelGeneration(1,grits,filename,geoparam,res);
+writetable(sortedT,[FileName '.csv']);
+[GritsProfile, GeoParam] = wheelGeneration(1,grits,FileName,GeoParam,res);
 end
 
 function bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,GrdToolwidth,sumRadius,damparea)

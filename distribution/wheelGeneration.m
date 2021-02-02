@@ -1,4 +1,4 @@
-function [grit_profile_all, ConeAngle]=wheelGeneration(mode, grits, filename, geoparam, res)
+function [GritsProfile, GeoParam]=wheelGeneration(mode, grits, FileName, GeoParam, res)
 %% geometrical parameters
 % R = 10;
 %%
@@ -10,7 +10,7 @@ numgrits = size(grits.Tradius,1);
 Surf_l = fix(max(grits.posy));
 Surf_w = fix(max(grits.posx));
 mode = 0;
-grit_profile_all = {};
+GritsProfile = {};
 %%
 if mode==0
     x_upper=Surf_l/res;
@@ -30,12 +30,12 @@ outline_all=[];
 ac_Rarea_all=[];
 temp = 0;
 
-if isfile(['gprofile_temp\' filename '_temp.csv'])
-    delete(['gprofile_temp\' filename '_temp.csv']);
+if isfile(['gprofile_temp\' FileName '_temp.csv'])
+    delete(['gprofile_temp\' FileName '_temp.csv']);
 end
 %%
 for grit_n = 1:numgrits
-    rad=round(grits.Tradius(grit_n)*10)/10;
+    rg=round(grits.Tradius(grit_n)*10)/10;
     if mode==0
         LFB=find(wheel_y<=grits.lowbounds(grit_n),1,'last');
         RB=find(wheel_y>=grits.highbounds(grit_n),1,'first');
@@ -47,14 +47,14 @@ for grit_n = 1:numgrits
         end
     end
     %%
-    [grit_P, active_Rarea, ConeAngle] = getGritShape(rad,geoparam,res);
-    grit_profile_all=[grit_profile_all; {grit_P}];
+    [grit_P, ActiveRarea, ConeAngle] = getGritShape(rg,GeoParam,res);
+    GritsProfile=[GritsProfile; {grit_P}];
     %%
     temp = temp + ConeAngle;
     %%
     outline=max(grit_P);
     proh_temp=max(outline);
-    ac_Rarea_all=[ac_Rarea_all,active_Rarea];
+    ac_Rarea_all=[ac_Rarea_all,ActiveRarea];
     proh_all=[proh_all; proh_temp];
     outline=[outline , NaN(1,200-length(outline))];
     outline_all=[outline_all;outline];
@@ -62,10 +62,10 @@ for grit_n = 1:numgrits
         for x_i=LB:HB
             for y_i=LFB:RB
                 relx=wheel_x(x_i)-round(grits.posy(grit_n)/res)*res;
-                rel_xi=round(relx/res+rad/res)-1;
+                rel_xi=round(relx/res+rg/res)-1;
                 rel_xi=max(rel_xi,1);
                 rely=wheel_y(y_i)-round(grits.posx(grit_n)/res)*res;
-                rel_yi=round(rely/res+rad/res)-1;
+                rel_yi=round(rely/res+rg/res)-1;
                 rel_yi=max(rel_yi,1);
                 wheel_h(y_i,x_i)=max(wheel_h(y_i,x_i),grit_P(rel_yi,rel_xi));
             end
@@ -74,6 +74,7 @@ for grit_n = 1:numgrits
 end
 %%
 ConeAngle = temp*180/(numgrits*pi);
+GeoParam.ConeAngle = ConeAngle;
 %%
 if mode==0
     %%
@@ -93,22 +94,24 @@ if mode==0
     C_0=1.29*10e5*20^-1.6;
     CPD={'Creal',C_real,'C0',C_0};
     disp(CPD);
-    print([filename '-wheel.jpg'], '-djpeg' );
+    print([FileName '-wheel.jpg'], '-djpeg' );
     close gcf;
     %SurfRoughANA(wheel_h);
+    GeoParam.MeanProh = mean(proh_all,'all');
+    GeoParam.MeanActiveRarea = mean(ac_Rarea_all,'all');
     %%
     figure;
     histogram(proh_all);
-    title(['Proh all: ' num2str(mean(ac_Rarea_all,'all'))]);
-    writematrix(proh_all,[filename '-proh.csv']);
-    print([filename '-phdist.jpg'], '-djpeg' );
+    title(['Proh all: ' num2str(GeoParam.ProhAll)]);
+    writematrix(proh_all,[FileName '-proh.csv']);
+    print([FileName '-phdist.jpg'], '-djpeg' );
     close gcf;
     %%
     figure;
     histogram(ac_Rarea_all);
-    writematrix(ac_Rarea_all,[filename '-ac_Rarea.csv']);
-    title(['Active Rarea all: ' num2str(mean(ac_Rarea_all,'all'))]);
-    print([filename '-ac_Rarea.jpg'], '-djpeg' );
+    writematrix(ac_Rarea_all,[FileName '-ac_Rarea.csv']);
+    title(['Active Rarea all: ' num2str(GeoParam.ActiveRarea)]);
+    print([FileName '-ac_Rarea.jpg'], '-djpeg' );
     close gcf;
 end
 %%
@@ -119,6 +122,6 @@ end
 % grits.r_angle_all=r_angle_all;
 grits.outlines=outline_all;
 T= struct2table(grits);
-writetable(T,[filename '.csv']);
-writecell(grit_profile_all,[filename '-gprofile_temp.csv'])
+writetable(T,[FileName '.csv']);
+writecell(GritsProfile,[FileName '-gprofile_temp.csv'])
 end

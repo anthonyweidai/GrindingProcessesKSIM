@@ -1,48 +1,48 @@
-function [P, ConeAngle]=getShapeParam(r, geoparam)
-%% generate the shape of grains
+function [P, ConeAngle]=getShapeParam(rg, GeoParam)
+%% generate the Shape of grains
 outline_mode = 0;
-if geoparam.shape == 1
-    omega = geoparam.omega;
-    Rarea = geoparam.Rarea;
-    fillet_mode = geoparam.fillet_mode;
+if GeoParam.Shape == 1
+    Omega = GeoParam.Omega;
+    Rarea = GeoParam.Rarea;
+    FilletMode = GeoParam.FilletMode;
     
-    mutemp = r*geoparam.h2w_ratio;
-    hv = normrnd(mutemp,mutemp*geoparam.sigmah); % the height of top plane
-    hv = max(hv,(mutemp-3*mutemp*geoparam.sigmah));
-    hv = min(hv,(mutemp+3*mutemp*geoparam.sigmah));
+    mutemp = rg*GeoParam.RHeightSize;
+    hv = normrnd(mutemp,mutemp*GeoParam.Sigmah); % the height of top plane
+    hv = max(hv,(mutemp-3*mutemp*GeoParam.Sigmah));
+    hv = min(hv,(mutemp+3*mutemp*GeoParam.Sigmah));
 
     theta_v = rand*3.1415926*2; % orientation of the vertex, theta_v = 0~2*pi
     mutemp = 0.4;
-    Rv = normrnd(mutemp,mutemp*geoparam.sigmasw); % ratio of the vertex's location, Rvertex = 0~0.8
+    Rv = normrnd(mutemp,mutemp*GeoParam.SigmaSkew); % ratio of the vertex's location, Rvertex = 0~0.8
     Rv = max(Rv,0);
     Rv = min(0.8,Rv);
     %% polygon vertices on bottom plane
-    nodes_x = zeros(1,omega);
-    nodes_y = zeros(1,omega);
-    nodes_z = zeros(1,omega);
+    nodes_x = zeros(1,Omega);
+    nodes_y = zeros(1,Omega);
+    nodes_z = zeros(1,Omega);
     
-    for i = 0:omega-1
-        theta_culet = i*2*pi/omega;
-        nodes_x(i+1) = r*cos(theta_culet);
-        nodes_y(i+1) = r*sin(theta_culet);
+    for i = 0:Omega-1
+        theta_culet = i*2*pi/Omega;
+        nodes_x(i+1) = rg*cos(theta_culet);
+        nodes_y(i+1) = rg*sin(theta_culet);
     end
-    [xc, yc] = getVertex(nodes_x(1:omega),nodes_y(1:omega),theta_v,Rv);
+    [xc, yc] = getVertex(nodes_x(1:Omega),nodes_y(1:Omega),theta_v,Rv);
     %%
     if Rarea<=1e-7
         %% pyramid with fillet
-        if fillet_mode == 1
-            setback = 0.5*r/2;
+        if FilletMode == 1
+            setback = 0.5*rg/2;
             xtemp = xc;
             ytemp = yc;
             ztemp = hv;
             vtex = [xtemp,ytemp,ztemp];
-            A = zeros(omega,3); % points in edge
-            B = zeros(omega,3); % points between highest points on edge fillet (C)
-            C = zeros(omega,3); % edge fillet highest points
-            midp = zeros(omega,3); % middle points in bottom face
+            A = zeros(Omega,3); % points in edge
+            B = zeros(Omega,3); % points between highest points on edge fillet (C)
+            C = zeros(Omega,3); % edge fillet highest points
+            midp = zeros(Omega,3); % middle points in bottom face
             %% generate points
-            for i = 1:omega
-                if i == omega
+            for i = 1:Omega
+                if i == Omega
                     x1 = [nodes_x(i),nodes_y(i),nodes_z(i)];
                     x2 = [nodes_x(1),nodes_y(1),nodes_z(1)];
                 else
@@ -58,14 +58,14 @@ if geoparam.shape == 1
             end
             %% equivalent C
             Ce = mean(C(:,3));
-            for t1 = 1:omega
+            for t1 = 1:Omega
                 C(t1,:) = getLinesInterploation(vtex,midp(t1,:),[],Ce);
             end
             %% Interpolation
             % edge arc
-            for j = 1:omega
+            for j = 1:Omega
                 k1 = j;
-                if j == omega
+                if j == Omega
                     k2 = 1;
                 else
                     k2 = j+1;
@@ -79,7 +79,7 @@ if geoparam.shape == 1
             %% get point to fill up top place
             % top
             Zmax = max(nodes_z);
-            Sz = Zmax + 1/15*setback*(omega^(6/11)/7+0.6); % compensate
+            Sz = Zmax + 1/15*setback*(Omega^(6/11)/7+0.6); % compensate
             Rs = Sz/vtex(3);
             Sx = Rs*vtex(1);
             Sy = Rs*vtex(2);
@@ -88,14 +88,14 @@ if geoparam.shape == 1
             nodes_y = [nodes_y nsph(2)];
             nodes_z = [nodes_z nsph(3)];
             
-            B(:,3) = B(:,3) + setback*2/(15*omega); % compensate
+            B(:,3) = B(:,3) + setback*2/(15*Omega); % compensate
             D = (nsph + B)/2;
             delta1 = nsph(3)-mean(D(:,3));
             D(:,3) = D(:,3) + delta1/2; % compensate
             % top face arc
-            for j = 1:omega
+            for j = 1:Omega
                 k1 = j;
-                if j == omega
+                if j == Omega
                     k2 = 1;
                 else
                     k2 = j+1;
@@ -115,10 +115,10 @@ if geoparam.shape == 1
         Rarea(Rarea == 1) = 0.99;
         Rfv = sqrt(Rarea);
         
-        nodes_zt = zeros(1,omega);
-        nodes_xt = zeros(1,omega);
-        nodes_yt = zeros(1,omega);
-        if geoparam.RA_mode == 1
+        nodes_zt = zeros(1,Omega);
+        nodes_xt = zeros(1,Omega);
+        nodes_yt = zeros(1,Omega);
+        if GeoParam.RAMode == 1
             zc = hv;
             nodes_zt(:) = hv * Rfv;
         else
@@ -126,32 +126,32 @@ if geoparam.shape == 1
             nodes_zt(:) = hv;
         end
         vtex = [xc,yc,zc]; %vertex
-        ConeAngle = 2*atan(r/zc);
+        ConeAngle = 2*atan(rg/zc);
         
-        for j = 1:omega
+        for j = 1:Omega
             nodes_xt(j) = vtex(1) + Rfv*(nodes_x(j)-vtex(1));
             nodes_yt(j) = vtex(2) + Rfv*(nodes_y(j)-vtex(2));
         end
         %% frustum with/without fillet
-        if fillet_mode == 1
+        if FilletMode == 1
             %% with fillet
-            R_fillet = 0.5*r/2;
+            R_fillet = 0.5*rg/2;
             Pbottom = [nodes_x; nodes_y; nodes_z]';
             Ptop = [nodes_xt; nodes_yt; nodes_zt]';
-            PB = zeros(omega,3);
-            O = zeros(omega,3); % circle of fillet
-            A = zeros(omega,3); % arc point in edge (on verical plane), visual points
-            B = zeros(omega,3); % arc point in top face
-            C1 = zeros(omega,3); % mid surface point (for smaller trapezoid)
-            C2 = zeros(omega,3); % top surface point (for smaller trapezoid)
-            DRv = zeros(omega,3); % orthogonal vector
+            PB = zeros(Omega,3);
+            O = zeros(Omega,3); % circle of fillet
+            A = zeros(Omega,3); % arc point in edge (on verical plane), visual points
+            B = zeros(Omega,3); % arc point in top face
+            C1 = zeros(Omega,3); % mid surface point (for smaller trapezoid)
+            C2 = zeros(Omega,3); % top surface point (for smaller trapezoid)
+            DRv = zeros(Omega,3); % orthogonal vector
             numofp = 6;
-            num = numofp*omega;
+            num = numofp*Omega;
             arct = zeros(num,3); % 2D arc point
             %% get A, B, O, C1, C2
-            for k = 1:omega
+            for k = 1:Omega
                 k1 = k;
-                if k == omega
+                if k == Omega
                     k2 = 1;
                 else
                     k2 = k+1;
@@ -173,7 +173,7 @@ if geoparam.shape == 1
                 % GET A
                 disAP1 = R_fillet*tan(ang34/2);
                 A(k,:) = getLinesInterploation(P3,PB(k1,:),disAP1);
-                if geoparam.Rarea <= 0.3
+                if GeoParam.Rarea <= 0.3
                     % get B, O
                     dist2 = norm(PB(k1,:)-Ptop(k1,:))*cos(ang34);
                     dist3 = disAP1 + dist2;
@@ -191,17 +191,17 @@ if geoparam.shape == 1
                     C2(k, 2) = vtex(2) + Rfv*(nodes_y(k)*0.8-vtex(2));
                 end
             end
-            if geoparam.Rarea <= 0.3
+            if GeoParam.Rarea <= 0.3
                 %% solution 1
-                for k = 1:omega
+                for k = 1:Omega
                     k1 = k;
-                    if k == omega
+                    if k == Omega
                         k2 = 1;
                     else
                         k2 = k+1;
                     end
                     if k == 1
-                        k3 = omega;
+                        k3 = Omega;
                     else
                         k3 = k-1;
                     end
@@ -220,9 +220,9 @@ if geoparam.shape == 1
                 end
                 %% get 3D interplation
                 arc3d = zeros(num,3);
-                for i = 1:omega
+                for i = 1:Omega
                     k1 = i;
-                    if i == omega
+                    if i == Omega
                         k2 = 1;
                     else
                         k2 = i+1;
@@ -241,9 +241,9 @@ if geoparam.shape == 1
                 %% solution 2
                 C1(:, 3) = 0.6*nodes_zt + 0.4*mean(A(:,3));
                 C2(:, 3) = nodes_zt;
-                for i = 1:omega
+                for i = 1:Omega
                     k1 = i;
-                    if i == omega
+                    if i == Omega
                         k2 = 1;
                     else
                         k2 = i+1;
@@ -263,29 +263,29 @@ if geoparam.shape == 1
             nodes_z = [nodes_z nodes_zt];
         end
     end
-elseif geoparam.shape == 2
+elseif GeoParam.Shape == 2
     %% ellipsoid
-    a = r;
+    a = rg;
     b = a;
     
-    if geoparam.Rarea<=1e-7
+    if GeoParam.Rarea<=1e-7
         Rarea = 0; % the ratio of area of cross section 
     else
-        Rarea = geoparam.Rarea;
+        Rarea = GeoParam.Rarea;
     end
-    mutemp = r/Rarea;
-    c = max(mutemp,(mutemp-3*mutemp*geoparam.sigmah));
-    c = min(c,(mutemp+3*mutemp*geoparam.sigmah));
-    ConeAngle = 2*atan(r/c);
+    mutemp = rg/Rarea;
+    c = max(mutemp,(mutemp-3*mutemp*GeoParam.Sigmah));
+    c = min(c,(mutemp+3*mutemp*GeoParam.Sigmah));
+    ConeAngle = 2*atan(rg/c);
     %%
     theta=2*pi*rand(1,700);
     phi=24*pi/50*rand(1,700)+pi/50;
     nodes_x=a*sin(phi).*cos(theta);
     nodes_y=b*sin(phi).*sin(theta);
     nodes_z=c*cos(phi);
-elseif geoparam.shape == 3
+elseif GeoParam.Shape == 3
     %% tetradecahedron = cube by cuting its 6 vertecies
-    a = 1.414*r; % the length of cube
+    a = 1.414*rg; % the length of cube
     temp = a/2;
     rectangle = [temp, -temp, 0; %
         temp, temp, 0;
@@ -296,13 +296,13 @@ elseif geoparam.shape == 3
         -temp, temp, temp;
         -temp, -temp, temp];
     
-    xi = geoparam.xi;
-    b = 0.707*a + 1.414*a*xi;
-    octahedron = [0, -0.707*b, 0; % b = sqrt(2)*(a/2+a*xi)
+    Xi = GeoParam.Xi;
+    b = 0.707*a + 1.414*a*Xi;
+    octahedron = [0, -0.707*b, 0; % b = sqrt(2)*(a/2+a*Xi)
         0.707*b, 0, 0;
         0, 0.707*b, 0;
         -0.707*b, 0, 0;
-        0, 0, a/2+a*xi];
+        0, 0, a/2+a*Xi];
     
     num_face = 6;
     num_vertex = size(rectangle,1);
@@ -357,10 +357,10 @@ elseif geoparam.shape == 3
     end
     %%
     mu_r = 2.828; % 2x1.414 times
-    sigmah = geoparam.sigmah;
-    Hr = normrnd(mu_r,mu_r*sigmah);
-    Hr = max(Hr,(mu_r-3*mu_r*sigmah));
-    Hr = min(Hr,(mu_r+3*mu_r*sigmah));
+    Sigmah = GeoParam.Sigmah;
+    Hr = normrnd(mu_r,mu_r*Sigmah);
+    Hr = max(Hr,(mu_r-3*mu_r*Sigmah));
+    Hr = min(Hr,(mu_r+3*mu_r*Sigmah));
     tetradecahedron(:,3) = tetradecahedron(:,3)*Hr;
     tetradecahedron = [tetradecahedron; rectangle(1:realnum_vertex,:)];
     
@@ -374,9 +374,9 @@ P = [nodes_x;nodes_y;nodes_z]';
 %% Plot every node before image processing
 if outline_mode == 1
     scatter3(nodes_x,nodes_y,nodes_z)
-    if geoparam.shape == 1
+    if GeoParam.Shape == 1
         hold on
-        if geoparam.Rarea <= 1e-7
+        if GeoParam.Rarea <= 1e-7
             vtex = [xc,yc,hv];
         end
         scatter3(vtex(1),vtex(2),vtex(3))

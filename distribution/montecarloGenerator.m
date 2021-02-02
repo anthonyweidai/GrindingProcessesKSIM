@@ -1,12 +1,12 @@
-function [grits, grit_profile_all,ConeAngle] = ...
-    montecarloGenerator(filename, wheel_length, wheel_width, sepparam, geoparam, res)
+function [grits, GritsProfile,GeoParam] = ...
+    montecarloGenerator(FileName, wheel_length, wheel_width, SepParam, GeoParam, res)
 %% use Monte Carlo algorithm to generate the distribution of abrasive grains
 %% parameters
 %%%%%%%%%%
 mu = 10;
 %%%%%%%%%%
 MuRadius=mu;       % minimum MuRadius
-SigRadius=geoparam.Rsigma;      % maximum MuRadius
+SigRadius=GeoParam.Sigmarg;      % maximum MuRadius
 %% Self adaptive for different dimensions of wheel
 num_grits = wheel_length*wheel_width / (4*MuRadius^2);
 blocknum = floor(sqrt(num_grits));
@@ -46,9 +46,9 @@ blockflag1_map = reshape(1:blocknum,[x_blocknum,y_blocknum]); % block = 35; bloc
 %% monte carlo generation
 bubbles = montecarloUpdate(bubbles, blockbound, blockflag1_map, x_blocknum, y_blocknum);
 %% laser frame
-if sepparam.LS_mode == 1 % to prevent from field theta is not exsited
-bubbles = laserFrame(sepparam.theta, sepparam.RowGap, ...
-    sepparam.SaveGap, wheel_length, wheel_width, bubbles);
+if SepParam.LSMode == 1 % to prevent from field theta is not exsited
+bubbles = laserFrame(SepParam.theta, SepParam.RowGap, ...
+    SepParam.SaveGap, wheel_length, wheel_width, bubbles);
 end
 % figure;
 % axis equal;drawnow;
@@ -73,6 +73,6 @@ sortedT =sortrows(T, 'posy'); % sort the table by 'DOB'
 % %%
 % cr=length(grits.posx)/(max(grits.posx)*max(grits.posy));
 % disp(cr);
-writetable(sortedT,[filename '.csv']);
-[grit_profile_all, ConeAngle] = wheelGeneration(1,grits,filename,geoparam,res);
+writetable(sortedT,[FileName '.csv']);
+[GritsProfile, GeoParam] = wheelGeneration(1,grits,FileName,GeoParam,res);
 end

@@ -12,44 +12,43 @@
 %2  - GrindingProcess   % simulation process
 %   -- COF_CAL
 %%
-function grindingProcess(cof_cal_mode, cycle, FOI, sepparam, geoparam)
+function grindingProcess(cof_cal_mode, Cycle, FOI, SepParam, GeoParam)
 warning off;
 tic;
 %%
 workpiece_length = 1000;
 workpiece_width = 500;     % max(grits.posx);
-wheel_length = 15*workpiece_length;
+wheel_length = 10*workpiece_length;
 wheel_width = workpiece_width;
 vw = 200e3;               % feed speed, um/s
 res = .2;              % surf resolution of all axis
 %% Input parameters initialization
-[sepparam, geoparam] = initializeParam(sepparam, geoparam);
+[SepParam, GeoParam] = initializeParam(SepParam, GeoParam);
 %% Simplified mode won't calculate force, but the other will
-cof_cal_mode(geoparam.shape==2 || geoparam.shape==3) = 0; % 0-simplified mode 1-accurate mode
+cof_cal_mode(GeoParam.Shape==2 || GeoParam.Shape==3) = 0; % 0-simplified mode 1-accurate mode
 %% Generate grinding wheel
-filename = getFilename(cycle, sepparam, geoparam, FOI, vw);
-if sepparam.wheel_type == 1
-    [grits,grit_profile_all,ConeAngle] = ...
-        bubbleSimulator(filename, wheel_length, wheel_width, geoparam, res);
-elseif sepparam.wheel_type == 2
-    [grits,grit_profile_all,ConeAngle] = ...
-        montecarloGenerator(filename, wheel_length, wheel_width, sepparam, geoparam, res);
-elseif sepparam.wheel_type == 3
-    [grits,grit_profile_all,ConeAngle] = ...
-        TGWGenerator(filename, wheel_length, wheel_width, sepparam, geoparam, res);
+FileName = getFilename(Cycle, SepParam, GeoParam, FOI, vw);
+if SepParam.WheelType == 1
+    [grits,GritsProfile,GeoParam] = ...
+        bubbleSimulator(FileName, wheel_length, wheel_width, GeoParam, res);
+elseif SepParam.WheelType == 2
+    [grits,GritsProfile,GeoParam] = ...
+        montecarloGenerator(FileName, wheel_length, wheel_width, SepParam, GeoParam, res);
+elseif SepParam.WheelType == 3
+    [grits,GritsProfile,GeoParam] = ...
+        TGWGenerator(FileName, wheel_length, wheel_width, SepParam, GeoParam, res);
 end
-geoparam.ConeAngle = ConeAngle;
 %% Kinematic simulation
-GrdOutput = kinematicSimulation(filename,grits,grit_profile_all,cof_cal_mode,...
+GrdOutput = kinematicSimulation(FileName,grits,GritsProfile,cof_cal_mode,...
     workpiece_length,workpiece_width,wheel_length,...
-    geoparam,res,vw);
+    GeoParam,res,vw);
 %% Record input and output variables
 BatchInfo = array2table(convertCharsToStrings(char(datetime)),'VariableNames',{'datetime'});
-BatchInfo = [BatchInfo table(cycle) table(vw)];
-BatchInfo = [BatchInfo struct2table(sepparam) struct2table(geoparam)];
+BatchInfo = [BatchInfo table(Cycle) table(vw)];
+BatchInfo = [BatchInfo struct2table(SepParam) struct2table(GeoParam)];
 BatchInfo = [BatchInfo GrdOutput];
 writetable(BatchInfo,...
-    ['M:\\GrdData\\' FOI '\\' 'CY' num2str(cycle) 'wheel' num2str(sepparam.wheel_type) '-info.csv'],...
+    ['M:\\GrdData\\' FOI '\\' 'CY' num2str(Cycle) 'wheel' num2str(SepParam.WheelType) '-info.csv'],...
     'WriteMode','append');
 toc;
 end

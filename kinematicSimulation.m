@@ -1,5 +1,5 @@
-function GrdOutput = kinematicSimulation(filename,grits,grit_profile_all,cof_cal_mode,...
-    workpiece_length,workpiece_width,wheel_length,geoparam,res,vw)
+function GrdOutput = kinematicSimulation(filename,grits,GritsProfile,cof_cal_mode,...
+    workpiece_length,workpiece_width,wheel_length,GeoParam,res,vw)
 %% simulation function
 %% function mode
 report_mode = 2;
@@ -11,12 +11,8 @@ sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = pi/2*sigma_s/sigma_y;
 % f = 0.108;
-%% initialize Rarea
-if geoparam.shape == 3
-    Rarea = 0;
-else
-    Rarea = geoparam.Rarea;
-end
+%% Initialize Rarea
+Rarea = GeoParam.Rarea;
 %% grinding parameters
 numgrits=size(grits.Tradius,1);
 rpm = 3000;               %wheel spinning speed, round/min
@@ -76,7 +72,7 @@ c_mode=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 F_n=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 F_t=zeros(floor(t_count/k_t_cof)+1,num_vgrits);
 %%
-g_shape = grit_profile_all;
+g_shape = GritsProfile;
 grit_outline = cell(1,numgrits);
 grit_proh = zeros(1,numgrits);
 for g_i = 1:numgrits

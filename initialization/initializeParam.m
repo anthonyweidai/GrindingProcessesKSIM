@@ -1,35 +1,36 @@
-function [sepparam, geoparam] = initializeParam(sepparam, geoparam)
+function [SepParam, GeoParam] = initializeParam(SepParam, GeoParam)
 %% Initialize input variables
-%% seperation parameters
-sepparam.wheel_type(~isfield(sepparam,'wheel_type')) = 2;   % 1-random; 2-tgw
-if sepparam.wheel_type == 2
-    sepparam.LS_mode(~isfield(sepparam,'LS_mode')) = 0;
-    if sepparam.LS_mode == 1
-        sepparam.theta(~isfield(sepparam,'theta')) = 60;
-        sepparam.RowGap(~isfield(sepparam,'RowGap')) = 150;
-        sepparam.SaveGap(~isfield(sepparam,'SaveGap')) = 100;
+%% Seperation parameters
+SepParam.WheelType(~isfield(SepParam,'WheelType')) = 2;   % 1-random; 2-tgw
+if SepParam.WheelType == 2
+    SepParam.LSMode(~isfield(SepParam,'LSMode')) = 0;
+    if SepParam.LSMode == 1
+        SepParam.theta(~isfield(SepParam,'theta')) = 60;
+        SepParam.RowGap(~isfield(SepParam,'RowGap')) = 150;
+        SepParam.SaveGap(~isfield(SepParam,'SaveGap')) = 100;
     end
-elseif sepparam.wheel_type == 3
-    sepparam.theta(~isfield(sepparam,'theta')) = 80;   % line tilt angle:30 40 50 60 70 80
-    sepparam.SepGap(~isfield(sepparam,'SepGap')) = 0.5; % column gap: 0.5,1,3,5
-    sepparam.RowGap(~isfield(sepparam,'RowGap')) = 3;   % row gap: 1,3,5,7
-    sepparam.k_dev(~isfield(sepparam,'k_dev')) = 0;    % position deviation para: 1,3,5,7
+elseif SepParam.WheelType == 3
+    SepParam.theta(~isfield(SepParam,'theta')) = 60;   % line tilt angle:30 40 50 60 70 80
+    SepParam.SepGap(~isfield(SepParam,'SepGap')) = 0.5; % column gap: 0.5,1,3,5
+    SepParam.RowGap(~isfield(SepParam,'RowGap')) = 3;   % row gap: 1,3,5,7
+    SepParam.KDev(~isfield(SepParam,'KDev')) = 0;    % position deviation para: 1,3,5,7
 end
-%% geometrical parameters
-geoparam.shape(~isfield(geoparam,'shape')) = 1;
-if geoparam.shape == 1
-    geoparam.omega(~isfield(geoparam,'omega')) = 3;
-    geoparam.h2w_ratio(~isfield(geoparam,'h2w_ratio')) = 1;
-    geoparam.Rarea(~isfield(geoparam,'Rarea')) = 0.5;
-    geoparam.RA_mode(~isfield(geoparam,'RA_mode')) = 1;
-    geoparam.sigmasw(~isfield(geoparam,'sigmasw')) = 0;
-    geoparam.fillet_mode(~isfield(geoparam,'fillet_mode')) = 0;
-elseif geoparam.shape == 2
-    geoparam.Rarea(~isfield(geoparam,'Rarea')) = 0.5;
-elseif geoparam.shape == 3
-    geoparam.xi(~isfield(geoparam,'xi')) = 0;
+%% Geometries parameters
+GeoParam.Shape(~isfield(GeoParam,'Shape')) = 1;
+if GeoParam.Shape == 1
+    GeoParam.Omega(~isfield(GeoParam,'Omega')) = 7;
+    GeoParam.RHeightSize(~isfield(GeoParam,'RHeightSize')) = 1;
+    GeoParam.Rarea(~isfield(GeoParam,'Rarea')) = 0.7;
+    GeoParam.RAMode(~isfield(GeoParam,'RAMode')) = 1;
+    GeoParam.SigmaSkew(~isfield(GeoParam,'SigmaSkew')) = 0;
+    GeoParam.FilletMode(~isfield(GeoParam,'FilletMode')) = 0;
+elseif GeoParam.Shape == 2
+    GeoParam.Rarea(~isfield(GeoParam,'Rarea')) = 0.5;
+elseif GeoParam.Shape == 3
+    GeoParam.Xi(~isfield(GeoParam,'Xi')) = 0;
+    GeoParam.Rarea(~isfield(GeoParam,'Rarea')) = 0; % For get force module
 end
-geoparam.trim_h(~isfield(geoparam,'trim_h')) = 0;
-geoparam.Rsigma(~isfield(geoparam,'Rsigma')) = 0;
-geoparam.sigmah(~isfield(geoparam,'sigmah')) = 0;
+GeoParam.Trimmingh(~isfield(GeoParam,'Trimmingh')) = 0;
+GeoParam.Sigmarg(~isfield(GeoParam,'Sigmarg')) = 0;
+GeoParam.Sigmah(~isfield(GeoParam,'Sigmah')) = 0;
 end
