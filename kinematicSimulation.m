@@ -205,7 +205,7 @@ end
 %%
 h_surf=h_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);
 rs_surf=rs_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);
-[Ra,~]=SurfRoughANA(h_surf);
+[Ra,Rz]=SurfRoughANA(h_surf);
 Cgrits=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 %%
 [l_b,w_b]=size(rs_surf);
@@ -281,8 +281,6 @@ else
         writematrix(T,[FileName '-uct.csv']);
         T=[t_axis' ucarea];
         writematrix(T,[FileName '-ucarea.csv']);
-        %% Stress ouput
-        [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, rs_surf);
         %% force output
         subplot(2,2,4);
         F_n_total=sum(F_n,2);
@@ -338,11 +336,13 @@ else
         writematrix(pdz_surf,[FileName '-pdz_dist.csv']);
         print([FileName '-pdzdist.jpg'], '-djpeg' );
         close gcf;
+         %% Stress ouput
+        [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, rs_surf);
     end
 end
 %%
-GrdOutput = [Ra,Ra_pdz,Rz_pdz,Cgrits,FnSteady,FtSteady,MaxStress,MeanStress,NumMode,PercentMode];
-GrdOutputname = {'Ra' 'Ra_pdz' 'Rz_pdz' 'CGrits' 'FnSteady' 'FtSteady' 'MaxStress' 'MeanStress'...
+GrdOutput = [Ra,Rz,Ra_pdz,Rz_pdz,Cgrits,FnSteady,FtSteady,MaxStress,MeanStress,NumMode,PercentMode];
+GrdOutputname = {'Ra' 'Rz' 'Ra_pdz' 'Rz_pdz' 'CGrits' 'FnSteady' 'FtSteady' 'MaxStress' 'MeanStress'...
     'Cutting' 'Plughing' 'Rubbing' 'Inactive' 'Cutting/%' 'Plughing/%' 'Rubbing/%' 'Inactive/%'};
 GrdOutput = array2table(GrdOutput,'VariableNames',GrdOutputname);
 end

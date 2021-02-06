@@ -16,6 +16,8 @@ function grindingProcess(cof_cal_mode, Cycle, FOI, SepParam, GeoParam)
 warning off;
 tic;
 %%
+DiskPath = 'M:/GrdData/';
+%%
 WorkpieceLength = 1000;
 WorkpieceWidth = WorkpieceLength/2;     % max(grits.posx);
 WheelLength = 15*WorkpieceLength;       % 40 times Wheel Diameter to Width
@@ -24,10 +26,15 @@ vw = 200e3; % feed speed, um/s
 res = .2;  % surf resolution of all axis
 %% Input parameters initialization
 [SepParam, GeoParam] = initializeParam(SepParam, GeoParam);
+%% Judge of exsistence
+Existence = batchExsistInvalidate(DiskPath, Cycle, FOI, SepParam, GeoParam);
+if Existence == 1
+    disp('Aleady run with given parameters, skill to the next')
+else
 %% Simplified mode won't calculate force, but the other will
 cof_cal_mode(GeoParam.Shape==2 || GeoParam.Shape==3) = 0; % 0-simplified mode 1-accurate mode
 %% Generate grinding wheel
-FileName = getFilename(Cycle, SepParam, GeoParam, FOI, vw);
+FileName = getFilename(DiskPath, Cycle, SepParam, GeoParam, FOI, vw);
 if SepParam.WheelType == 1
     [grits,GritsProfile,GeoParam] = bubbleSimulator(FileName,WheelLength,WheelWidth,GeoParam,res);
 elseif SepParam.WheelType == 2
@@ -45,7 +52,8 @@ BatchInfo = [BatchInfo table(Cycle) table(vw)];
 BatchInfo = [BatchInfo struct2table(SepParam) struct2table(GeoParam)];
 BatchInfo = [BatchInfo GrdOutput];
 writetable(BatchInfo,...
-    ['M:\\GrdData\\' FOI '\\' 'CY' num2str(Cycle) 'wheel' num2str(SepParam.WheelType) '-info.csv'],...
+    [DiskPath FOI '/' 'CY' num2str(Cycle) 'wheel' num2str(SepParam.WheelType) '-info.csv'],...
     'WriteMode','append');
 toc;
+end
 end

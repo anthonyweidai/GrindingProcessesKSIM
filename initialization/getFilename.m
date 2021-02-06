@@ -1,8 +1,8 @@
-function FileName = getFilename(Cycle, SepParam, GeoParam, FOI, vw)
+function FileName = getFilename(DiskPath, Cycle, SepParam, GeoParam, FOI, vw)
 %% get_filename is usedd to set path and files' names
 WheelType = SepParam.WheelType;
 Shape = GeoParam.Shape;
-filefolder = ['M:/GrdData/' FOI '/' 'CY' num2str(Cycle)];
+filefolder = [DiskPath FOI '/' 'CY' num2str(Cycle)];
 %%
 if WheelType == 1
     if Shape == 1

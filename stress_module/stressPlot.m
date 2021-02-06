@@ -48,7 +48,7 @@ close gcf
 %%
 rs_mean = mean(rs_s,2);
 figure;
-plot(-res:-res:size(rs_s,1)*-res,rs_mean(1,:)','k');
+plot(-res:-res:size(rs_s,1)*-res,rs_mean','k');
 print([FileName '-MeanStressField.jpg'], '-djpeg' );
 close gcf
 MaxStress = max(rs_mean);
