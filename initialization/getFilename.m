@@ -1,58 +1,58 @@
 function FileName = getFilename(Cycle, SepParam, GeoParam, FOI, vw)
 %% get_filename is usedd to set path and files' names
-wheel_type = SepParam.wheel_type;
-shape = GeoParam.shape;
+WheelType = SepParam.WheelType;
+Shape = GeoParam.Shape;
 filefolder = ['M:/GrdData/' FOI '/' 'CY' num2str(Cycle)];
 %%
-if wheel_type == 1
-    if shape == 1
-        namebody = ['w' num2str(GeoParam.omega)  'FT' num2str(GeoParam.fillet_mode) 'RAM' num2str(GeoParam.RA_mode) ...
+if WheelType == 1
+    if Shape == 1
+        NameBody = ['w' num2str(GeoParam.Omega)  'FT' num2str(GeoParam.FilletMode) 'RAM' num2str(GeoParam.RAMode) ...
             'Rarea' num2str(GeoParam.Rarea)...
-            'Ssg' num2str(GeoParam.sigmasw) ] ;
-    elseif shape == 2
-        namebody = ['Rarea' num2str(GeoParam.Rarea)];
+            'Ssg' num2str(GeoParam.SigmaSkew) ] ;
+    elseif Shape == 2
+        NameBody = ['Rarea' num2str(GeoParam.Rarea)];
     else
-        namebody = ['xi' num2str(GeoParam.xi)] ;
+        NameBody = ['Xi' num2str(GeoParam.Xi)] ;
     end
-elseif wheel_type == 2
-    if SepParam.LS_mode == 1
-        name_laser = ['LS' num2str(SepParam.LS_mode) ...
+elseif WheelType == 2
+    if SepParam.LSMode == 1
+        NameLaser = ['LS' num2str(SepParam.LSMode) ...
             'tgw' num2str(SepParam.theta) 'Sgap' num2str(SepParam.SaveGap) 'Rgap' num2str(SepParam.RowGap)];
-        if shape == 1
-            namebody = [name_laser ...
-                'w' num2str(GeoParam.omega) 'FT' num2str(GeoParam.fillet_mode) 'RAM' num2str(GeoParam.RA_mode) ...
+        if Shape == 1
+            NameBody = [NameLaser ...
+                'w' num2str(GeoParam.Omega) 'FT' num2str(GeoParam.FilletMode) 'RAM' num2str(GeoParam.RAMode) ...
                 'Rarea' num2str(GeoParam.Rarea) ...
-                'Ssg' num2str(GeoParam.sigmasw)] ;
-        elseif shape == 2
-            namebody = [name_laser 'Rarea' num2str(GeoParam.Rarea)] ;
+                'Ssg' num2str(GeoParam.SigmaSkew)] ;
+        elseif Shape == 2
+            NameBody = [NameLaser 'Rarea' num2str(GeoParam.Rarea)] ;
         else
-            namebody = [name_laser 'xi' num2str(GeoParam.xi)] ;
+            NameBody = [NameLaser 'Xi' num2str(GeoParam.Xi)] ;
         end
     else
-        if shape == 1
-            namebody = ['w' num2str(GeoParam.omega)  'FT' num2str(GeoParam.fillet_mode) 'RAM' num2str(GeoParam.RA_mode) ...
+        if Shape == 1
+            NameBody = ['w' num2str(GeoParam.Omega)  'FT' num2str(GeoParam.FilletMode) 'RAM' num2str(GeoParam.RAMode) ...
                 'Rarea' num2str(GeoParam.Rarea)...
-                'Ssg' num2str(GeoParam.sigmasw) ] ;
-        elseif shape == 2
-            namebody = ['Rarea' num2str(GeoParam.Rarea)];
+                'Ssg' num2str(GeoParam.SigmaSkew) ] ;
+        elseif Shape == 2
+            NameBody = ['Rarea' num2str(GeoParam.Rarea)];
         else
-            namebody = ['xi' num2str(GeoParam.xi)] ;
+            NameBody = ['Xi' num2str(GeoParam.Xi)] ;
         end
     end
-elseif wheel_type == 3
-    name_wheel_type3 = ['tgw' num2str(SepParam.theta) 'kd' num2str(SepParam.k_dev) ...
+elseif WheelType == 3
+    NameWheelType3 = ['tgw' num2str(SepParam.theta) 'kd' num2str(SepParam.KDev) ...
         'Sgap' num2str(SepParam.SepGap) 'Rgap' num2str(SepParam.RowGap)];
-    if shape == 1
-        namebody = [name_wheel_type3 'w' num2str(GeoParam.omega)  ...
-            'FT' num2str(GeoParam.fillet_mode) 'RAM' num2str(GeoParam.RA_mode) 'Rarea' num2str(GeoParam.Rarea)...
-            'Ssg' num2str(GeoParam.sigmasw)] ;
-    elseif shape == 2
-        namebody = [name_wheel_type3 'Rarea' num2str(GeoParam.Rarea)] ;
+    if Shape == 1
+        NameBody = [NameWheelType3 'w' num2str(GeoParam.Omega)  ...
+            'FT' num2str(GeoParam.FilletMode) 'RAM' num2str(GeoParam.RAMode) 'Rarea' num2str(GeoParam.Rarea)...
+            'Ssg' num2str(GeoParam.SigmaSkew)] ;
+    elseif Shape == 2
+        NameBody = [NameWheelType3 'Rarea' num2str(GeoParam.Rarea)] ;
     else
-        namebody = [name_wheel_type3 'xi' num2str(GeoParam.xi)] ;
+        NameBody = [NameWheelType3 'Xi' num2str(GeoParam.Xi)] ;
     end
 end
 %%
-FileName = [filefolder namebody ...
-    'Hsg' num2str(GeoParam.sigmah) 'Rsg' num2str(GeoParam.Rsigma) 'vw' num2str(vw)];
+FileName = [filefolder NameBody ...
+    'Hsg' num2str(GeoParam.Sigmah) 'Rsg' num2str(GeoParam.Sigmarg) 'vw' num2str(vw)];
 end

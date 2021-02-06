@@ -16,12 +16,12 @@ function grindingProcess(cof_cal_mode, Cycle, FOI, SepParam, GeoParam)
 warning off;
 tic;
 %%
-workpiece_length = 1000;
-workpiece_width = 500;     % max(grits.posx);
-wheel_length = 10*workpiece_length;
-wheel_width = workpiece_width;
-vw = 200e3;               % feed speed, um/s
-res = .2;              % surf resolution of all axis
+WorkpieceLength = 1000;
+WorkpieceWidth = WorkpieceLength/2;     % max(grits.posx);
+WheelLength = 15*WorkpieceLength;       % 40 times Wheel Diameter to Width
+WheelWidth = WorkpieceWidth;
+vw = 200e3; % feed speed, um/s
+res = .2;  % surf resolution of all axis
 %% Input parameters initialization
 [SepParam, GeoParam] = initializeParam(SepParam, GeoParam);
 %% Simplified mode won't calculate force, but the other will
@@ -29,18 +29,15 @@ cof_cal_mode(GeoParam.Shape==2 || GeoParam.Shape==3) = 0; % 0-simplified mode 1-
 %% Generate grinding wheel
 FileName = getFilename(Cycle, SepParam, GeoParam, FOI, vw);
 if SepParam.WheelType == 1
-    [grits,GritsProfile,GeoParam] = ...
-        bubbleSimulator(FileName, wheel_length, wheel_width, GeoParam, res);
+    [grits,GritsProfile,GeoParam] = bubbleSimulator(FileName,WheelLength,WheelWidth,GeoParam,res);
 elseif SepParam.WheelType == 2
-    [grits,GritsProfile,GeoParam] = ...
-        montecarloGenerator(FileName, wheel_length, wheel_width, SepParam, GeoParam, res);
+    [grits,GritsProfile,GeoParam] = montecarloGenerator(FileName,WheelLength,WheelWidth,SepParam,GeoParam,res);
 elseif SepParam.WheelType == 3
-    [grits,GritsProfile,GeoParam] = ...
-        TGWGenerator(FileName, wheel_length, wheel_width, SepParam, GeoParam, res);
+    [grits,GritsProfile,GeoParam] = TGWGenerator(FileName,WheelLength,WheelWidth,SepParam,GeoParam,res);
 end
 %% Kinematic simulation
 GrdOutput = kinematicSimulation(FileName,grits,GritsProfile,cof_cal_mode,...
-    workpiece_length,workpiece_width,wheel_length,...
+    WorkpieceLength,WorkpieceWidth,WheelLength,...
     GeoParam,res,vw);
 %% Record input and output variables
 BatchInfo = array2table(convertCharsToStrings(char(datetime)),'VariableNames',{'datetime'});

@@ -29,7 +29,7 @@ proh_all=[];
 outline_all=[];
 ac_Rarea_all=[];
 temp = 0;
-
+%%
 if isfile(['gprofile_temp\' FileName '_temp.csv'])
     delete(['gprofile_temp\' FileName '_temp.csv']);
 end
@@ -102,7 +102,7 @@ if mode==0
     %%
     figure;
     histogram(proh_all);
-    title(['Proh all: ' num2str(GeoParam.ProhAll)]);
+    title(['Proh all: ' num2str(GeoParam.MeanProh)]);
     writematrix(proh_all,[FileName '-proh.csv']);
     print([FileName '-phdist.jpg'], '-djpeg' );
     close gcf;
@@ -110,7 +110,7 @@ if mode==0
     figure;
     histogram(ac_Rarea_all);
     writematrix(ac_Rarea_all,[FileName '-ac_Rarea.csv']);
-    title(['Active Rarea all: ' num2str(GeoParam.ActiveRarea)]);
+    title(['Active Rarea all: ' num2str(GeoParam.MeanActiveRarea)]);
     print([FileName '-ac_Rarea.jpg'], '-djpeg' );
     close gcf;
 end

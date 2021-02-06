@@ -1,5 +1,5 @@
-function GrdOutput = kinematicSimulation(filename,grits,GritsProfile,cof_cal_mode,...
-    workpiece_length,workpiece_width,wheel_length,GeoParam,res,vw)
+function GrdOutput = kinematicSimulation(FileName,grits,GritsProfile,cof_cal_mode,...
+    WorkpieceLength,WorkpieceWidth,WheelLength,GeoParam,res,vw)
 %% simulation function
 %% function mode
 report_mode = 2;
@@ -10,49 +10,49 @@ v = 0.203;
 sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = pi/2*sigma_s/sigma_y;
-% f = 0.108;
+f = 0.108;
 %% Initialize Rarea
 Rarea = GeoParam.Rarea;
 %% grinding parameters
-numgrits=size(grits.Tradius,1);
+numgrits = size(grits.Tradius,1);
 rpm = 3000;               %wheel spinning speed, round/min
-ds = wheel_length/pi;   %diameter of a grd wheel, um
-vs = floor(wheel_length*rpm/60);        %grd wheel line speed, um/s
+ds = WheelLength/pi; %diameter of a grd wheel, um
+vs = floor(WheelLength*rpm/60);  %grd wheel line speed, um/s
 ap = 2;                 %input('R_m2dgmax:'); depth of grinding
 %% simulation time
 %step time can be adjusted accordingly, longer=better Ra, will reach plateu
-% t_step=50e-5*k_t;%workpiece_length/vs;
+% t_step=50e-5*k_t;%WorkpieceLength/vs;
 %considering that the interval should be small enough, we now use fix time
 %interval to prevent any type of unexpected problems.
 % dt=2e-8*k_t;%t_step/t_interval;
-active_dw = ((ap)*1.05*(ds)*(1+vw/vs)^2)^0.5; %% prisoner's dilemma, dp, dd, active_dw
+active_dw = ((ap)*1.05*(ds)*(1+vw/vs)^2)^0.5;
 dy = res;%roundn((vs+vw)*dt,-3);
 dt = floor(1e10*dy/(vs+vw))/1e10;
-t_step = (workpiece_length + 2*active_dw)/vw;
+t_step = (WorkpieceLength + 2*active_dw)/vw;
 t_count = floor(t_step/dt);
 k_t_cof = floor(t_count/100);
 %% vitual grinding wheel generation
-num_cycle=floor(t_step*(vs+vw)/wheel_length)+1;
+num_cycle=floor(t_step*(vs+vw)/WheelLength)+1;
 v_i=0;
 for c_i=1:num_cycle
     for g_i=1:numgrits
-        if (c_i-1)*wheel_length+grits.posy(g_i)>t_step*(vs+vw)
+        if (c_i-1)*WheelLength+grits.posy(g_i)>t_step*(vs+vw)
             continue
         end
         v_i=v_i+1;
         vgrit(v_i,1)=g_i;
         vgrit(v_i,2)=round(grits.posx(g_i)/res)*res;
-        vgrit(v_i,3)=(c_i-1)*wheel_length+grits.posy(g_i);
+        vgrit(v_i,3)=(c_i-1)*WheelLength+grits.posy(g_i);
         vgrit(v_i,4)=vgrit(v_i,3)/vs*vw-active_dw;
     end
 end
 num_vgrits=length(vgrit);
 % creating the ground surface
-h_clearance=workpiece_width*0.1;
+h_clearance = WorkpieceWidth*0.1;
 c_clr=h_clearance/res/2;
-h_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
-rs_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
-% pdz_surf=zeros(workpiece_length/res,round((workpiece_width+h_clearance)/res));
+h_surf=zeros(WorkpieceLength/res,round((WorkpieceWidth+h_clearance)/res));
+rs_surf=zeros(WorkpieceLength/res,round((WorkpieceWidth+h_clearance)/res));
+% pdz_surf=zeros(WorkpieceLength/res,round((WorkpieceWidth+h_clearance)/res));
 hmax=zeros(num_vgrits,2);
 t_tick=0;
 % h_m=zeros(t_count,num_vgrits);
@@ -88,7 +88,7 @@ for t_i=dt:dt:t_step
     vgrit(:,3)=round((vgrit(:,3)-dy)/res)*res;
     for v_i=1:num_vgrits
         % if the grit.posy is outside of active_area, it is inactive
-        if (-vgrit(v_i,3)<=max(0,(wheel_location-active_dw)))||(-vgrit(v_i,3)>=min( workpiece_length,(wheel_location+active_dw)))
+        if (-vgrit(v_i,3)<=max(0,(wheel_location-active_dw)))||(-vgrit(v_i,3)>=min( WorkpieceLength,(wheel_location+active_dw)))
             continue
         end
         % basic calculation of grit positions
@@ -137,22 +137,22 @@ for t_i=dt:dt:t_step
                 % a_temp = sum(h_grit<h_origin)*0.2/2;
                 % alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
                 b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
-                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  + c_clr);
                 if b_prev == 0
-                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+                    rs_surf( round( g_y / res ), round( g_x / res ) + c_clr) = b_temp;
                 else
-                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+                    rs_surf( round( g_y / res ), round( g_x / res ) + c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
                 end
             else
                 % a_temp = sum(h_grit<h_origin)*0.2/2;
                 % alpha_temp = atan(a_temp^2/temp_chparea)/pi*180;
                 temp_chparea = temp_chparea/temp_uct*0.6;
                 b_temp = ( temp_chparea * ( 3*pi*( 1 - 2*v)*sigma_y + 2*3^0.5*E )/( pi*( 5 - 4*v )*sigma_y ) )^0.5;
-                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  +c_clr);
+                b_prev = rs_surf( round( g_y / res ), round( g_x / res )  + c_clr);
                 if b_prev == 0
-                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = b_temp;
+                    rs_surf( round( g_y / res ), round( g_x / res ) + c_clr) = b_temp;
                 else
-                    rs_surf( round( g_y / res ), round( g_x / res ) +c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
+                    rs_surf( round( g_y / res ), round( g_x / res ) + c_clr) = ( b_prev ^ 2 + b_temp ^ 2 ) ^ 0.5;
                 end
             end
         end
@@ -203,10 +203,10 @@ for t_i=dt:dt:t_step
 end
 
 %%
-h_surf=h_surf(:,c_clr:c_clr+workpiece_width/res-1);
-rs_surf=rs_surf(:,c_clr:c_clr+workpiece_width/res-1);
+h_surf=h_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);
+rs_surf=rs_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);
 [Ra,~]=SurfRoughANA(h_surf);
-C_grit=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
+Cgrits=floor(numgrits/(max(grits.posx)/1000*max(grits.posy)/1000));
 %%
 [l_b,w_b]=size(rs_surf);
 b_clr=0.2*w_b;
@@ -222,7 +222,7 @@ for i=1:l_b
         end
     end
 end
-pdz_surf=pdz_field(:,b_clr:b_clr+workpiece_width/res-1);
+pdz_surf=pdz_field(:,b_clr:b_clr+WorkpieceWidth/res-1);
 [Ra_pdz,Rz_pdz]=SurfRoughANA(pdz_surf);
 %%
 %draw the final ground surface
@@ -236,8 +236,8 @@ else
         
         surf_x=res:res:size(h_surf,2)*res;
         surf_y=res:res:size(h_surf,1)*res;
-        surf(surf_x,surf_y,h_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra)]);
-        print([filename '-report.jpg'], '-djpeg' );
+        surf(surf_x,surf_y,h_surf,'Linestyle','none');axis equal;title([FileName '| Ra=' num2str(Ra)]);
+        print([FileName '-report.jpg'], '-djpeg' );
     else
         %%
         figure('units','normalized','outerposition',[0 0 1 1]); %,'visible','off'
@@ -245,9 +245,8 @@ else
         
         surf_x=res:res:size(h_surf,2)*res;
         surf_y=res:res:size(h_surf,1)*res;
-        surf(surf_x,surf_y,h_surf,'Linestyle','none');axis equal;title([filename '| Ra=' num2str(Ra)]);
-        %%
-        %the uct distribution
+        surf(surf_x,surf_y,h_surf,'Linestyle','none');axis equal;title([FileName '| Ra=' num2str(Ra)]);
+        %% the uct distribution
         subplot(2,2,2);
         %     dist_uct=hmax(:,1);
         dist_uct=sum(uct,2);
@@ -261,8 +260,8 @@ else
         c_mode_act=c_mode_cut+c_mode_plg+c_mode_rub;
         
         c_mode_sum=max(c_mode);
-        num_mode=[sum(c_mode_sum==3) sum(c_mode_sum==2) sum(c_mode_sum==1) sum(c_mode_sum==0)];
-        percent_mode=num_mode/num_vgrits;
+        NumMode=[sum(c_mode_sum==3) sum(c_mode_sum==2) sum(c_mode_sum==1) sum(c_mode_sum==0)];
+        PercentMode=NumMode/num_vgrits;
         
         uct_aver=dist_uct./c_mode_act;
         yyaxis left;
@@ -270,9 +269,7 @@ else
         yyaxis right;
         plot(t_axis,uct_aver,'k.-');
         title(['uct|' num2str(numgrits) ' grits|L-k:uct_{ttl};.-k:uct_{aver}|R-r:cut;-g:plg;-b:rub']);
-        
-        %%
-        %cutting mode
+        %% cutting mode
         subplot(2,2,3);
         %active_grit_condition={'inactive' 'rubbing' 'ploughing' 'cutting'; cut_mode(1) cut_mode(2) cut_mode(3) cut_mode(4)};
         %     disp(active_grit_condition);
@@ -281,43 +278,44 @@ else
         %     plot(1:num_vgrits,hmax(:,1),'k');title('uct vs grit #');
         plot(1:num_vgrits,hmax(:,1),'k');title('uct vs grit#-k| ucarea vs grit#-r ');%,1:num_vgrits,max(ucarea,[],1),'r'
         T=[t_axis' uct];
-        writematrix(T,[filename '-uct.csv']);
+        writematrix(T,[FileName '-uct.csv']);
         T=[t_axis' ucarea];
-        writematrix(T,[filename '-ucarea.csv']);
-        
+        writematrix(T,[FileName '-ucarea.csv']);
+        %% Stress ouput
+        [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, rs_surf);
         %% force output
         subplot(2,2,4);
         F_n_total=sum(F_n,2);
         F_t_total=sum(F_t,2);
         lb_F=floor(0.35*t_count/k_t_cof);hb_F=floor(0.55*t_count/k_t_cof);
-        F_n_steadystage=mean(F_n_total(lb_F:hb_F));
-        F_t_steadystage=mean(F_t_total(lb_F:hb_F));
+        FnSteady=mean(F_n_total(lb_F:hb_F));
+        FtSteady=mean(F_t_total(lb_F:hb_F));
         t_axis=0*dt:k_t_cof*dt:t_step;
-        plot(t_axis,F_n_total,'k-',t_axis,F_t_total,'r-');title(['GForce|red-tang;black-normal;(N vs s)|' filename '|' num2str(numgrits) ' grits'])
+        plot(t_axis,F_n_total,'k-',t_axis,F_t_total,'r-');title(['GForce|red-tang;black-normal;(N vs s)|' FileName '|' num2str(numgrits) ' grits'])
         T=[t_axis' F_n_total F_t_total];
-        writematrix(T,[filename '-GForce.csv']);
+        writematrix(T,[FileName '-GForce.csv']);
         T=[t_axis' F_n];
-        writematrix(T,[filename '-GForce_n.csv']);
+        writematrix(T,[FileName '-GForce_n.csv']);
         T=[t_axis' F_t];
-        writematrix(T,[filename '-GForce_t.csv']);
+        writematrix(T,[FileName '-GForce_t.csv']);
         
         %     savefig([filename '-report.fig']);
-        print([filename '-report.jpg'], '-djpeg' );
+        print([FileName '-report.jpg'], '-djpeg' );
         close gcf;
         
-        writematrix(h_surf,[filename '-gsurf.csv']);
+        writematrix(h_surf,[FileName '-gsurf.csv']);
         
         % 2
         figure('units','normalized','outerposition',[0 0 1 1]);
         dist_uct=hmax(:,1);
         histogram(dist_uct);
         title('UCT histogram')
-        print([filename '-ucthisto.jpg'], '-djpeg' );
+        print([FileName '-ucthisto.jpg'], '-djpeg' );
         close gcf;
         
         % 3
         figure('units','normalized','outerposition',[0 0 1 1]);
-        writematrix([vgrit hmax],[filename '-hmax.csv']);
+        writematrix([vgrit hmax],[FileName '-hmax.csv']);
         index_cut=find(hmax(:,2)==3);
         index_plow=find(hmax(:,2)==2);
         index_rub=find(hmax(:,2)==1);
@@ -327,7 +325,7 @@ else
         stem3(grits.posx(vgrit(index_plow,1)),vgrit(index_plow,3),hmax(index_plow,1),'r');
         stem3(grits.posx(vgrit(index_rub,1)),vgrit(index_rub,3),hmax(index_rub,1),'g');
         title('UST dist')
-        savefig([filename '-uctdist.fig']);
+        savefig([FileName '-uctdist.fig']);
         close gcf;
         
         % 4
@@ -335,16 +333,16 @@ else
         surf_x=res:res:size(h_surf,2)*res;
         surf_y=res:res:size(h_surf,1)*res;
         surf(surf_x,surf_y,pdz_surf,'Linestyle','none');axis equal;
-        title([filename '| Ra=' num2str(Ra_pdz)]);
-        writematrix(rs_surf,[filename '-rs_b_dist.csv']);
-        writematrix(pdz_surf,[filename '-pdz_dist.csv']);
-        print([filename '-pdzdist.jpg'], '-djpeg' );
+        title([FileName '| Ra=' num2str(Ra_pdz)]);
+        writematrix(rs_surf,[FileName '-rs_b_dist.csv']);
+        writematrix(pdz_surf,[FileName '-pdz_dist.csv']);
+        print([FileName '-pdzdist.jpg'], '-djpeg' );
         close gcf;
     end
 end
 %%
-GrdOutput = [Ra,Ra_pdz,Rz_pdz,C_grit,F_n_steadystage,F_t_steadystage,num_mode,percent_mode];
-GrdOutputname = {'Ra', 'Ra_pdz', 'Rz_pdz', 'C_grit', 'F_n_steadystage', 'F_t_steadystage', ...
-    'num_cut', 'num_plg', 'num_rub', 'num_ina', 'percent_cut', 'percent_plg', 'percent_rub', 'percent_ina'};
+GrdOutput = [Ra,Ra_pdz,Rz_pdz,Cgrits,FnSteady,FtSteady,MaxStress,MeanStress,NumMode,PercentMode];
+GrdOutputname = {'Ra' 'Ra_pdz' 'Rz_pdz' 'CGrits' 'FnSteady' 'FtSteady' 'MaxStress' 'MeanStress'...
+    'Cutting' 'Plughing' 'Rubbing' 'Inactive' 'Cutting/%' 'Plughing/%' 'Rubbing/%' 'Inactive/%'};
 GrdOutput = array2table(GrdOutput,'VariableNames',GrdOutputname);
 end

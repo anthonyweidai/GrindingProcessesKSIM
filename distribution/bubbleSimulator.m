@@ -1,5 +1,5 @@
 function [grits,GritsProfile,GeoParam] = ...
-    bubbleSimulator(FileName, wheel_length, wheel_width, GeoParam, res)
+    bubbleSimulator(FileName, WheelLength, WheelWidth, GeoParam, res)
 %%
 % parameters
 %%%%%%%%%%
@@ -21,16 +21,16 @@ damparea=0;
 w_boundary=4;
 w_gt=mu*50;
 %
-% wheel_length = workpiece_length*2;
-% wheel_width = workpiece_width + w_boundary*2;
-num_grits = wheel_length*wheel_width / (4*MuRadius^2);
+% WheelLength = WorkpieceLength*2;
+% WheelWidth = workpiece_width + w_boundary*2;
+num_grits = WheelLength*WheelWidth / (4*MuRadius^2);
 numBubbles = round(num_grits*0.4);     % number of bubbles
 % generate bubbles and initialise
 %bubbles.radius=rand(numBubbles,1)*(maxRadius-minRadius)+minRadius;
 bubbles.Tradius=normrnd(MuRadius,SigRadius,[numBubbles,1]);
 bubbles.radius=bubbles.Tradius+rand(numBubbles,1)*MaxSep+MinSep;
 bubbles.mass=0.1*ones(numBubbles,1);
-bubbles.pos=rand(numBubbles,2).*wheel_width;
+bubbles.pos=rand(numBubbles,2).*WheelWidth;
 bubbles.pos(:,2)=bubbles.pos(:,2)*4; %4for 800,8for2k
 bubbles.vel=zeros(numBubbles,2);
 
@@ -50,7 +50,7 @@ while t<5
     else
         g=0.2/mu;
     end
-    bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,wheel_width,sumRadius,damparea);
+    bubbles=updatePosition(bubbles,numBubbles,Ts,k1,k2,c,cg,g,WheelWidth,sumRadius,damparea);
     %     if ~mod(round(t/Ts),10)
     %         %disp(['dropping....',int2str(round(t/15*100)),'%' ])
     %     end
@@ -76,7 +76,7 @@ grits.Tradius=roundn(bubbles.Tradius,-3);
 grits.Tradius=max(bubbles.Tradius,MuRadius-3*SigRadius);
 grits.Tradius=min(bubbles.Tradius,MuRadius+3*SigRadius);
 
-index=find((grits.posy<wheel_length).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
+index=find((grits.posy<WheelLength).*(grits.posx<w_gt+w_boundary).*(grits.posx>w_boundary));
 grits.posx=grits.posx(index)-w_boundary;
 grits.posy=grits.posy(index);
 grits.Tradius=grits.Tradius(index);

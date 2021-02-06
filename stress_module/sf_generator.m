@@ -1,7 +1,7 @@
 function sf_generator()
 rs_mean_all=[];
-for vw=100000:100000:600000
-filename=['UT_data/EFvw/N2tgw30kd0Sgap0.5Rgap3w8vw' num2str(vw) 'Hsg0Ssg0Rsg2FT1RA0.7RAM0-rs_b_dist'];
+% for vw=100000:100000:600000
+filename=['M:/GrdData_old/RSigma/CY1tgw30kd0Sgap0.5Rgap3w7FT0RAM1Rarea0.7Ssg0Hsg0Rsg0.1vw200000-rs_b_dist'];
 b_field=readtable([filename '.csv']);
 b_field=table2array(b_field,'ToScalar',true);
 [l_surf,w_surf]=size(b_field);
@@ -78,8 +78,9 @@ rs_mean_all=[rs_mean_all, rs_mean];
 %     end
 % end
 % writematrix([sigma_11;sigma_12;sigma_13;sigma_22;sigma_23;sigma_33],'blisterstress.csv');
-end
-rs_mean_all=rs_mean_all';
+% end
+% rs_mean_all=rs_mean_all';
 figure;
-plot(-res:-res:size(rs_s,1)*-res,rs_mean_all(1,:),'k',-res:-res:size(rs_s,1)*-res,rs_mean_all(2,:),'b',-res:-res:size(rs_s,1)*-res,rs_mean_all(3,:),'r',-res:-res:size(rs_s,1)*-res,rs_mean_all(4,:),'g',-res:-res:size(rs_s,1)*-res,rs_mean_all(5,:),'y',-res:-res:size(rs_s,1)*-res,rs_mean_all(6,:),'k-.');
+% plot(-res:-res:size(rs_s,1)*-res,rs_mean_all(1,:),'k',-res:-res:size(rs_s,1)*-res,rs_mean_all(2,:),'b',-res:-res:size(rs_s,1)*-res,rs_mean_all(3,:),'r',-res:-res:size(rs_s,1)*-res,rs_mean_all(4,:),'g',-res:-res:size(rs_s,1)*-res,rs_mean_all(5,:),'y',-res:-res:size(rs_s,1)*-res,rs_mean_all(6,:),'k-.');
+plot(-res:-res:size(rs_s,1)*-res,rs_mean_all(1,:),'k');
 end
