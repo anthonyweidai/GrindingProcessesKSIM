@@ -29,6 +29,7 @@ if GeoParam.Shape == 1
     [xc, yc] = getVertex(nodes_x(1:Omega),nodes_y(1:Omega),theta_v,Rv);
     %%
     if Rarea<=1e-7
+        ConeAngle = 2*atan(rg/hv);
         %% pyramid with fillet
         if FilletMode == 1
             setback = 0.5*rg/2;
@@ -36,6 +37,7 @@ if GeoParam.Shape == 1
             ytemp = yc;
             ztemp = hv;
             vtex = [xtemp,ytemp,ztemp];
+            
             A = zeros(Omega,3); % points in edge
             B = zeros(Omega,3); % points between highest points on edge fillet (C)
             C = zeros(Omega,3); % edge fillet highest points
