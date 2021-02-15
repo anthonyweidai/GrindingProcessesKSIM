@@ -31,8 +31,7 @@ vq = vq - lowerb_p;
 vq(isnan(vq)) = 0;
 h_vq = max(vq,[],'all');
 %% trimming
-if GeoParam.Trimmingh == 0
-else
+if GeoParam.Trimmingh >= 1e-7
     MuTrim = GeoParam.Trimmingh;
     SigmaTrim = 0.1;
     Trimmingh = normrnd(GeoParam.Trimmingh, MuTrim*SigmaTrim);
