@@ -7,9 +7,10 @@ report_mode = 2;
 H = 7.6e-3; %Pa, 7.6GPa=7.6e-3N/um^2
 E = 83e-3;
 v = 0.203;
-sigma_s = 0.253e-3; %shear strength 0.253GPa
+% sigma_s = 0.253e-3; %shear strength 0.253GPa
 sigma_y = 3.5e-3; %yield strength 3.5GPa
-u_a = pi/2*sigma_s/sigma_y;
+% u_a = pi/2*sigma_s/sigma_y;
+u_a = 0.4;
 f = 0.108;
 %% Initialize Rarea
 Rarea = GeoParam.Rarea;
@@ -159,7 +160,6 @@ for t_i=dt:dt:t_step
         %recording hmax, logging cut mode data
         %     h_m(t_tick,v_i)=temp_uct;
         %     area_chp(t_tick,v_i)=temp_chparea;
-        
         %% calculation of microinteration every k_t ticks
         if ~mod(round(t_i/dt),k_t_cof)
             t_ana_i=round(t_i/dt/k_t_cof);
@@ -201,7 +201,6 @@ for t_i=dt:dt:t_step
         end
     end
 end
-
 %%
 h_surf=h_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);
 rs_surf=rs_surf(:,c_clr:c_clr+WorkpieceWidth/res-1);

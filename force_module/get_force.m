@@ -6,9 +6,9 @@ function [F_n,F_t]=get_force(H,E,v,u_a,temp_uct,area_n,area_t,Rarea)
 % A_t=1.3;
 % Rarea=0.5;
 g_radius=10;
-a=1;
+% a=1;
 Rarea(Rarea < 0.09) = 0.09;
-alpha=atan((a*(1-sqrt(Rarea))/2/a))/pi*180;
+alpha=atan(1-Rarea)/pi*180;
 D_grit=g_radius*sqrt(Rarea);
 % u_a=pi/2*sigma_s/sigma_y;
 % u_a=0.4;
@@ -18,12 +18,13 @@ k_pc=0.4;
 d_crit_pl=(1-v^2)*D_grit/E*k_pc*H;
 % d_crit_pl=0.075;
 %% d_crit_cut
-rho=2;% grit edge radius, um
+% rho=2;% grit edge radius, um
 [theta_a,beta_a]=get_shearangle(alpha);
 theta_a=theta_a/180*pi;
 beta_a=beta_a/180*pi;
-d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
-% d_crit_cut=0.6;
+alpha = alpha/180*pi;
+% d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
+d_crit_cut=0.6;
 %% force cal
 mode=1;
 if mode==1

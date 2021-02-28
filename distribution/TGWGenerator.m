@@ -15,9 +15,11 @@ RowGap = (RowGap+1)*mu*2;
 %% Generate lattice with angle
 %%
 if theta == pi/2
-    theta = 0;
+    temp = SepGap;
+    SepGap = RowGap;
+    RowGap = temp;
 end
-if theta == 0
+if theta == 0 || theta == pi/2
     YRowStart = 0:RowGap:WheelLength;
     XColumnStart = 0:SepGap:WheelWidth;
 else
@@ -30,7 +32,7 @@ end
 xlattice = [];
 ylattice = [];
 for i = 1:length(YRowStart)
-    if theta == 0
+    if theta == 0 || theta == pi/2
         ytemp = repmat(YRowStart(i),1,length(XColumnStart));
     else
         ytemp = repmat(YRowStart(i),1,length(XColumnStart)) + StartRandom.*sin(theta);
