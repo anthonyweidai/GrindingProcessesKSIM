@@ -20,8 +20,8 @@ if theta == pi/2
     RowGap = temp;
 end
 if theta == 0 || theta == pi/2
-    YRowStart = 0:RowGap:WheelLength;
-    XColumnStart = 0:SepGap:WheelWidth;
+    YRowStart = 0:SepGap:WheelLength;
+    XColumnStart = 0:RowGap:WheelWidth;
 else
     YRowStart = 0:SepGap*sin(theta):WheelLength; % cut point in y-coordinate
     XColumnStart = -WheelLength/tan(theta):RowGap/sin(theta):WheelWidth;
