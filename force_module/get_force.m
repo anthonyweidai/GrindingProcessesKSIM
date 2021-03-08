@@ -22,7 +22,7 @@ d_crit_pl=(1-v^2)*D_grit/E*k_pc*H;
 [theta_a,beta_a]=get_shearangle(alpha);
 theta_a=theta_a/180*pi;
 beta_a=beta_a/180*pi;
-alpha = alpha/180*pi;
+alpha = alpha/180*pi; 
 % d_crit_cut=rho*(1-cos(pi/4-(beta_a/2)));
 d_crit_cut=0.6;
 %% force cal
