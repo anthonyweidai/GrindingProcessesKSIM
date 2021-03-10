@@ -1,5 +1,5 @@
 function P = getLinesInterploation(P1,P2,dis,z,inverse)
-%% get the point between two points, according to the distance or ratio
+%% Get the point between two points, according to the distance or ratio
 % dis is distance between P and P1,
 % if inverse == 1, dis is ratio fraction of dis1 and dis_total
 if exist('inverse','var')

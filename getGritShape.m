@@ -12,7 +12,8 @@ function [vq, ActiveRarea, ConeAngle] = getGritShape(rg, GeoParam, res)
 % RA_mode: 1 - Rake angle is const, 0 - Rake angle is not const
 % xi: intercept parameter of tetradecahedron
 %%
-[P, ConeAngle] = getShapeParam(rg,GeoParam);
+OutlineMode = 0;
+[P, ConeAngle] = getShapeParam(rg,GeoParam,OutlineMode);
 %% rotate grit
 rotate_angle = rand*3.1415926;
 rotate_z_ori = [cos(rotate_angle) -sin(rotate_angle) 0; sin(rotate_angle) cos(rotate_angle) 0; 0 0 1];
