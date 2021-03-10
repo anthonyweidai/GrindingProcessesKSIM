@@ -12,7 +12,7 @@ GeoParam.Omega = 7;
 
 GeoParam.Xi = 1/2/1.732;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.7;
+GeoParam.Rarea = 0.1;
 GeoParam.RAMode = 1;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0; 

@@ -44,12 +44,14 @@ elseif FilletMode == 2 || FilletMode == 1
     C1 = zeros(Omega,3); % mid surface point (for smaller trapezoid)
     C2 = zeros(Omega,3); % top surface point (for smaller trapezoid)
     DRv = zeros(Omega,3); % orthogonal vector
+    NumofP1 = 6;
+    NumofP2 = 2;
     if FilletMode == 2
-        numofp = 2;
+        NumofP = NumofP2;
     else
-        numofp = 6;
+        NumofP = NumofP1;
     end
-    num = numofp*Omega;
+    num = NumofP*Omega;
     arct = zeros(num,3); % 2D arc point
     %% get A, B, O, C1, C2
     for k = 1:Omega
@@ -112,15 +114,22 @@ elseif FilletMode == 2 || FilletMode == 1
             temp1 = max(max(A(k1,3),A(k2,3)),A(k3,3));
             temp2 = min(B(:,3)) - temp1;
             %% get arc point 2D
-            deltaz1 = temp2/(numofp);
-            z1 = temp1 + (0:1:numofp-1)*deltaz1;
+            if FilletMode == 2
+                deltaz1 = temp2/(NumofP);
+                temp = temp2/NumofP1;
+            else
+                deltaz1 = temp2/(NumofP - 1);
+                temp = 0;
+            end
+            z1 = temp1 + (0:1:NumofP-1)*deltaz1;
+            z1(end) = z1(end) - temp;
             Pc = zeros(2,3); % 2D arc intersect point on the top plane
-            for j = 1:numofp
+            for j = 1:NumofP
                 ztemp = z1(j);
                 Pc(1,:) = getLinesInterploation(Ptop(k1,:),PB(k1,:),[],ztemp);
                 Pc(2,:) = getLinesInterploation(B(k,:),O(k,:),[],ztemp);
                 dist = sqrt(R_fillet^2-(norm(Pc(2,:)-O(k,:)))^2);
-                arct(j + numofp*(k-1),:) = getLinesInterploation(Pc(2,:),Pc(1,:),dist);
+                arct(j + NumofP*(k-1),:) = getLinesInterploation(Pc(2,:),Pc(1,:),dist);
             end
         end
         %% Get 3D interplation
@@ -132,10 +141,10 @@ elseif FilletMode == 2 || FilletMode == 1
             else
                 k2 = i+1;
             end
-            for j = 1:numofp
-                PA = [arct(j+numofp*(k1-1),:);arct(j+numofp*(k2-1),:)];
+            for j = 1:NumofP
+                PA = [arct(j+NumofP*(k1-1),:);arct(j+NumofP*(k2-1),:)];
                 %% rebuild the lineIntersec3D
-                arc3d(j+numofp*(i-1),:) = findLinesIntersection3D(PA(1,:),PA(2,:),...
+                arc3d(j+NumofP*(i-1),:) = findLinesIntersection3D(PA(1,:),PA(2,:),...
                     DRv(k1,:),DRv(k2,:));
             end
         end
