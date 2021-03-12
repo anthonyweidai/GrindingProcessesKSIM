@@ -1,6 +1,6 @@
 function [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, BField)
 %% Plot save stress images
-[~,WSurf] = size(BField);
+[Lsurf,WSurf] = size(BField);
 %% material properties
 % sigma_s=0.253e-3; %shear strength 0.253GPa
 % sigma_y=3.5e-3; %yield strength 3.5GPa
@@ -10,7 +10,7 @@ z_depth = (  5  );            %depth of field
 w_clr = 0.1*WSurf;
 rs_surf = zeros(7,WSurf+2*w_clr,h_surf);
 %% Start generating stress field
-for l_i = 1%:l_surf
+for l_i = 1%:Lsurf
     for w_i = 1:WSurf
         b_i = BField(l_i,w_i);
         if b_i == 0

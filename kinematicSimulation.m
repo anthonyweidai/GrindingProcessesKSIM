@@ -248,7 +248,7 @@ else
         %% the uct distribution
         subplot(2,2,2);
         %     dist_uct=hmax(:,1);
-        dist_uct=sum(uct,2);
+        dist_uct=sum(uct,2); % sum of uct, total in each row
         t_axis=0*dt:k_t_cof*dt:t_step;
         %histogram(dist_uct);
         
@@ -335,8 +335,17 @@ else
         writematrix(pdz_surf,[FileName '-pdz_dist.csv']);
         print([FileName '-pdzdist.jpg'], '-djpeg' );
         close gcf;
-         %% Stress ouput
+        %% Stress ouput
         [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, rs_surf);
+        %% Force Plot
+        figure('units','normalized','outerposition',[0 0 1 1]);
+        plot(t_axis,F_n_total,'m-',t_axis,F_t_total,'g--');
+        legend('F_n','F_t')
+        savefig([FileName '-Force.fig'])
+        print([FileName '-Force.jpg'], '-djpeg' );
+        % xlabel('time/s'),ylabel('Force/N')
+        xlabel('时间/s');ylabel('力/N')
+        close gcf;
     end
 end
 %%

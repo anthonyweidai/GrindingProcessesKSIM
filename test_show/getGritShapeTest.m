@@ -6,7 +6,7 @@ testmode = 2;
 orimode = 0;
 res = .01;
 
-GeoParam.Shape = 1;
+GeoParam.Shape = 3;
 GeoParam.Trimmingh = 0;
 GeoParam.Omega = 7;
 
