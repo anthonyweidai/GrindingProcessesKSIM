@@ -13,7 +13,11 @@ sigma_y = 3.5e-3; %yield strength 3.5GPa
 u_a = 0.4;
 f = 0.108;
 %% Initialize Rarea
-Rarea = GeoParam.Rarea;
+if GeoParam.Shape == 2
+    Rarea = 1 - GeoParam.Rarea;
+else
+    Rarea = GeoParam.Rarea;
+end
 %% grinding parameters
 numgrits = size(grits.Tradius,1);
 rpm = 3000;               %wheel spinning speed, round/min

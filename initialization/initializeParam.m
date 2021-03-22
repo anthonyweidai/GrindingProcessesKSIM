@@ -12,7 +12,7 @@ if SepParam.WheelType == 2
 elseif SepParam.WheelType == 3
     SepParam.theta(~isfield(SepParam,'theta')) = 60;   % line tilt angle:30 40 50 60 70 80
     SepParam.SepGap(~isfield(SepParam,'SepGap')) = 0.5; % column gap: 0.5,1,3,5
-    SepParam.RowGap(~isfield(SepParam,'RowGap')) = 3;   % row gap: 1,3,5,7
+    SepParam.RowGap(~isfield(SepParam,'RowGap')) = 3;   % row gap: 1,1.5,2,2.5,3,4
     SepParam.KDev(~isfield(SepParam,'KDev')) = 0;    % position deviation para: ~0.01 
 end
 %% Geometries parameters

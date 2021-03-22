@@ -32,7 +32,7 @@ if Existence == 1
     disp('Aleady run with given parameters, skill to the next')
 else
 %% Simplified mode won't calculate force, but the other will
-cof_cal_mode(GeoParam.Shape==2 || GeoParam.Shape==3) = 0; % 0-simplified mode 1-accurate mode
+% cof_cal_mode(GeoParam.Shape==2 || GeoParam.Shape==3) = 0; % 0-simplified mode 1-accurate mode
 %% Generate grinding wheel
 FileName = getFilename(DiskPath, Cycle, SepParam, GeoParam, FOI, vw);
 if SepParam.WheelType == 1

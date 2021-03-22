@@ -10,16 +10,30 @@ GeoParam.Shape = 3;
 GeoParam.Trimmingh = 0;
 GeoParam.Omega = 7;
 
-GeoParam.Xi = 1/2/1.732;
+GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
 GeoParam.Rarea = 0.1;
 GeoParam.RAMode = 1;
 GeoParam.Sigmah = 0;
-GeoParam.SigmaSkew = 0; 
+GeoParam.SigmaSkew = 0;
 GeoParam.FilletMode = 2;
 %%
 OutlineMode = 1;
 [P, ConeAngle] = getShapeParam(rg,GeoParam,OutlineMode);
+%% Get Rarea of tetradecahedron
+if GeoParam.Shape == 3
+    TopZIndex = find(P(:,3) == max(P(:,3)));
+    DownZIndex = find(P(:,3) == min(P(:,3)));
+    TopDist = 0;
+    DownDist = 0;
+    for i = 1:TopZIndex
+        TopDist = max(TopDist,norm(P(TopZIndex(i),1:2)));
+    end
+    for i = 1:DownZIndex
+        DownDist = max(DownDist,norm(P(DownZIndex(i),1:2)));
+    end
+    Rarea = (TopDist/DownDist)^2;
+end
 %% draw initial grit
 if testmode==2
     figure;

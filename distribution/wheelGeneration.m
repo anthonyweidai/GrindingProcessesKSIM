@@ -25,6 +25,7 @@ if mode==0
     grits.rightbounds=min(Surf_l,round(grits.posy*10)/10+round(grits.Tradius*10)/10);
 end
 %%
+Rarea_all = [];
 proh_all=[];
 outline_all=[];
 ac_Rarea_all=[];
@@ -47,10 +48,11 @@ for grit_n = 1:numgrits
         end
     end
     %%
-    [grit_P, ActiveRarea, ConeAngle] = getGritShape(rg,GeoParam,res);
+    [grit_P, ActiveRarea, ConeAngle, Rarea] = getGritShape(rg,GeoParam,res);
     GritsProfile=[GritsProfile; {grit_P}];
     %%
     temp = temp + ConeAngle;
+    Rarea_all = [Rarea_all Rarea];
     %%
     outline=max(grit_P);
     proh_temp=max(outline);
@@ -75,6 +77,9 @@ end
 %%
 ConeAngle = temp*180/(numgrits*pi);
 GeoParam.ConeAngle = ConeAngle;
+if GeoParam.Shape == 3
+    GeoParam.Rarea = mean(Rarea_all);
+end
 %%
 if mode==0
     %%
