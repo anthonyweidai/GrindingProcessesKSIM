@@ -28,7 +28,6 @@ elseif GeoParam.Shape == 2
     GeoParam.Rarea(~isfield(GeoParam,'Rarea')) = 0.5;
 elseif GeoParam.Shape == 3
     GeoParam.Xi(~isfield(GeoParam,'Xi')) = 0;
-    GeoParam.Rarea(~isfield(GeoParam,'Rarea')) = 0; % For get force module
 end
 GeoParam.Trimmingh(~isfield(GeoParam,'Trimmingh')) = 0;
 GeoParam.Sigmarg(~isfield(GeoParam,'Sigmarg')) = 0;

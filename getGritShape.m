@@ -20,11 +20,11 @@ if GeoParam.Shape == 3
     DownZIndex = find(P(:,3) == min(P(:,3)));
     TopDist = 0;
     DownDist = 0;
-    for k1 = 1:TopZIndex
-        TopDist = max(TopDist,norm(P(k1,1:2)));
+    for k1 = 1:length(TopZIndex)
+        TopDist = max(TopDist,norm(P(TopZIndex(k1),1:2)));
     end
-    for k2 = 1:DownZIndex
-        DownDist = max(DownDist,norm(P(k2,1:2)));
+    for k2 = 1:length(DownZIndex)
+        DownDist = max(DownDist,norm(P(DownZIndex(k2),1:2)));
     end
     Rarea = (TopDist/DownDist)^2;
 else

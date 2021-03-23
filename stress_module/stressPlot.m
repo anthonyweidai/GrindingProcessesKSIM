@@ -47,7 +47,7 @@ c = colorbar;
 c.Label.String = '\sigma/GPa';
 % xlabel('Width/\mum'),ylabel('Depth/\mum')
 xlabel('宽度/\mum'),ylabel('深度/\mum')
-savefig([FileName '-StressField.fig']);
+% savefig([FileName '-StressField.fig']);
 print([FileName '-StressField.jpg'], '-djpeg' );
 close gcf
 %%
@@ -56,7 +56,7 @@ figure;
 plot(-res:-res:size(rs_s,1)*-res,rs_mean','k');
 % xlabel('Width/\mum'),ylabel('\sigma/GPa')
 xlabel('深度/\mum'),ylabel('\sigma/GPa')
-savefig([FileName '-MeanStressField.fig']);
+% savefig([FileName '-MeanStressField.fig']);
 print([FileName '-MeanStressField.jpg'], '-djpeg' );
 close gcf
 MaxStress = max(rs_mean);

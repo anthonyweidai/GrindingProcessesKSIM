@@ -10,13 +10,13 @@ GeoParam.Shape = 3;
 GeoParam.Trimmingh = 0;
 GeoParam.Omega = 7;
 
-GeoParam.Xi = 0.7;
+GeoParam.Xi = 0.2;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.1;
+GeoParam.Rarea = 1.4;
 GeoParam.RAMode = 1;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
-GeoParam.FilletMode = 2;
+GeoParam.FilletMode = 0;
 %%
 OutlineMode = 1;
 [P, ConeAngle] = getShapeParam(rg,GeoParam,OutlineMode);
@@ -26,13 +26,15 @@ if GeoParam.Shape == 3
     DownZIndex = find(P(:,3) == min(P(:,3)));
     TopDist = 0;
     DownDist = 0;
-    for i = 1:TopZIndex
-        TopDist = max(TopDist,norm(P(TopZIndex(i),1:2)));
+    for k1 = 1:length(TopZIndex)
+        TopDist = max(TopDist,norm(P(TopZIndex(k1),1:2)));
     end
-    for i = 1:DownZIndex
-        DownDist = max(DownDist,norm(P(DownZIndex(i),1:2)));
+    for k2 = 1:length(DownZIndex)
+        DownDist = max(DownDist,norm(P(DownZIndex(k2),1:2)));
     end
     Rarea = (TopDist/DownDist)^2;
+else
+    Rarea = [];
 end
 %% draw initial grit
 if testmode==2

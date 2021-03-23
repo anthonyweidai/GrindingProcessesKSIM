@@ -14,7 +14,7 @@ u_a = 0.4;
 f = 0.108;
 %% Initialize Rarea
 if GeoParam.Shape == 2
-    Rarea = 1 - GeoParam.Rarea;
+    Rarea = 1 - 1/(GeoParam.Rarea)^2;
 else
     Rarea = GeoParam.Rarea;
 end
