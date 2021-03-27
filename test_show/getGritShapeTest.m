@@ -10,7 +10,7 @@ GeoParam.Shape = 3;
 GeoParam.Trimmingh = 0;
 GeoParam.Omega = 7;
 
-GeoParam.Xi = 0.2;
+GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
 GeoParam.Rarea = 1.4;
 GeoParam.RAMode = 1;
