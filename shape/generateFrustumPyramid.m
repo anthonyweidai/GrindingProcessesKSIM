@@ -26,7 +26,7 @@ end
 [xc, yc] = getVertex(nodes_x(1:Omega),nodes_y(1:Omega),theta_v,Rv);
 %%
 Vertex = [xc, yc, hv];
-if Rarea<=1e-7
+if Rarea <= 1e-7
     [nodes_x,nodes_y,nodes_z,ConeAngle] = generatePyramid(rg, Vertex, ...
         GeoParam, nodes_x, nodes_y, nodes_z, OutlineMode);
 else

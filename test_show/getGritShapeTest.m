@@ -6,17 +6,17 @@ testmode = 2;
 orimode = 0;
 res = .01;
 
-GeoParam.Shape = 3;
+GeoParam.Shape = 1;
 GeoParam.Trimmingh = 0;
 GeoParam.Omega = 7;
 
 GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 1.4;
+GeoParam.Rarea = 0.3;
 GeoParam.RAMode = 1;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
-GeoParam.FilletMode = 0;
+GeoParam.FilletMode = 1;
 %%
 OutlineMode = 1;
 [P, ConeAngle] = getShapeParam(rg,GeoParam,OutlineMode);
