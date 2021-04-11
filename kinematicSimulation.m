@@ -341,15 +341,15 @@ else
         close gcf;
         %% Stress ouput
         [MaxStress, MeanStress] = stressPlot(FileName, H, E, v, f, res, rs_surf);
-        %% Force Plot
-        figure('units','normalized','outerposition',[0 0 1 1]);
-        plot(t_axis,F_n_total,'m-',t_axis,F_t_total,'g--');
-        legend('F_n','F_t')
-        savefig([FileName '-Force.fig'])
-        print([FileName '-Force.jpg'], '-djpeg' );
-        % xlabel('time/s'),ylabel('Force/N')
-        xlabel('时间/s');ylabel('力/N')
-        close gcf;
+        %         %% Force Plot
+        %         figure('units','normalized','outerposition',[0 0 1 1]);
+        %         plot(t_axis,F_n_total,'m-',t_axis,F_t_total,'g--');
+        %         legend('F_n','F_t')
+        %         savefig([FileName '-Force.fig'])
+        %         print([FileName '-Force.jpg'], '-djpeg' );
+        %         % xlabel('time/s'),ylabel('Force/N')
+        %         xlabel('时间/s');ylabel('力/N')
+        %         close gcf;
     end
 end
 %%

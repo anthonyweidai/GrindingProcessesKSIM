@@ -8,12 +8,12 @@ res = .01;
 
 GeoParam.Shape = 1;
 GeoParam.Trimmingh = 0;
-GeoParam.Omega = 7;
+GeoParam.Omega = 5;
 
 GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.3;
-GeoParam.RAMode = 1;
+GeoParam.Rarea = 0.7;
+GeoParam.RAMode = 0;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
 GeoParam.FilletMode = 1;

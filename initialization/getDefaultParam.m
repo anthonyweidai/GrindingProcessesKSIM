@@ -11,13 +11,13 @@ if Shape == 1
     DefaultVal.Omega = 7;
     DefaultVal.RHeightSize = 1;
     DefaultVal.Rarea = 0.7;
-    DefaultVal.RAMode = 1;
+    DefaultVal.RAMode = 0;
     DefaultVal.SigmaSkew = 0;
     DefaultVal.FilletMode = 0;
 elseif Shape == 2
     DefaultVal.Rarea = 1;
 elseif Shape == 3
-    DefaultVal.Xi = 0.7;
+    DefaultVal.Xi = 0.55;
 end
 DefaultVal.Trimmingh = 0;
 DefaultVal.Sigmarg = 0;

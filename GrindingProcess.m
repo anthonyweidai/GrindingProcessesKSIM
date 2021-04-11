@@ -27,7 +27,7 @@ res = .2;  % surf resolution of all axis
 %% Input parameters initialization
 [SepParam, GeoParam] = initializeParam(SepParam, GeoParam);
 %% Judge of exsistence
-Existence = batchExsistInvalidate(DiskPath, Cycle, FOI, SepParam, GeoParam);
+[Existence, ~] = batchExsistInvalidate(DiskPath, Cycle, FOI, SepParam, GeoParam, 1);
 if Existence == 1
     disp('Aleady run with given parameters, skill to the next')
 else
