@@ -8,7 +8,7 @@ res = .01;
 
 GeoParam.Shape = 1;
 GeoParam.Trimmingh = 0;
-GeoParam.Omega = 5;
+GeoParam.Omega = 7;
 
 GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;

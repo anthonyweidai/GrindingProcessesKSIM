@@ -34,7 +34,7 @@ if FilletMode == 0
     nodes_z = [nodes_z nodes_zt];
 elseif FilletMode == 2 || FilletMode == 1
     %% With fillet
-    R_fillet = 0.25*rg;
+%     R_fillet = 0.25*rg;
     Pbottom = [nodes_x; nodes_y; nodes_z]';
     Ptop = [nodes_xt; nodes_yt; nodes_zt]';
     PB = zeros(Omega,3); % bottom point intersect
@@ -45,9 +45,11 @@ elseif FilletMode == 2 || FilletMode == 1
     NumofP1 = 6;
     NumofP2 = 2;
     if FilletMode == 2
-        NumofP = NumofP2;
+        NumofP = NumofP1;
+        R_fillet = 0.5*rg;
     else
         NumofP = NumofP1;
+        R_fillet = 0.25*rg;
     end
     num = NumofP*Omega;
     arct = zeros(num,3); % 2D arc point
@@ -70,7 +72,7 @@ elseif FilletMode == 2 || FilletMode == 1
         v = PB(k1,:) - P3;
         nor = [u1(2),-u1(1),0];
         ang34 = atan2(norm(cross(v,nor)),dot(v,nor));
-        if ang34>pi/2
+        if ang34 > pi/2
             ang34 =  ang34 - pi/2;
         end
         % GET A
@@ -104,14 +106,16 @@ elseif FilletMode == 2 || FilletMode == 1
         temp2 = min(B(:,3)) - temp1;
         %% get arc point 2D
         if FilletMode == 2
-            deltaz1 = temp2/(NumofP);
-            temp = temp2/NumofP1;
+            deltaz1 = temp2 / (NumofP);
+            % temp = temp2 / NumofP1;
+            % z1 = temp1 + (1:1:NumofP) * deltaz1;
+            z1 = temp1 + (0:1:NumofP - 1) * deltaz1;
+            % z1(end) = z1(end) - temp;
         else
-            deltaz1 = temp2/(NumofP - 1);
-            temp = 0;
+            deltaz1 = temp2 / (NumofP - 1);
+            z1 = temp1 + (0:1:NumofP - 1) * deltaz1;
         end
-        z1 = temp1 + (0:1:NumofP-1)*deltaz1;
-        z1(end) = z1(end) - temp;
+        
         Pc = zeros(2,3); % 2D arc intersect point on the top plane
         for j = 1:NumofP
             ztemp = z1(j);
