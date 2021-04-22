@@ -3,7 +3,7 @@ if isfile(['batch\\' 'errorReport.csv'])
     delete(['batch\\' 'errorReport.csv']);
 end
 % Cycle = 1:3;
-Cycle = 3;
+Cycle = 5;
 %%
 Shape = 1;
 FOI = 'Default';
