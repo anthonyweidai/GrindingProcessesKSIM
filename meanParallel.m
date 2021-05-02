@@ -4,21 +4,21 @@ set(0,'defaultfigurecolor',[1 1 1])
 %%
 Cycle = 5;
 %% Parallel experiment
-% CurrentMode = 0;
-% BackupMode = 0;
-% RemoveInfo = removeFieldParam(BackupMode, 0);
+CurrentMode = 0;
+BackupMode = 0;
+RemoveInfo = removeFieldParam(BackupMode, 0);
 % WheelType = 2:3;
 % % FOIStorage = {'Edges' 'FilletMode' 'Sigmah' 'Sigmarg'}; % Cycle = 1 % 'EllipsoidRarea' 'Xi' 
-% FOIStorage = { 'Sigmah' 'Sigmarg'};
+% FOIStorage = {'Edges'};
 % meanAnalysis(Cycle, WheelType, FOIStorage, CurrentMode, BackupMode, RemoveInfo);
-% FOIStorage = {'RowGap' 'SepGap' 'theta' 'KDev'};
-% % % % % FOIStorage = {'theta'};
-% WheelType = 3;
-% meanAnalysis(Cycle, WheelType, FOIStorage, CurrentMode, BackupMode, RemoveInfo);
+% % FOIStorage = {'RowGap' 'SepGap' 'theta' 'KDev'};
+FOIStorage = {'theta'};
+WheelType = 3;
+meanAnalysis(Cycle, WheelType, FOIStorage, CurrentMode, BackupMode, RemoveInfo);
 
-%% Different Shapes %% mean analysis
-% % WheelType = 2:3;
-% % diffShapesPlot(Cycle, WheelType);
+%% Different Shapes
+% WheelType = 2:3;
+% diffShapesPlot(Cycle, WheelType);
 
 %% Box plotter
 % DistField = 'UCT';
@@ -38,8 +38,8 @@ Cycle = 5;
 %     DistribBoxPlot(Cycle, WheelType, FOI, FOI, CurrentMode);
 % end
 
-%% Comprehensive evaluation %% mean analysis
-% Cycle = 1;
+%% Comprehensive evaluation
+% Cycle = 5;
 % WheelType = 2:3;
 % FOIStorage = {'Edges' 'Sigmah' 'Sigmarg' 'FilletMode'};
 % % FOIStorage = {'FilletMode'};

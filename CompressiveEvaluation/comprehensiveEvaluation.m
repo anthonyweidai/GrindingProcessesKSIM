@@ -1,6 +1,6 @@
 function comprehensiveEvaluation(Cycle, WheelType, FOIStorage)
 %% Comprehensively evaluate grinding performance
-NewSubfolder = 'MeanAnalysis/Commenting';
+NewSubfolder = 'MeanAnalysis/Commenting'; % For mean analysis
 if exist(NewSubfolder,'dir')
     delete([NewSubfolder '/*'])
 end

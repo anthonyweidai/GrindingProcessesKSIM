@@ -17,7 +17,7 @@ if length(WheelType) >= 2
     % FOIHandler = sortrows(T2,InputField);
     x2 = table2array(T2(:,InputField));
     y2 = table2array(T2(:,OutputField));
-    EnhanceRatio = y./y2;
+    % EnhanceRatio = y./y2;
     hold on;
     plot(x2,y2,'b--');
     legend('有序排布','无序排布')
