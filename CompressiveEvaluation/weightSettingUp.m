@@ -1,4 +1,4 @@
-function [WCutting, WInactive, WCGrits, WRa, WFn, WMaxStress, CR] = weightSettingUp(MaterialType)
+function [WCutting, WInactive, WCGrits, WRa, WF, WMaxStress, CR] = weightSettingUp(MaterialType)
 %% Setting up weight of interesting result values
 if MaterialType == 1 % rough grinding
     WRa = 0.6;
@@ -44,11 +44,11 @@ WCutting = 0;
 WInactive = 0;
 WCGrits = 0;
 
-WFn = WForce;
+WF = WForce;
 WMaxStress = WStress;
 end
 
-%%%%%%%%%%%
+%%%%%%%%%%% 2021/02
 % WCGrits = 0.1;
 % WCutting = 0.1;
 % WInactive = 0.2;
