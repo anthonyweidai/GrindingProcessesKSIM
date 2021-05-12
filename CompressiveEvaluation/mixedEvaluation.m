@@ -27,47 +27,9 @@ BatchArrayAll = normalize(BatchArrayAll,'range'); % normalize data in [0,1]
 %%
 Theight = height(BatchInfo);
 SumScore = zeros(2*Theight,3);
+
 MaterialType = 1:3;
-MTLength = length(MaterialType);
-WRaAll = zeros(1,MTLength);
-WFnAll = zeros(1,MTLength);
-WMaxStressAll = zeros(1,MTLength);
-WCuttingAll = zeros(1,MTLength);
-WInactiveAll = zeros(1,MTLength);
-CRAll = zeros(1,MTLength);
-for MT = MaterialType
-    %% Material setting up
-    [WCutting, WInactive, WCGrits, WRa, WFn, WMaxStress, CR] = ...
-        weightSettingUp(MT);
-    %%
-    for k3 = 1:length(ColNames)
-        ColNamesChar = char(ColNames(k3));
-        if strcmp(ColNamesChar, 'Ra')
-            Ra = BatchArrayAll(:,k3)*WRa;
-        elseif strcmp(ColNamesChar, 'FnSteady')
-            FnSteady = BatchArrayAll(:,k3)*WFn;
-        elseif strcmp(ColNamesChar, 'MaxStress')
-            MaxStress = BatchArrayAll(:,k3)*WMaxStress;
-        elseif strcmp(ColNamesChar, 'Cutting/%')
-            Cutting = BatchArrayAll(:,k3)*WCutting;
-        elseif strcmp(ColNamesChar, 'Inactive/%')
-            Inactive = BatchArrayAll(:,k3)*WInactive;
-        elseif strcmp(ColNamesChar, 'CGrits')
-            CGrits = BatchArrayAll(:,k3)*WCGrits;
-        end
-    end
-    %%
-    temp = Ra + MaxStress + FnSteady + Cutting + Inactive + CGrits;
-    MaxSum = max(temp)/100;
-    SumScore(:,MT) = temp/MaxSum;
-    WRaAll(MT) = WRa;
-    WFnAll(MT) = WFn;
-    WMaxStressAll(MT) = WMaxStress;
-    WCuttingAll(MT) = WCutting;
-    WInactiveAll(MT) = WInactive;
-    WCGritsAll(MT) = WCGrits;
-    CRAll(MT) = CR;
-end
+[SumScore, BestWeight] = getSumScore(BatchArrayAll, ColNames, SumScore, MaterialType);
 %% Plot and save data in image
 InputValue = table2array(BatchInfo(:,InputField));
 figure
@@ -107,15 +69,7 @@ SavePath = [NewSubfolder  '/Commenting-' InputField 'Wheel3' '.csv'];
 temp = struct2table(T);
 writetable(temp, SavePath);
 %% Save evaluation vector
-BestT.WRa = WRaAll;
-BestT.WFn = WFnAll;
-BestT.WMaxStress = WMaxStressAll;
-BestT.WCutting = WCuttingAll;
-BestT.WInactive = WInactiveAll;
-BestT.WCGrits = WCGritsAll;
-BestT.CR = CRAll;
-
-BestT = struct2table(BestT);
+BestWeight = struct2table(BestWeight);
 SavePath = [NewSubfolder 'Comprehensive-commenting-Shape' '.csv'];
-writetable(BestT, SavePath, 'WriteMode', 'append');
+writetable(BestWeight, SavePath, 'WriteMode', 'append');
 end

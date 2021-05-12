@@ -16,7 +16,7 @@ for i = WheelType
         if strcmp(ColNamesChar, 'Inactive/%')
             BatchArray(:,k2) = 1 - BatchArray(:,k2);
         elseif strcmp(ColNamesChar, 'Ra') || strcmp(ColNamesChar, 'FnSteady') || ...
-                strcmp(ColNamesChar, 'MaxStress')
+                strcmp(ColNamesChar, 'FtSteady') || strcmp(ColNamesChar, 'MaxStress')
             BatchArray(:,k2) = 1./BatchArray(:,k2);
         end
     end
@@ -25,54 +25,9 @@ for i = WheelType
     %%
     Theight = height(BatchInfo);
     SumScore = zeros(Theight,3);
-    %     if strcmp(FOI, 'Edges')
-    %         MaterialType = 2;
-    %     else
+    
     MaterialType = 1:3;
-    %     end
-    MTLength = length(MaterialType);
-    WRaAll = zeros(1,MTLength);
-    WFnAll = zeros(1,MTLength);
-    WMaxStressAll = zeros(1,MTLength);
-    WCuttingAll = zeros(1,MTLength);
-    WInactiveAll = zeros(1,MTLength);
-    WCGritsAll = zeros(1,MTLength);
-    CRAll = zeros(1,MTLength);
-    for MT = MaterialType
-        %% Material setting up
-        [WCutting, WInactive, WCGrits, WRa, WFn, WMaxStress, CR] = ...
-            weightSettingUp(MT);
-        %%
-        for k3 = 1:length(ColNames)
-            ColNamesChar = char(ColNames(k3));
-            if strcmp(ColNamesChar, 'Ra')
-                Ra = BatchArray(:,k3)*WRa;
-                % Ra = BatchArray(:,k3).^WRa;
-            elseif strcmp(ColNamesChar, 'FnSteady')
-                FnSteady = BatchArray(:,k3)*WFn;
-            elseif strcmp(ColNamesChar, 'MaxStress')
-                MaxStress = BatchArray(:,k3)*WMaxStress;
-                % MaxStress = BatchArray(:,k3).^WMaxStress;
-            elseif strcmp(ColNamesChar, 'Cutting/%')
-                Cutting = BatchArray(:,k3)*WCutting;
-            elseif strcmp(ColNamesChar, 'Inactive/%')
-                Inactive = BatchArray(:,k3)*WInactive;
-            elseif strcmp(ColNamesChar, 'CGrits')
-                CGrits = BatchArray(:,k3)*WCGrits;
-            end
-        end
-        %%
-        temp = Ra + MaxStress + FnSteady + Cutting + Inactive + CGrits;
-        MaxSum = max(temp)/100;
-        SumScore(:,MT) = temp/MaxSum;
-        WRaAll(MT) = WRa;
-        WFnAll(MT) = WFn;
-        WMaxStressAll(MT) = WMaxStress;
-        WCuttingAll(MT) = WCutting;
-        WInactiveAll(MT) = WInactive;
-        WCGritsAll(MT) = WCGrits;
-        CRAll(MT) = CR;
-    end
+    [SumScore, BestWeight] = getSumScore(BatchArray, ColNames, SumScore, MaterialType);
     %% Plot and save data in image
     InputValue = table2array(BatchInfo(:,InputField));
     figure
@@ -132,13 +87,7 @@ for i = WheelType
     [~,I] = maxk(T.Plastic,MaxNum);
     BestT.Plastic = InputValue(I)';
     
-    BestT.WRa = WRaAll;
-    BestT.WFn = WFnAll;
-    BestT.WMaxStress = WMaxStressAll;
-    BestT.WCutting = WCuttingAll;
-    BestT.WInactive = WInactiveAll;
-    BestT.WCGrits = WCGritsAll;
-    BestT.CR = CRAll;
+    BestT = catstruct(BestT, BestWeight);
     
     BestT = struct2table(BestT);
     SavePath = [NewSubfolder 'Comprehensive-commenting-Distribution' '.csv'];
