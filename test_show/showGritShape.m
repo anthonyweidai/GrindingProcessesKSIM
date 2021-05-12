@@ -8,17 +8,18 @@ res = .01;
 
 GeoParam.Shape = 1;
 GeoParam.Trimmingh = 0;
-GeoParam.Omega = 7;
+GeoParam.Omega = 16;
 
 GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.7;
+GeoParam.Rarea = 0.8;
 GeoParam.RAMode = 0;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
-GeoParam.FilletMode = 1;
+GeoParam.FilletMode = 0;
 %%
-OutlineMode = 1;
+OutlineMode = 0;
+NetMode = 1;
 [P, ConeAngle] = getShapeParam(rg,GeoParam,OutlineMode);
 %% Get Rarea of tetradecahedron
 if GeoParam.Shape == 3
@@ -44,7 +45,12 @@ if testmode==2
     grid on;
     k = boundary(P,0);
     hold on;
-    trisurf(k,P(:,1),P(:,2),P(:,3),'Facecolor','red','FaceAlpha',1);
+    Color = repmat(160/255, 1, 3);
+    trisurf(k,P(:,1),P(:,2),P(:,3),'Facecolor',Color,'FaceAlpha',1);
+    if NetMode == 1
+        grid off
+        set(gca,'XColor','none','YColor','none','ZColor','none','TickDir','out')
+    end
     axis equal;
     xlabel('x')
     ylabel('y')

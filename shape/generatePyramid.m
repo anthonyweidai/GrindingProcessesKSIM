@@ -91,6 +91,7 @@ elseif FilleMode == 1
     end
 end
 if OutlineMode == 1
+    figure
     scatter3(nodes_x,nodes_y,nodes_z)
     hold on
     scatter3(Vertex(1),Vertex(2),Vertex(3))
