@@ -4,8 +4,8 @@ cof_cal_mode = 1;
 GeoParam.Shape = Shape;
 createFolder(FOI);
 %% Interesting variables
-disp(['FOI: ' FOI ', Numbers of Variables: ' num2str(...
-    length(InterestingParam1)*length(InterestingParam1)*length(BatNum))]);
+disp(['FOI: ' FOI ', Numbers of Variables: ' num2str(2*...
+    length(InterestingParam1)*length(InterestingParam2)*length(BatNum))]);
 %%
 for Cycle = BatNum
     for WheelType = 2:3

@@ -21,7 +21,8 @@ end
 %% grinding parameters
 numgrits = size(grits.Tradius,1);
 rpm = 3000;               %wheel spinning speed, round/min
-ds = WheelLength/pi; %diameter of a grd wheel, um
+% ds = WheelLength/pi; %diameter of a grd wheel, um
+ds=30e3;
 vs = floor(WheelLength*rpm/60);  %grd wheel line speed, um/s
 ap = 2;                 %input('R_m2dgmax:'); depth of grinding
 %% simulation time
@@ -192,14 +193,12 @@ for t_i=dt:dt:t_step
                 if hmax(v_i,1)<0.075
                     hmax(v_i,2)=1;
                     c_mode(t_ana_i,v_i)=1;
+                elseif hmax(v_i,1)<0.6
+                    hmax(v_i,2)=2;
+                    c_mode(t_ana_i,v_i)=2;
                 else
-                    if hmax(v_i,1)<0.6
-                        hmax(v_i,2)=2;
-                        c_mode(t_ana_i,v_i)=2;
-                    else
-                        hmax(v_i,2)=3;
-                        c_mode(t_ana_i,v_i)=3;
-                    end
+                    hmax(v_i,2)=3;
+                    c_mode(t_ana_i,v_i)=3;
                 end
             end
         end

@@ -59,6 +59,7 @@ for i = 1:length(FOIStorage)
                 FileName = [DiskPath1 FOI '/CY' num2str(k1) 'wheel' num2str(j) '-info.csv'];
                 BatchInfo = readtable(FileName,'PreserveVariableNames',1);
                 BatchInfo = removevars(BatchInfo,{'datetime'});
+                BatchInfo = removevars(BatchInfo,{'MeanProh'});
                 BatchInfo = sortrows(BatchInfo, InputField);
                 %% Remove rows
                 BatchInfo = removeTableRows(FOI, BatchInfo, RemoveInfo);

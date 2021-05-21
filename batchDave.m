@@ -2,8 +2,8 @@ set(0,'defaultfigurecolor',[1 1 1])
 if isfile(['batch\\' 'errorReport.csv'])
     delete(['batch\\' 'errorReport.csv']);
 end
-% Cycle = 1:3;
-Cycle = 4:5;
+Cycle = 1;
+% Cycle = 4:5;
 % %%
 % Shape = 1;
 % FOI = 'Default';
@@ -34,14 +34,16 @@ FOIEdges(Cycle, FOI, Shape, InterestingParam1, InterestingParam2);
 % %%
 % Shape = 2;
 % FOI = 'EllipsoidRarea';
-% InterestingParam = [1 1.5 2 2.5];
+% %%%%%% InterestingParam = [1 1.5 2 2.5];
+% InterestingParam = [1];
 % FOIGeoParam(Cycle, FOI, Shape, InterestingParam);
-% % % %%
-% % % Shape = 3;
-% % % FOI = 'Xi';
-% % % InterestingParam = [0.5 0.55 0.6 0.65 0.7];
-% % % FOIGeoParam(Cycle, FOI, Shape, InterestingParam);
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%
+% Shape = 3;
+% FOI = 'Xi';
+% %%%%%% InterestingParam = [0.5 0.55 0.6 0.65 0.7];
+% InterestingParam = [0.55];
+% FOIGeoParam(Cycle, FOI, Shape, InterestingParam);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%
 % FOI = 'theta';
 % InterestingParam = [10 20 30 40 50 55 65 70 75 80];

@@ -1,6 +1,6 @@
 # GrdProcess
 
-The repo is grinding process kinematic simulation in MATLAB.
+The repo is utilized for kinematic simulation of grinding process in MATLAB.
 
 ## Git 
 

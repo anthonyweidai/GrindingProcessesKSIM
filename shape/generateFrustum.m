@@ -43,7 +43,7 @@ elseif FilletMode == 2 || FilletMode == 1
     B = zeros(Omega,3); % arc point in top face
     DRv = zeros(Omega,3); % orthogonal vector
     NumofP1 = 6;
-    NumofP2 = 2;
+%     NumofP2 = 2;
     if FilletMode == 2
         NumofP = NumofP1;
         R_fillet = 0.5*rg;

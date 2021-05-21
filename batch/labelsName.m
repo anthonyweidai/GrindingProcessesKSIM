@@ -50,7 +50,7 @@ elseif strcmp(OutputField,'proh')
 elseif strcmp(OutputField,'rg')
     yName = 'r_g/\mum';
 elseif strcmp(OutputField,'UCT') || strcmp(OutputField,'uct') 
-    yName = 'UCT/\mum';
+    yName = 'h_m/\mum';
 else
     yName = OutputField;
 end

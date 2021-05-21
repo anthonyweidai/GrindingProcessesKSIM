@@ -11,6 +11,9 @@ UCTInfo = readtable([FileName '-' FileIcon '.csv'],'PreserveVariableNames',1);
 UCTArray = table2array(UCTInfo);
 UCTArray = UCTArray(:);
 UCTArray(UCTArray<=1e-3) = [];
+if strcmp(FileIcon,'uct')
+    UCTArray = rmoutliers(UCTArray);
+end
 
 x = [x; UCTArray];
 LogicAll = strncmp(BatchInfo.Properties.VariableNames, 'datetime', length('datetime'));

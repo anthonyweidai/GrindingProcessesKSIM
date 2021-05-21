@@ -3,7 +3,8 @@ function diffShapesPlot(Cycle, WheelType)
 %%
 warning off
 OutputFields = {'Ra' 'FnSteady' 'FtSteady' 'MaxStress' 'MeanStress' 'CGrits'};
-DiskPath1 = 'N:/GrdData/';
+% DiskPath1 = 'N:/GrdData/';
+DiskPath1 = 'M:/GrdData/';
 DiskPath2 = 'P:/university/GrdData/';
 
 FOI1 = 'FilletMode';
@@ -100,7 +101,7 @@ for k2 = 1:length(OutputFields)
     BarValue2 = getValuefromStruct(BarValues2, OutputField);
     BarValue3 = getValuefromStruct(BarValues3, OutputField);
     vals = [BarValue1; BarValue2; BarValue3];
-    % Ratio = vals./vals(2,:);
+    Ratio = vals./vals(2,:);
     
     figure
     hb = bar(x,vals);

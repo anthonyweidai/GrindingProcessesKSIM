@@ -8,15 +8,15 @@ res = .01;
 
 GeoParam.Shape = 1;
 GeoParam.Trimmingh = 0;
-GeoParam.Omega = 16;
+GeoParam.Omega = 7;
 
 GeoParam.Xi = 0.7;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.8;
+GeoParam.Rarea = 0.7;
 GeoParam.RAMode = 0;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
-GeoParam.FilletMode = 0;
+GeoParam.FilletMode = 2;
 %%
 OutlineMode = 0;
 NetMode = 1;
@@ -47,6 +47,7 @@ if testmode==2
     hold on;
     Color = repmat(160/255, 1, 3);
     trisurf(k,P(:,1),P(:,2),P(:,3),'Facecolor',Color,'FaceAlpha',1);
+%     trisurf(k,P(:,1),P(:,2),P(:,3),'Facecolor','r','FaceAlpha',1);
     if NetMode == 1
         grid off
         set(gca,'XColor','none','YColor','none','ZColor','none','TickDir','out')
