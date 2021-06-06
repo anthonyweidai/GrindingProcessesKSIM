@@ -49,15 +49,15 @@ vq(isnan(vq)) = 0;
 h_vq = max(vq,[],'all');
 %% trimming
 if GeoParam.Trimmingh >= 1e-7
-    MuTrim = GeoParam.Trimmingh;
-    SigmaTrim = 0.1;
-    Trimmingh = normrnd(GeoParam.Trimmingh, MuTrim*SigmaTrim);
-    Trimmingh = max(Trimmingh, MuTrim - 3*MuTrim*SigmaTrim);
-    vq = min(vq,Trimmingh);
+    MuTrim = rg;
+    SigmaTrim = GeoParam.Trimmingh;
+    Trimmingh = normrnd(MuTrim, SigmaTrim);
+    Trimmingh = max(Trimmingh, MuTrim - 3*SigmaTrim);
+    vq = min(vq, Trimmingh);
 end
 newh_vq = max(vq,[],'all');
 if GeoParam.Shape == 1
-    ActiveRarea = 1-(1-(h_vq-newh_vq)/h_vq)*(1-GeoParam.Rarea);
+    ActiveRarea = 1 - (1 - (h_vq-newh_vq) / h_vq) * (1-GeoParam.Rarea);
 else
     ActiveRarea = 0;
 end
