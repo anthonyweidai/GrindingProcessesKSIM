@@ -15,6 +15,9 @@ beenoera
 beenoera.pub
 .DS_Store
 PCC.ipynb
+batchDave.m
+trimmingTest.m
+batchDave_adddata.m
 
 # 忽略 experiment_monte/ 文件夹下的所有文件
 former/
