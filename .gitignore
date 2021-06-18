@@ -23,8 +23,8 @@ SmartCar/
 MeanAnalysis/old
 Others/
 
-# 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件
-# !lib.a
+# 但否定忽略 MeanAnalysis/*.csv, 尽管已经在前面忽略了 .csv 文件
+!MeanAnalysis/*.csv
 # 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO
 # /TODO
 # 忽略 doc/notes.txt, 不包括 doc/server/arch.txt
