@@ -6,17 +6,17 @@ testmode = 2;
 orimode = 0;
 res = .01;
 
-GeoParam.Shape = 1;
+GeoParam.Shape = 3;
 GeoParam.Trimmingh = 0;
-GeoParam.Omega = 7;
+GeoParam.Omega = 25;
 
-GeoParam.Xi = 0.7;
+GeoParam.Xi = 0.6;
 GeoParam.RHeightSize = 1;
-GeoParam.Rarea = 0.7;
+GeoParam.Rarea = 2;
 GeoParam.RAMode = 0;
 GeoParam.Sigmah = 0;
 GeoParam.SigmaSkew = 0;
-GeoParam.FilletMode = 2;
+GeoParam.FilletMode = 0;
 %%
 OutlineMode = 0;
 NetMode = 1;
@@ -96,9 +96,9 @@ if testmode ==2
     hold on
     xlim([-rg rg])
     ylim([-rg rg])
-    xlabel('x')
+    % xlabel('x')
     % xlabel('x','FontSize',24)
-    ylabel('y')
-    zlabel('z')
+    % ylabel('y')
+    % zlabel('z')
     axis equal;drawnow;
 end

@@ -5,7 +5,7 @@ GeoParam.Shape = 1;
 FOI = 'ConeAngle';
 createFolder(FOI);
 %%
-disp(['FOI: ' FOI ', Numbers of Variables: ' num2str(2*2)]);
+disp(['FOI: ' FOI ', Variables Numbers: ' num2str(2*2)]);
 %%
 for Cycle = BatNum
     for WheelType = 2:3

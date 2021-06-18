@@ -3,8 +3,8 @@ function diffShapesPlot(Cycle, WheelType)
 %%
 warning off
 OutputFields = {'Ra' 'FnSteady' 'FtSteady' 'MaxStress' 'MeanStress' 'CGrits'};
-% DiskPath1 = 'N:/GrdData/';
-DiskPath1 = 'M:/GrdData/';
+DiskPath1 = 'N:/GrdData/';
+% DiskPath1 = 'M:/GrdData/';
 DiskPath2 = 'P:/university/GrdData/';
 
 FOI1 = 'FilletMode';

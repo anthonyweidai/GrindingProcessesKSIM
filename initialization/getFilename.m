@@ -32,7 +32,7 @@ elseif WheelType == 2
         if Shape == 1
             NameBody = ['w' num2str(GeoParam.Omega)  'FT' num2str(GeoParam.FilletMode) 'RAM' num2str(GeoParam.RAMode) ...
                 'Rarea' num2str(GeoParam.Rarea)...
-                'Ssg' num2str(GeoParam.SigmaSkew) ] ;
+                'Ssg' num2str(GeoParam.SigmaSkew)] ; % 'Trh' num2str(GeoParam.Trimmingh)
         elseif Shape == 2
             NameBody = ['Rarea' num2str(GeoParam.Rarea)];
         else

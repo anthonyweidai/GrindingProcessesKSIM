@@ -6,7 +6,6 @@
 *.mat
 
 # 忽略 test2.m
-test2.m
 GrdTversion.m
 batch.m
 test_change.m
@@ -15,16 +14,13 @@ beenoera
 beenoera.pub
 .DS_Store
 PCC.ipynb
-batchDave.m
-trimmingTest.m
-batchDave_adddata.m
 
 # 忽略 experiment_monte/ 文件夹下的所有文件
 former/
 GrdData/
 .ipynb_checkpoints/
 SmartCar/
-MeanAnalysis/
+MeanAnalysis/old
 Others/
 
 # 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件

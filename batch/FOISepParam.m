@@ -5,7 +5,7 @@ SepParam.WheelType = 3;
 createFolder(FOI);
 GeoParam.Shape = 1;
 %% Interesting variables
-disp(['FOI: ' FOI ', Numbers of Variables: ' num2str(length(InterestingParam)*length(BatNum))]);
+disp(['FOI: ' FOI ', Variables Numbers: ' num2str(length(InterestingParam)*length(BatNum))]);
 %%
 for Cycle = BatNum
     for InterestingField = InterestingParam

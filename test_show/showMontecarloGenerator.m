@@ -17,7 +17,7 @@ GeoParam.FilletMode = 0;
 
 SepParam.LSMode = 0;
 
-WheelLength = 1000;
+WheelLength = 10000;
 WheelWidth = 500;
 %% parameters
 %%%%%%%%%%

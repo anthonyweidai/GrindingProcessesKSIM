@@ -10,7 +10,7 @@ if strcmp(FOI, 'RHeightSize')
     GeoParam.RAMode = 1;
 end
 %% Interesting variables
-disp(['FOI: ' FOI ', Numbers of Variables: ' num2str(2*length(InterestingParam)*length(BatNum))]);
+disp(['FOI: ' FOI ', Variables Numbers: ' num2str(2*length(InterestingParam)*length(BatNum))]);
 %%
 for Cycle = BatNum
     for WheelType = 2:3
